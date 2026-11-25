@@ -1,0 +1,543 @@
+{
+  "version": "2026.11.23",
+  "generatedBy": "website/scripts/process-media.mjs",
+  "brandAssets": {
+    "logoWebp": {
+      "path": "/media/logo-badge.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 11292
+    },
+    "logoPng": {
+      "path": "/media/logo-badge.png",
+      "width": 256,
+      "height": 256,
+      "bytes": 76594
+    },
+    "faviconPng": {
+      "path": "/favicon.png",
+      "width": 64,
+      "height": 64,
+      "bytes": 8883
+    }
+  },
+  "photos": {
+    "hero_kitchen": {
+      "id": "hero_kitchen",
+      "slug": "hero-kitchen",
+      "aspect": "16:9",
+      "alt": "Sunlit modern Edmonton home kitchen with white oak cabinetry, spotless Calacatta quartz island, stainless steel range and hood, and fresh eucalyptus",
+      "usage": "Homepage Hero + Kitchen X-Ray Interactive Breakdown",
+      "srcset": {
+        "avif": "/media/photos/hero-kitchen-640w.avif 640w, /media/photos/hero-kitchen-1024w.avif 1024w, /media/photos/hero-kitchen-1440w.avif 1440w",
+        "webp": "/media/photos/hero-kitchen-640w.webp 640w, /media/photos/hero-kitchen-1024w.webp 1024w, /media/photos/hero-kitchen-1440w.webp 1440w"
+      },
+      "variants": {
+        "640": {
+          "width": 640,
+          "height": 360,
+          "avif": {
+            "path": "/media/photos/hero-kitchen-640w.avif",
+            "width": 640,
+            "height": 360,
+            "bytes": 13333
+          },
+          "webp": {
+            "path": "/media/photos/hero-kitchen-640w.webp",
+            "width": 640,
+            "height": 360,
+            "bytes": 18912
+          }
+        },
+        "1024": {
+          "width": 1024,
+          "height": 576,
+          "avif": {
+            "path": "/media/photos/hero-kitchen-1024w.avif",
+            "width": 1024,
+            "height": 576,
+            "bytes": 26147
+          },
+          "webp": {
+            "path": "/media/photos/hero-kitchen-1024w.webp",
+            "width": 1024,
+            "height": 576,
+            "bytes": 38242
+          }
+        },
+        "1440": {
+          "width": 1440,
+          "height": 810,
+          "avif": {
+            "path": "/media/photos/hero-kitchen-1440w.avif",
+            "width": 1440,
+            "height": 810,
+            "bytes": 33818
+          },
+          "webp": {
+            "path": "/media/photos/hero-kitchen-1440w.webp",
+            "width": 1440,
+            "height": 810,
+            "bytes": 53534
+          }
+        }
+      },
+      "fallback": {
+        "path": "/media/photos/hero-kitchen-fallback.jpg",
+        "width": 1200,
+        "height": 675,
+        "bytes": 84557
+      }
+    },
+    "xray_bathroom": {
+      "id": "xray_bathroom",
+      "slug": "xray-bathroom",
+      "aspect": "16:9",
+      "alt": "Spotless Edmonton spa master bathroom with crystal-clear frameless glass walk-in shower, matte black rain showerhead, freestanding soaking tub, and oak vanity",
+      "usage": "Bathroom X-Ray Interactive Breakdown",
+      "srcset": {
+        "avif": "/media/photos/xray-bathroom-640w.avif 640w, /media/photos/xray-bathroom-1024w.avif 1024w, /media/photos/xray-bathroom-1440w.avif 1440w",
+        "webp": "/media/photos/xray-bathroom-640w.webp 640w, /media/photos/xray-bathroom-1024w.webp 1024w, /media/photos/xray-bathroom-1440w.webp 1440w"
+      },
+      "variants": {
+        "640": {
+          "width": 640,
+          "height": 360,
+          "avif": {
+            "path": "/media/photos/xray-bathroom-640w.avif",
+            "width": 640,
+            "height": 360,
+            "bytes": 7071
+          },
+          "webp": {
+            "path": "/media/photos/xray-bathroom-640w.webp",
+            "width": 640,
+            "height": 360,
+            "bytes": 10476
+          }
+        },
+        "1024": {
+          "width": 1024,
+          "height": 576,
+          "avif": {
+            "path": "/media/photos/xray-bathroom-1024w.avif",
+            "width": 1024,
+            "height": 576,
+            "bytes": 13562
+          },
+          "webp": {
+            "path": "/media/photos/xray-bathroom-1024w.webp",
+            "width": 1024,
+            "height": 576,
+            "bytes": 20908
+          }
+        },
+        "1440": {
+          "width": 1440,
+          "height": 810,
+          "avif": {
+            "path": "/media/photos/xray-bathroom-1440w.avif",
+            "width": 1440,
+            "height": 810,
+            "bytes": 17760
+          },
+          "webp": {
+            "path": "/media/photos/xray-bathroom-1440w.webp",
+            "width": 1440,
+            "height": 810,
+            "bytes": 30234
+          }
+        }
+      },
+      "fallback": {
+        "path": "/media/photos/xray-bathroom-fallback.jpg",
+        "width": 1200,
+        "height": 675,
+        "bytes": 55013
+      }
+    },
+    "moveout_condo": {
+      "id": "moveout_condo",
+      "slug": "moveout-condo",
+      "aspect": "4:3",
+      "alt": "Bright empty Downtown Edmonton high-rise condo after move-out inspection clean with gleaming vinyl plank floors and brass keys resting on spotless quartz island",
+      "usage": "Move-Out Inspection Clean Service Card & Landing Funnel",
+      "srcset": {
+        "avif": "/media/photos/moveout-condo-640w.avif 640w, /media/photos/moveout-condo-1024w.avif 1024w, /media/photos/moveout-condo-1440w.avif 1440w",
+        "webp": "/media/photos/moveout-condo-640w.webp 640w, /media/photos/moveout-condo-1024w.webp 1024w, /media/photos/moveout-condo-1440w.webp 1440w"
+      },
+      "variants": {
+        "640": {
+          "width": 640,
+          "height": 480,
+          "avif": {
+            "path": "/media/photos/moveout-condo-640w.avif",
+            "width": 640,
+            "height": 480,
+            "bytes": 14784
+          },
+          "webp": {
+            "path": "/media/photos/moveout-condo-640w.webp",
+            "width": 640,
+            "height": 480,
+            "bytes": 21814
+          }
+        },
+        "1024": {
+          "width": 1024,
+          "height": 768,
+          "avif": {
+            "path": "/media/photos/moveout-condo-1024w.avif",
+            "width": 1024,
+            "height": 768,
+            "bytes": 28668
+          },
+          "webp": {
+            "path": "/media/photos/moveout-condo-1024w.webp",
+            "width": 1024,
+            "height": 768,
+            "bytes": 44180
+          }
+        },
+        "1440": {
+          "width": 1440,
+          "height": 1080,
+          "avif": {
+            "path": "/media/photos/moveout-condo-1440w.avif",
+            "width": 1440,
+            "height": 1080,
+            "bytes": 36056
+          },
+          "webp": {
+            "path": "/media/photos/moveout-condo-1440w.webp",
+            "width": 1440,
+            "height": 1080,
+            "bytes": 61138
+          }
+        }
+      },
+      "fallback": {
+        "path": "/media/photos/moveout-condo-fallback.jpg",
+        "width": 1200,
+        "height": 900,
+        "bytes": 88152
+      }
+    },
+    "winter_entryway": {
+      "id": "winter_entryway",
+      "slug": "winter-entryway",
+      "aspect": "4:3",
+      "alt": "Clean Edmonton front foyer and mudroom in winter with dry matte porcelain floor tile free of white salt crust, neat boot tray, and snowy porch outside",
+      "usage": "Winter Salt & Seasonal Reset Guide / Card",
+      "srcset": {
+        "avif": "/media/photos/winter-entryway-640w.avif 640w, /media/photos/winter-entryway-1024w.avif 1024w, /media/photos/winter-entryway-1440w.avif 1440w",
+        "webp": "/media/photos/winter-entryway-640w.webp 640w, /media/photos/winter-entryway-1024w.webp 1024w, /media/photos/winter-entryway-1440w.webp 1440w"
+      },
+      "variants": {
+        "640": {
+          "width": 640,
+          "height": 480,
+          "avif": {
+            "path": "/media/photos/winter-entryway-640w.avif",
+            "width": 640,
+            "height": 480,
+            "bytes": 11914
+          },
+          "webp": {
+            "path": "/media/photos/winter-entryway-640w.webp",
+            "width": 640,
+            "height": 480,
+            "bytes": 17678
+          }
+        },
+        "1024": {
+          "width": 1024,
+          "height": 768,
+          "avif": {
+            "path": "/media/photos/winter-entryway-1024w.avif",
+            "width": 1024,
+            "height": 768,
+            "bytes": 23654
+          },
+          "webp": {
+            "path": "/media/photos/winter-entryway-1024w.webp",
+            "width": 1024,
+            "height": 768,
+            "bytes": 38094
+          }
+        },
+        "1440": {
+          "width": 1440,
+          "height": 1080,
+          "avif": {
+            "path": "/media/photos/winter-entryway-1440w.avif",
+            "width": 1440,
+            "height": 1080,
+            "bytes": 30200
+          },
+          "webp": {
+            "path": "/media/photos/winter-entryway-1440w.webp",
+            "width": 1440,
+            "height": 1080,
+            "bytes": 53674
+          }
+        }
+      },
+      "fallback": {
+        "path": "/media/photos/winter-entryway-fallback.jpg",
+        "width": 1200,
+        "height": 900,
+        "bytes": 87910
+      }
+    },
+    "holiday_living": {
+      "id": "holiday_living",
+      "slug": "holiday-living",
+      "aspect": "4:3",
+      "alt": "Warm sunlit Edmonton living room ready for December holidays with gleaming oak floors, vacuumed neutral sectional sofa, and fresh cedar and eucalyptus centerpiece",
+      "usage": "December Holiday Reset Promo & Recurring Maintenance Card",
+      "srcset": {
+        "avif": "/media/photos/holiday-living-640w.avif 640w, /media/photos/holiday-living-1024w.avif 1024w, /media/photos/holiday-living-1440w.avif 1440w",
+        "webp": "/media/photos/holiday-living-640w.webp 640w, /media/photos/holiday-living-1024w.webp 1024w, /media/photos/holiday-living-1440w.webp 1440w"
+      },
+      "variants": {
+        "640": {
+          "width": 640,
+          "height": 480,
+          "avif": {
+            "path": "/media/photos/holiday-living-640w.avif",
+            "width": 640,
+            "height": 480,
+            "bytes": 31329
+          },
+          "webp": {
+            "path": "/media/photos/holiday-living-640w.webp",
+            "width": 640,
+            "height": 480,
+            "bytes": 41878
+          }
+        },
+        "1024": {
+          "width": 1024,
+          "height": 768,
+          "avif": {
+            "path": "/media/photos/holiday-living-1024w.avif",
+            "width": 1024,
+            "height": 768,
+            "bytes": 64098
+          },
+          "webp": {
+            "path": "/media/photos/holiday-living-1024w.webp",
+            "width": 1024,
+            "height": 768,
+            "bytes": 75388
+          }
+        },
+        "1440": {
+          "width": 1440,
+          "height": 1080,
+          "avif": {
+            "path": "/media/photos/holiday-living-1440w.avif",
+            "width": 1440,
+            "height": 1080,
+            "bytes": 80348
+          },
+          "webp": {
+            "path": "/media/photos/holiday-living-1440w.webp",
+            "width": 1440,
+            "height": 1080,
+            "bytes": 121932
+          }
+        }
+      },
+      "fallback": {
+        "path": "/media/photos/holiday-living-fallback.jpg",
+        "width": 1200,
+        "height": 900,
+        "bytes": 143294
+      }
+    }
+  },
+  "videos": {
+    "pet_supervisors": {
+      "id": "pet_supervisors",
+      "slug": "pet-supervisors",
+      "title": "Edmonton Pet Supervisors On Duty",
+      "caption": "Real client pets inspecting spotless floors — 100% botanical eucalyptus formulas with zero bleach or ammonia fumes.",
+      "alt": "Grey and white cat sitting on freshly cleaned Edmonton kitchen tile floor during a pet-safe LevelUp Cleaning visit",
+      "width": 720,
+      "height": 1280,
+      "durationSec": 32.08,
+      "mp4": {
+        "path": "/media/videos/pet-supervisors.mp4",
+        "bytes": 4242380
+      },
+      "poster": {
+        "width": 540,
+        "height": 960,
+        "avif": {
+          "path": "/media/videos/pet-supervisors-poster.avif",
+          "width": 540,
+          "height": 960,
+          "bytes": 17083
+        },
+        "webp": {
+          "path": "/media/videos/pet-supervisors-poster.webp",
+          "width": 540,
+          "height": 960,
+          "bytes": 20924
+        }
+      }
+    },
+    "polished_faucet": {
+      "id": "polished_faucet",
+      "slug": "polished-faucet",
+      "title": "Zero Water Spots Mirror-Polished Faucet",
+      "caption": "Real Edmonton bathroom detailing — mineral deposits removed safely without scratching chrome or surrounding stone.",
+      "alt": "Close-up of a gleaming mirror-polished chrome bathroom faucet with zero hard-water spots",
+      "width": 720,
+      "height": 1280,
+      "durationSec": 10.93,
+      "mp4": {
+        "path": "/media/videos/polished-faucet.mp4",
+        "bytes": 1096885
+      },
+      "poster": {
+        "width": 540,
+        "height": 960,
+        "avif": {
+          "path": "/media/videos/polished-faucet-poster.avif",
+          "width": 540,
+          "height": 960,
+          "bytes": 14821
+        },
+        "webp": {
+          "path": "/media/videos/polished-faucet-poster.webp",
+          "width": 540,
+          "height": 960,
+          "bytes": 21426
+        }
+      }
+    },
+    "friday_reset": {
+      "id": "friday_reset",
+      "slug": "friday-reset",
+      "title": "The Friday Reset Studio Walkthrough",
+      "caption": "Walk into a bright, eucalyptus-fresh Edmonton home before the weekend begins.",
+      "alt": "Sunlit white oak and quartz waterfall kitchen island ready for the weekend in Edmonton",
+      "width": 720,
+      "height": 1280,
+      "durationSec": 7.95,
+      "mp4": {
+        "path": "/media/videos/friday-reset.mp4",
+        "bytes": 1166814
+      },
+      "poster": {
+        "width": 540,
+        "height": 960,
+        "avif": {
+          "path": "/media/videos/friday-reset-poster.avif",
+          "width": 540,
+          "height": 960,
+          "bytes": 27214
+        },
+        "webp": {
+          "path": "/media/videos/friday-reset-poster.webp",
+          "width": 540,
+          "height": 960,
+          "bytes": 28316
+        }
+      }
+    }
+  },
+  "xrayHotspots": {
+    "kitchen": {
+      "photoId": "hero_kitchen",
+      "targets": [
+        {
+          "id": "oven",
+          "xPct": 51,
+          "yPct": 59,
+          "feature": "Stainless steel range front & oven glass door"
+        },
+        {
+          "id": "hood",
+          "xPct": 51,
+          "yPct": 20,
+          "feature": "Stainless steel range hood baffle & chimney"
+        },
+        {
+          "id": "island",
+          "xPct": 24,
+          "yPct": 68,
+          "feature": "Calacatta quartz island countertop"
+        },
+        {
+          "id": "sink",
+          "xPct": 89,
+          "yPct": 53,
+          "feature": "Undermount stainless sink & chrome faucet"
+        },
+        {
+          "id": "cabinets",
+          "xPct": 64,
+          "yPct": 18,
+          "feature": "White oak upper cabinetry faces & pulls"
+        },
+        {
+          "id": "baseboards",
+          "xPct": 69,
+          "yPct": 76,
+          "feature": "White kitchen baseboards & cabinet toe-kick"
+        },
+        {
+          "id": "seals",
+          "xPct": 73,
+          "yPct": 54,
+          "feature": "Dishwasher & appliance door edge seals"
+        }
+      ]
+    },
+    "bathroom": {
+      "photoId": "xray_bathroom",
+      "targets": [
+        {
+          "id": "shower_glass",
+          "xPct": 30,
+          "yPct": 45,
+          "feature": "Crystal-clear frameless glass walk-in shower panel"
+        },
+        {
+          "id": "matte_fixture",
+          "xPct": 17,
+          "yPct": 36,
+          "feature": "Matte black handheld rail & rain shower hardware"
+        },
+        {
+          "id": "grout",
+          "xPct": 15,
+          "yPct": 80,
+          "feature": "Shower floor tile grout lines & linear drain"
+        },
+        {
+          "id": "vanity",
+          "xPct": 84,
+          "yPct": 60,
+          "feature": "White oak vanity counter, sink & matte black faucet"
+        },
+        {
+          "id": "tub",
+          "xPct": 50,
+          "yPct": 72,
+          "feature": "Freestanding soaking tub basin & exterior"
+        },
+        {
+          "id": "vent_baseboard",
+          "xPct": 41,
+          "yPct": 6,
+          "feature": "Ceiling exhaust fan grille & trim perimeter"
+        }
+      ]
+    }
+  }
+}

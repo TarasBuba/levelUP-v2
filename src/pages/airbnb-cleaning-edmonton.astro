@@ -1,0 +1,141 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import LiveSlotsBadge from '../components/LiveSlotsBadge.astro';
+import ChecklistTabs from '../components/ChecklistTabs.astro';
+import InstantCalculator from '../components/InstantCalculator.astro';
+import TrustProtocol from '../components/TrustProtocol.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
+
+import siteCopy from '../data/site_copy.json';
+import mediaManifest from '../data/media_manifest.json';
+import type { PageSeoConfig } from '../types/contracts';
+
+const svc = siteCopy.services.airbnb;
+const photo = mediaManifest.photos.winter_entryway;
+
+const seoConfig: PageSeoConfig = {
+  title: svc.metaTitle,
+  description: svc.metaDescription,
+  canonicalPath: '/airbnb-cleaning-edmonton',
+  ogImage: photo.variants['1024'].webp.path,
+  preloadHeroImage: photo.variants['1024'].avif.path,
+  serviceSchema: {
+    name: svc.h1,
+    description: svc.metaDescription,
+    lowPriceCad: 120,
+    highPriceCad: 330,
+  },
+  faqs: svc.faqs,
+  breadcrumbs: [
+    { name: 'Home', path: '/' },
+    { name: 'Airbnb Cleaning Edmonton', path: '/airbnb-cleaning-edmonton' },
+  ],
+};
+---
+
+<MainLayout seoConfig={seoConfig} ctaHref="#quote-calculator">
+  <section class="surface-quiet-luxury border-b border-mist/25 py-10 sm:py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-10 lg:grid-cols-12 lg:items-center">
+        <div class="lg:col-span-7 space-y-5">
+          <div class="flex flex-wrap items-center gap-2.5">
+            <span class="inline-flex items-center rounded-full border border-brass/50 bg-brass/18 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-spruce">
+              {svc.badge}
+            </span>
+            <LiveSlotsBadge compact />
+          </div>
+
+          <h1 class="font-serif text-4xl sm:text-5xl font-semibold leading-tight text-spruce">
+            {svc.h1}
+          </h1>
+          <p class="text-base sm:text-lg leading-relaxed text-spruce/85">
+            {svc.subtitle}
+          </p>
+
+          <div class="rounded-2xl border border-eucalyptus/35 bg-eucalyptus/10 p-4 text-sm text-spruce">
+            <p class="font-semibold text-spruce">
+              From ${svc.startingPriceCad} CAD pre-tax (1-Bed) • $160 (2-Bed) • $220 (3-Bed)
+            </p>
+            <p class="mt-0.5 text-xs text-spruce/80">
+              + 5% AB GST where applicable • Timestamped SMS Photo-Verified Ready Report • Volume Host Discounts up to 15%.
+            </p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 pt-1">
+            <a
+              href="#quote-calculator"
+              class="inline-flex min-h-[48px] items-center justify-center rounded-full bg-eucalyptus px-6 py-3 text-sm font-semibold text-linen shadow-xs transition hover:bg-eucalyptus-hover"
+            >
+              Quote My Short-Term Rental →
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <div class="overflow-hidden rounded-3xl border border-mist/35 bg-card shadow-lg">
+            <picture>
+              <source type="image/avif" srcset={photo.srcset.avif} sizes="(min-width: 1024px) 42vw, 100vw" />
+              <source type="image/webp" srcset={photo.srcset.webp} sizes="(min-width: 1024px) 42vw, 100vw" />
+              <img
+                src={photo.fallback.path}
+                alt={photo.alt}
+                width="1440"
+                height="1080"
+                fetchpriority="high"
+                class="aspect-[4/3] w-full object-cover"
+              />
+            </picture>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 sm:py-16 border-b border-mist/25 bg-card/50">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid gap-8 lg:grid-cols-12">
+      <div class="lg:col-span-7 space-y-4">
+        <h2 class="font-serif text-2xl sm:text-3xl font-semibold text-spruce">
+          Built for Ice District, Whyte Ave, Garneau &amp; Executive Hosts
+        </h2>
+        <p class="text-sm sm:text-base leading-relaxed text-spruce/85">
+          {svc.edmontonContextParagraph}
+        </p>
+      </div>
+      <div class="lg:col-span-5 rounded-3xl border border-mist/35 bg-linen p-6 space-y-3">
+        <h3 class="font-serif text-lg font-semibold text-spruce">Ideal For:</h3>
+        <ul class="space-y-2.5 text-sm text-spruce/85">
+          {svc.idealFor.map((item) => (
+            <li class="flex items-start gap-2.5">
+              <span class="mt-0.5 text-eucalyptus font-bold" aria-hidden="true">✓</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <ChecklistTabs
+    eyebrow="SUPERHOST 5-STAR TURNOVER CHECKLIST"
+    title="Staging, Inspection & Restock Verification"
+    checklistByRoom={svc.checklistByRoom}
+    whatIsExcluded={svc.whatIsExcluded}
+  />
+
+  <div class="border-t border-mist/25 bg-card/45">
+    <InstantCalculator
+      defaultService="airbnb"
+      defaultBedrooms={1}
+      defaultBathrooms={1}
+      defaultFrequency="weekly"
+    />
+  </div>
+
+  <TrustProtocol showComparison={false} includeModal={true} />
+
+  <FaqAccordion
+    eyebrow="SHORT-TERM RENTAL FAQS"
+    title="Edmonton Airbnb & Executive Turnover Questions"
+    faqs={svc.faqs}
+  />
+</MainLayout>

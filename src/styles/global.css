@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@theme {
+  --color-linen: #FAF7F2;
+  --color-card: #F3EFE6;
+  --color-eucalyptus: #3B6B56;
+  --color-eucalyptus-hover: #2E5645;
+  --color-mist: #729E8A;
+  --color-spruce: #172A22;
+  --color-brass: #B89352;
+
+  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+@layer base {
+  html {
+    background-color: #FAF7F2;
+    color: #172A22;
+    font-family: var(--font-sans);
+    scroll-padding-top: 5.5rem;
+    overflow-x: clip;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    background-color: #FAF7F2;
+    color: #172A22;
+    overflow-x: clip;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, .font-editorial {
+    font-family: var(--font-serif);
+    letter-spacing: -0.015em;
+  }
+
+  :focus-visible {
+    outline: 2px solid #3B6B56;
+    outline-offset: 2px;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary {
+    list-style: none;
+  }
+}
+
+/* Chrome / Baseline native modal scroll containment without root scrollbar layout shift */
+dialog:modal {
+  overscroll-behavior: contain;
+}
+
+dialog::backdrop {
+  background-color: rgba(23, 42, 34, 0.64);
+  backdrop-filter: blur(4px);
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+/* Subtle architectural linen surface utility */
+.surface-quiet-luxury {
+  background-image: radial-gradient(circle at 18% 12%, rgba(114, 158, 138, 0.09), transparent 48%),
+    radial-gradient(circle at 85% 0%, rgba(184, 147, 82, 0.08), transparent 42%);
+}

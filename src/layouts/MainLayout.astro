@@ -1,0 +1,46 @@
+---
+import '../styles/global.css';
+import type { PageSeoConfig } from '../types/contracts';
+import SeoHead from '../components/SeoHead.astro';
+import SeasonalStrip from '../components/SeasonalStrip.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import StickyMobileBar from '../components/StickyMobileBar.astro';
+
+interface Props {
+  seoConfig: PageSeoConfig;
+  hideSeasonalStrip?: boolean;
+  ctaHref?: string;
+}
+
+const {
+  seoConfig,
+  hideSeasonalStrip = false,
+  ctaHref = '#quote-calculator',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en-CA">
+  <head>
+    <SeoHead config={seoConfig} />
+  </head>
+  <body class="min-h-screen flex flex-col bg-linen text-spruce font-sans antialiased selection:bg-eucalyptus selection:text-linen pb-20 lg:pb-0">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-xl focus:bg-spruce focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-linen focus:shadow-lg"
+    >
+      Skip to main content
+    </a>
+
+    {!hideSeasonalStrip && <SeasonalStrip />}
+    <Header />
+
+    <main id="main-content" class="flex-1">
+      <slot />
+    </main>
+
+    <Footer />
+    <StickyMobileBar ctaHref={ctaHref} />
+  </body>
+</html>

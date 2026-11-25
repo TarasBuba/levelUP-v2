@@ -1,0 +1,134 @@
+---
+import AdFunnelLayout from '../../layouts/AdFunnelLayout.astro';
+import LiveSlotsBadge from '../../components/LiveSlotsBadge.astro';
+import FurrySupervisors from '../../components/FurrySupervisors.astro';
+import InstantCalculator from '../../components/InstantCalculator.astro';
+import ChecklistTabs from '../../components/ChecklistTabs.astro';
+import TrustProtocol from '../../components/TrustProtocol.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+
+import siteCopy from '../../data/site_copy.json';
+import strategy from '../../data/strategy.json';
+import mediaManifest from '../../data/media_manifest.json';
+import { getHeadlinePromo } from '../../lib/promo';
+import type { PageSeoConfig } from '../../types/contracts';
+
+const lp = siteCopy.landingPages.petSafe;
+const funnel = strategy.adFunnels['pet-safe'];
+const defaultCode = funnel.adCreativeMatch.defaultPromoPreset;
+const defaultPromo = getHeadlinePromo(null, defaultCode);
+const shortPromo = `$${defaultPromo.discountCad} OFF`;
+
+const headlineRendered = lp.headline.replace(/\{PROMO\}/g, shortPromo);
+const ctaRendered = lp.primaryCta.replace(/\{PROMO\}/g, shortPromo);
+
+const petVideo = mediaManifest.videos.pet_supervisors;
+const regSvc = siteCopy.services.regular;
+
+const seoConfig: PageSeoConfig = {
+  title: lp.metaTitle,
+  description: lp.metaDescription,
+  canonicalPath: '/lp/pet-safe',
+  noindex: true,
+  ogImage: petVideo.poster.webp.path,
+  preloadHeroImage: petVideo.poster.avif.path,
+};
+---
+
+<AdFunnelLayout seoConfig={seoConfig} defaultPromoCode={defaultCode}>
+  <section class="surface-quiet-luxury border-b border-mist/25 py-8 sm:py-14">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-10 lg:grid-cols-12 lg:items-center">
+        <div class="lg:col-span-7 space-y-5">
+          <div class="flex flex-wrap items-center gap-2">
+            <span
+              data-promo-badge
+              class="inline-flex items-center rounded-full border border-brass/55 bg-brass/20 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-spruce"
+            >
+              {defaultPromo.badge}
+            </span>
+            <LiveSlotsBadge compact />
+          </div>
+
+          <p class="text-xs font-bold uppercase tracking-wider text-eucalyptus">
+            {lp.eyebrow}
+          </p>
+
+          <h1
+            data-promo-template={lp.headline}
+            class="font-serif text-3xl sm:text-5xl font-semibold leading-tight text-spruce"
+          >
+            {headlineRendered}
+          </h1>
+
+          <p class="text-base sm:text-lg leading-relaxed text-spruce/85">
+            {lp.subheadline}
+          </p>
+
+          <ul class="space-y-2.5 text-sm text-spruce/90">
+            {lp.bulletPoints.map((pt) => (
+              <li class="flex items-start gap-2.5">
+                <span class="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-eucalyptus text-xs font-bold text-linen" aria-hidden="true">
+                  ✓
+                </span>
+                <span>{pt}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="rounded-2xl border border-eucalyptus/35 bg-eucalyptus/10 p-4 text-xs sm:text-sm text-spruce space-y-1">
+            <p class="font-semibold text-spruce">{funnel.primaryObjectionKiller.objection}</p>
+            <p class="text-spruce/85">{funnel.primaryObjectionKiller.resolution}</p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center gap-3 pt-1">
+            <a
+              href="#quote-calculator"
+              data-promo-template={lp.primaryCta}
+              class="inline-flex min-h-[52px] items-center justify-center rounded-full bg-eucalyptus px-7 py-3.5 text-sm sm:text-base font-semibold text-linen shadow-sm transition hover:bg-eucalyptus-hover"
+            >
+              {ctaRendered}
+            </a>
+          </div>
+
+          <div class="space-y-1 text-xs text-spruce/75">
+            <p class="font-semibold text-spruce">{lp.taxNote}</p>
+            <p>{lp.urgencyNote}</p>
+          </div>
+        </div>
+
+        <!-- Real Edmonton Pet Supervisors Facade (Zero eager MP4 download) -->
+        <div class="lg:col-span-5">
+          <FurrySupervisors singleVideoId="pet_supervisors" priorityPoster={true} />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Instant Calculator Pre-Loaded for Pet-Safe Bi-Weekly + Heavy Pet Fur HEPA -->
+  <div class="bg-card/45 border-b border-mist/25">
+    <InstantCalculator
+      defaultService="regular"
+      defaultBedrooms={3}
+      defaultBathrooms={2}
+      defaultFrequency="biweekly"
+      defaultAddons={['heavy_pet_hair']}
+      defaultPromoCode={defaultCode}
+    />
+  </div>
+
+  <ChecklistTabs
+    eyebrow="PAW & TODDLER SAFE CHECKLIST"
+    title="Zero Bleach, Zero Ammonia, Sealed HEPA Filtration"
+    checklistByRoom={regSvc.checklistByRoom}
+    whatIsExcluded={regSvc.whatIsExcluded}
+  />
+
+  <TrustProtocol showComparison={false} includeModal={false} />
+
+  <FaqAccordion
+    eyebrow="PET-SAFE CLEANING FAQS"
+    title="Questions From Edmonton Dog & Cat Parents"
+    faqs={regSvc.faqs}
+  />
+</AdFunnelLayout>

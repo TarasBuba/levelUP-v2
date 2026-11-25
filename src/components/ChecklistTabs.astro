@@ -1,0 +1,161 @@
+---
+interface ChecklistRooms {
+  kitchen: string[];
+  bathrooms: string[];
+  bedroomsAndLiving: string[];
+  specialExtras: string[];
+}
+
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  checklistByRoom: ChecklistRooms;
+  whatIsExcluded?: string[];
+}
+
+const {
+  eyebrow = 'ROOM-BY-ROOM 50-POINT TRANSPARENCY',
+  title = 'Exact Scope Checklist — Zero Guesswork',
+  subtitle = 'Every specialist works systematically from top to bottom using colour-coded microfibres and finish-safe botanical solutions.',
+  checklistByRoom,
+  whatIsExcluded = [],
+} = Astro.props;
+
+const uid = `checklist-${Math.random().toString(36).slice(2, 8)}`;
+const tabs = [
+  { key: 'kitchen', label: 'Kitchen & Appliances', items: checklistByRoom.kitchen },
+  { key: 'bathrooms', label: 'Bathrooms & Glass', items: checklistByRoom.bathrooms },
+  { key: 'bedroomsAndLiving', label: 'Bedrooms, Trim & Floors', items: checklistByRoom.bedroomsAndLiving },
+  { key: 'specialExtras', label: 'Verification & Extras', items: checklistByRoom.specialExtras },
+];
+---
+
+<section class="py-14 sm:py-18" data-checklist-widget>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl">
+      <span class="inline-flex items-center gap-2 rounded-full border border-brass/45 bg-brass/15 px-3.5 py-1 text-xs font-semibold tracking-wider uppercase text-spruce">
+        {eyebrow}
+      </span>
+      <h2 class="mt-3 font-serif text-3xl sm:text-4xl font-semibold text-spruce">{title}</h2>
+      <p class="mt-2.5 text-base leading-relaxed text-spruce/80">{subtitle}</p>
+    </div>
+
+    <div class="mt-8 rounded-3xl border border-mist/35 bg-card p-4 sm:p-7 shadow-2xs">
+      <!-- Accessible Tab List -->
+      <div
+        role="tablist"
+        aria-label="Room by room cleaning checklist"
+        class="flex flex-wrap gap-2 border-b border-mist/25 pb-4"
+      >
+        {tabs.map((tab, index) => (
+          <button
+            type="button"
+            role="tab"
+            id={`${uid}-tab-${tab.key}`}
+            aria-selected={index === 0 ? 'true' : 'false'}
+            aria-controls={`${uid}-panel-${tab.key}`}
+            data-tab-target={tab.key}
+            class:list={[
+              'inline-flex min-h-[44px] items-center gap-2 rounded-full px-4 py-2 text-xs sm:text-sm font-semibold transition cursor-pointer',
+              index === 0
+                ? 'bg-eucalyptus text-linen shadow-2xs'
+                : 'bg-linen text-spruce border border-mist/35 hover:border-eucalyptus',
+            ]}
+          >
+            <span>{tab.label}</span>
+            <span
+              class:list={[
+                'rounded-full px-2 py-0.5 text-[11px]',
+                index === 0 ? 'bg-linen/20 text-linen' : 'bg-card text-spruce/80',
+              ]}
+            >
+              {tab.items.length}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      <!-- Tab Panels -->
+      <div class="mt-6">
+        {tabs.map((tab, index) => (
+          <div
+            role="tabpanel"
+            id={`${uid}-panel-${tab.key}`}
+            aria-labelledby={`${uid}-tab-${tab.key}`}
+            data-tab-panel={tab.key}
+            hidden={index !== 0}
+            class="grid gap-3 sm:grid-cols-2"
+          >
+            {tab.items.map((line) => (
+              <div class="flex items-start gap-3 rounded-2xl border border-mist/25 bg-linen p-4">
+                <span class="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-eucalyptus text-xs font-bold text-linen" aria-hidden="true">
+                  ✓
+                </span>
+                <p class="text-sm leading-relaxed text-spruce">{line}</p>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      {whatIsExcluded.length > 0 && (
+        <details class="mt-6 rounded-2xl border border-mist/30 bg-linen/90 px-4 py-3">
+          <summary class="flex min-h-[44px] cursor-pointer items-center justify-between gap-3 text-sm font-semibold text-spruce">
+            <span>Scope Boundaries: What Is Excluded From This Package</span>
+            <span class="text-xs font-semibold text-eucalyptus">View Details +</span>
+          </summary>
+          <ul class="mt-3 space-y-2 border-t border-mist/25 pt-3 text-xs sm:text-sm text-spruce/80">
+            {whatIsExcluded.map((item) => (
+              <li class="flex items-start gap-2.5">
+                <span class="font-bold text-spruce/60" aria-hidden="true">•</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-checklist-widget]').forEach((widget) => {
+    const buttons = Array.from(widget.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const panels = Array.from(widget.querySelectorAll<HTMLElement>('[role="tabpanel"]'));
+
+    const activateTab = (targetKey: string) => {
+      buttons.forEach((btn) => {
+        const isActive = btn.dataset.tabTarget === targetKey;
+        btn.setAttribute('aria-selected', String(isActive));
+        btn.classList.toggle('bg-eucalyptus', isActive);
+        btn.classList.toggle('text-linen', isActive);
+        btn.classList.toggle('shadow-2xs', isActive);
+        btn.classList.toggle('bg-linen', !isActive);
+        btn.classList.toggle('text-spruce', !isActive);
+        btn.classList.toggle('border', !isActive);
+        btn.classList.toggle('border-mist/35', !isActive);
+      });
+      panels.forEach((panel) => {
+        panel.hidden = panel.dataset.tabPanel !== targetKey;
+      });
+    };
+
+    buttons.forEach((btn, idx) => {
+      btn.addEventListener('click', () => {
+        if (btn.dataset.tabTarget) activateTab(btn.dataset.tabTarget);
+      });
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+          e.preventDefault();
+          const nextIdx = e.key === 'ArrowRight'
+            ? (idx + 1) % buttons.length
+            : (idx - 1 + buttons.length) % buttons.length;
+          const nextBtn = buttons[nextIdx];
+          nextBtn.focus();
+          if (nextBtn.dataset.tabTarget) activateTab(nextBtn.dataset.tabTarget);
+        }
+      });
+    });
+  });
+</script>

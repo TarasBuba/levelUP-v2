@@ -1,0 +1,72 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import siteContext from '../data/site_context_lock.json';
+import siteCopy from '../data/site_copy.json';
+import type { PageSeoConfig } from '../types/contracts';
+
+const privacy = siteCopy.privacyPage;
+const { brand } = siteContext;
+
+const seoConfig: PageSeoConfig = {
+  title: privacy.metaTitle,
+  description: privacy.metaDescription,
+  canonicalPath: '/privacy',
+  breadcrumbs: [
+    { name: 'Home', path: '/' },
+    { name: 'Privacy & CASL SMS Terms', path: '/privacy' },
+  ],
+};
+---
+
+<MainLayout seoConfig={seoConfig} ctaHref="/#quote-calculator">
+  <article class="py-12 sm:py-18">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <header class="border-b border-mist/30 pb-8 space-y-3">
+        <span class="inline-flex items-center rounded-full border border-brass/45 bg-brass/15 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-spruce">
+          Alberta PIPA • PIPEDA • Canada CASL Governance
+        </span>
+        <h1 class="font-serif text-3xl sm:text-5xl font-semibold text-spruce">
+          Privacy Policy &amp; CASL SMS Communication Terms
+        </h1>
+        <p class="text-sm text-spruce/75">
+          Effective &amp; Last Updated: <strong class="text-spruce">{privacy.lastUpdated}</strong> • {brand.legalName} ({brand.badgeLabel})
+        </p>
+      </header>
+
+      <div class="mt-10 space-y-10">
+        {privacy.sections.map((section) => (
+          <section class="space-y-4">
+            <h2 class="font-serif text-2xl font-semibold text-spruce">
+              {section.heading}
+            </h2>
+            {section.paragraphs.map((p) => (
+              <p class="text-sm sm:text-base leading-relaxed text-spruce/85">{p}</p>
+            ))}
+            {section.bullets && section.bullets.length > 0 && (
+              <ul class="space-y-2.5 rounded-2xl border border-mist/35 bg-card p-5 text-sm text-spruce/90">
+                {section.bullets.map((b) => (
+                  <li class="flex items-start gap-2.5">
+                    <span class="mt-0.5 text-eucalyptus font-bold" aria-hidden="true">•</span>
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        ))}
+      </div>
+
+      <div class="mt-12 rounded-3xl border border-mist/35 bg-card p-6 text-sm text-spruce/85 space-y-2">
+        <p class="font-serif text-lg font-semibold text-spruce">
+          Direct Privacy &amp; CASL Opt-Out Contact
+        </p>
+        <p>
+          <strong>{brand.legalName}</strong> • Edmonton, Alberta, Canada
+        </p>
+        <p>
+          Email: <a href={`mailto:${brand.email}`} class="font-semibold text-eucalyptus underline">{brand.email}</a> • Phone / SMS: <a href={`tel:${brand.phoneE164}`} class="font-semibold text-eucalyptus underline">{brand.phoneDisplay}</a> (Reply <strong>STOP</strong> to any SMS to opt out immediately).
+        </p>
+      </div>
+    </div>
+  </article>
+</MainLayout>

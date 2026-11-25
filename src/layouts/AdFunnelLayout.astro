@@ -1,0 +1,135 @@
+---
+import '../styles/global.css';
+import type { PageSeoConfig } from '../types/contracts';
+import SeoHead from '../components/SeoHead.astro';
+import LiveSlotsBadge from '../components/LiveSlotsBadge.astro';
+import StickyMobileBar from '../components/StickyMobileBar.astro';
+import siteContext from '../data/site_context_lock.json';
+
+interface Props {
+  seoConfig: PageSeoConfig;
+  defaultPromoCode?: string;
+}
+
+const { seoConfig, defaultPromoCode = '50' } = Astro.props;
+const safeSeoConfig: PageSeoConfig = {
+  ...seoConfig,
+  noindex: true,
+};
+const { brand } = siteContext;
+---
+
+<!doctype html>
+<html lang="en-CA">
+  <head>
+    <SeoHead config={safeSeoConfig} />
+  </head>
+  <body
+    data-funnel-default-promo={defaultPromoCode}
+    class="min-h-screen flex flex-col bg-linen text-spruce font-sans antialiased selection:bg-eucalyptus selection:text-linen pb-20 lg:pb-0"
+  >
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-xl focus:bg-spruce focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-linen focus:shadow-lg"
+    >
+      Skip to main content
+    </a>
+
+    <!-- Distraction-free Ad Funnel Header: ZERO top-nav exit links -->
+    <header class="sticky top-0 z-40 border-b border-mist/25 bg-linen/95 backdrop-blur-md">
+      <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="h-11 w-11 shrink-0 rounded-full bg-spruce p-0.5 ring-1 ring-spruce/20 shadow-xs">
+            <img
+              src="/media/logo-badge.webp"
+              alt="LevelUp Cleaning Edmonton emblem"
+              width="44"
+              height="44"
+              class="h-full w-full rounded-full object-cover"
+            />
+          </div>
+          <div class="min-w-0">
+            <p class="font-serif text-base sm:text-lg font-semibold leading-tight text-spruce truncate">
+              {brand.companyName}
+            </p>
+            <p class="text-[11px] font-semibold tracking-wider uppercase text-spruce/75 truncate">
+              {brand.badgeLabel}
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2.5 sm:gap-4 shrink-0">
+          <div class="hidden md:block">
+            <LiveSlotsBadge compact />
+          </div>
+          <div class="hidden sm:flex items-center gap-2 rounded-full border border-mist/35 bg-card px-3.5 py-2 text-xs font-semibold text-spruce">
+            <span class="h-2 w-2 rounded-full bg-eucalyptus" aria-hidden="true"></span>
+            <span>$0 Upfront • {brand.phoneDisplay}</span>
+          </div>
+          <a
+            href="#quote-calculator"
+            class="inline-flex min-h-[44px] items-center justify-center rounded-full bg-eucalyptus px-4 sm:px-5 py-2.5 text-xs sm:text-sm font-semibold text-linen shadow-xs transition hover:bg-eucalyptus-hover"
+          >
+            Instant Price
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" class="flex-1">
+      <slot />
+    </main>
+
+    <footer class="border-t border-mist/25 bg-spruce text-linen">
+      <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between text-xs text-linen/80">
+          <div class="space-y-1">
+            <p class="font-semibold text-linen">
+              {brand.legalName} • {brand.badgeLabel}
+            </p>
+            <p>
+              City of Edmonton Licensed • Background-Checked Local Specialists • 100% Pet &amp; Kid Safe Botanical Formulas • English &amp; Ukrainian spoken
+            </p>
+          </div>
+          <div class="flex flex-wrap items-center gap-x-5 gap-y-1">
+            <span>Direct SMS / Call: {brand.phoneDisplay}</span>
+            <span>{brand.email}</span>
+            <a
+              href="/privacy"
+              class="inline-flex min-h-[44px] items-center underline decoration-mist/60 underline-offset-4 hover:text-linen"
+            >
+              Privacy &amp; CASL Terms
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <StickyMobileBar ctaHref="#quote-calculator" />
+
+    <script>
+      import { getHeadlinePromo } from '../lib/promo';
+
+      function syncFunnelPromoCopy() {
+        const params = new URLSearchParams(window.location.search);
+        const promoParam = params.get('promo') || params.get('offer');
+        const defaultCode = document.body.dataset.funnelDefaultPromo || '50';
+        const preset = getHeadlinePromo(promoParam, defaultCode);
+        const shortPromo = `$${preset.discountCad} OFF`;
+
+        document.querySelectorAll<HTMLElement>('[data-promo-template]').forEach((el) => {
+          const tpl = el.dataset.promoTemplate;
+          if (tpl) {
+            el.textContent = tpl.replace(/\{PROMO\}/g, shortPromo);
+          }
+        });
+
+        document.querySelectorAll<HTMLElement>('[data-promo-badge]').forEach((el) => {
+          el.textContent = preset.badge;
+        });
+      }
+
+      syncFunnelPromoCopy();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1430 @@
+---
+import type { AddonId, Frequency, ServiceId } from '../types/contracts';
+import strategy from '../data/strategy.json';
+import { buildSmsPrefillHref, calculateQuote } from '../lib/pricing';
+
+interface Props {
+  defaultService?: ServiceId;
+  defaultBedrooms?: number;
+  defaultBathrooms?: number;
+  defaultFrequency?: Frequency;
+  defaultAddons?: AddonId[];
+  defaultPromoCode?: string;
+  compact?: boolean;
+}
+
+const {
+  defaultService = 'move_out',
+  defaultBedrooms = 2,
+  defaultBathrooms = 2,
+  defaultFrequency = 'one_time',
+  defaultAddons = [],
+  defaultPromoCode = '',
+  compact = false,
+} = Astro.props;
+
+const initialMode = defaultService === 'hourly' ? 'hourly' : 'flat_rate';
+const initialQuote = calculateQuote({
+  mode: initialMode,
+  service: defaultService,
+  bedrooms: defaultBedrooms,
+  bathrooms: defaultBathrooms,
+  frequency: defaultFrequency,
+  addons: defaultAddons,
+  hours: 4,
+  cleaners: 1,
+  promoQuery: defaultPromoCode || null,
+});
+
+const initialSmsHref = buildSmsPrefillHref(initialQuote);
+
+const packageOptions: Array<{ id: Exclude<ServiceId, 'hourly'>; label: string; tag: string; fromCad: number }> = [
+  { id: 'move_out', label: 'Move-Out / Move-In', tag: 'Oven + Fridge + Cabinets FREE', fromCad: 235 },
+  { id: 'deep_clean', label: '50-Point Deep Reset', tag: 'Baseboards, Salt & Scale', fromCad: 210 },
+  { id: 'regular', label: 'Recurring Eco Clean', tag: 'Up to 15% Off Weekly', fromCad: 130 },
+  { id: 'airbnb', label: 'Airbnb 5-Star Turnover', tag: 'Same-Day Photo Staging', fromCad: 120 },
+];
+
+const frequencyOptions: Array<{ id: Frequency; label: string; sub: string }> = [
+  { id: 'one_time', label: 'One-Time', sub: 'Standard' },
+  { id: 'monthly', label: 'Monthly', sub: '5% Off' },
+  { id: 'biweekly', label: 'Bi-Weekly', sub: '10% Off' },
+  { id: 'weekly', label: 'Weekly', sub: '15% Off' },
+];
+
+const addonEntries = Object.entries(strategy.pricing.addons) as Array<
+  [AddonId, { label: string; priceCad: number }]
+>;
+
+const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside_cabinets']);
+---
+
+<section
+  id="quote-calculator"
+  data-calculator-root
+  data-default-mode={initialMode}
+  data-default-service={defaultService}
+  data-default-bedrooms={String(defaultBedrooms)}
+  data-default-bathrooms={String(defaultBathrooms)}
+  data-default-frequency={defaultFrequency}
+  data-default-addons={JSON.stringify(defaultAddons)}
+  data-default-promo={defaultPromoCode}
+  class:list={[compact ? 'py-8 sm:py-10' : 'py-14 sm:py-20']}
+>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    {!compact && (
+      <div class="max-w-3xl mb-8 sm:mb-10">
+        <span class="inline-flex items-center gap-2 rounded-full border border-brass/45 bg-brass/15 px-3.5 py-1 text-xs font-semibold tracking-wider uppercase text-spruce">
+          <span class="h-1.5 w-1.5 rounded-full bg-brass" aria-hidden="true"></span>
+          45-Second Hybrid Quote Engine • $0 Upfront Deposit
+        </span>
+        <h2 class="mt-3 font-serif text-3xl sm:text-4xl font-semibold text-spruce">
+          Instant Edmonton Flat-Rate &amp; Hourly Price Calculator
+        </h2>
+        <p class="mt-2.5 text-base leading-relaxed text-spruce/80">
+          Transparent pre-tax Canadian dollars (+ 5% AB GST where applicable). Check your Edmonton postal zone, customize your rooms, and reserve with $0 down today.
+        </p>
+      </div>
+    )}
+
+    <form
+      data-calc-form
+      novalidate
+      class="grid gap-6 lg:grid-cols-12 lg:items-start"
+    >
+      <!-- Left Column: Steps 1, 2 & 3 Controls -->
+      <div class="lg:col-span-7 space-y-6">
+        <!-- STEP 1: Edmonton Postal FSA Check -->
+        <div class="rounded-3xl border border-mist/35 bg-card p-5 sm:p-7 shadow-2xs">
+          <div class="flex items-center gap-2.5">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-spruce font-mono text-xs font-bold text-linen">
+              1
+            </span>
+            <h3 class="font-serif text-lg sm:text-xl font-semibold text-spruce">
+              Check Your Greater Edmonton Postal Code
+            </h3>
+          </div>
+
+          <div class="mt-4 grid gap-3 sm:grid-cols-12 sm:items-center">
+            <div class="sm:col-span-5">
+              <label for="calc-postal-input" class="sr-only">
+                Edmonton or Capital Region Postal Code (FSA)
+              </label>
+              <input
+                id="calc-postal-input"
+                name="postalCode"
+                type="text"
+                inputmode="text"
+                maxlength="7"
+                autocomplete="postal-code"
+                placeholder="e.g. T5K, T6W, T8N"
+                data-postal-input
+                class="w-full min-h-[48px] rounded-2xl border border-mist/50 bg-linen px-4 py-3 text-base font-semibold uppercase tracking-wider text-spruce placeholder:font-normal placeholder:normal-case placeholder:tracking-normal placeholder:text-spruce/50 focus:border-eucalyptus"
+              />
+            </div>
+            <div class="sm:col-span-7">
+              <div
+                data-postal-badge
+                aria-live="polite"
+                class="flex min-h-[48px] items-center rounded-2xl border border-mist/30 bg-linen/80 px-4 py-2.5 text-xs sm:text-sm text-spruce/80"
+              >
+                Enter your 3-character FSA (T5*, T6*, T8N, T8A, T7X, T9E…) to verify $0 travel zone.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: Dual-Path & Room Customization -->
+        <div class="rounded-3xl border border-mist/35 bg-card p-5 sm:p-7 shadow-2xs space-y-6">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-spruce font-mono text-xs font-bold text-linen">
+                2
+              </span>
+              <h3 class="font-serif text-lg sm:text-xl font-semibold text-spruce">
+                Customize Your Clean
+              </h3>
+            </div>
+
+            <!-- Dual-Path Toggle -->
+            <div
+              role="group"
+              aria-label="Pricing mode toggle"
+              class="inline-grid grid-cols-2 rounded-full border border-mist/40 bg-linen p-1"
+            >
+              <button
+                type="button"
+                data-mode-btn="flat_rate"
+                aria-pressed={initialMode === 'flat_rate' ? 'true' : 'false'}
+                class:list={[
+                  'min-h-[44px] rounded-full px-3.5 py-2 text-xs font-semibold transition cursor-pointer',
+                  initialMode === 'flat_rate'
+                    ? 'bg-eucalyptus text-linen shadow-2xs'
+                    : 'text-spruce hover:bg-card',
+                ]}
+              >
+                Flat-Rate Packages
+              </button>
+              <button
+                type="button"
+                data-mode-btn="hourly"
+                aria-pressed={initialMode === 'hourly' ? 'true' : 'false'}
+                class:list={[
+                  'min-h-[44px] rounded-full px-3.5 py-2 text-xs font-semibold transition cursor-pointer',
+                  initialMode === 'hourly'
+                    ? 'bg-eucalyptus text-linen shadow-2xs'
+                    : 'text-spruce hover:bg-card',
+                ]}
+              >
+                Hourly Custom ($48/hr)
+              </button>
+            </div>
+          </div>
+
+          <!-- Flat-Rate Controls -->
+          <div data-flat-rate-panel hidden={initialMode !== 'flat_rate'} class="space-y-6">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-wider text-spruce/75 mb-2.5">
+                Select Cleaning Package
+              </p>
+              <div class="grid gap-2.5 sm:grid-cols-2">
+                {packageOptions.map((pkg) => {
+                  const active = defaultService === pkg.id;
+                  return (
+                    <button
+                      type="button"
+                      data-service-btn={pkg.id}
+                      aria-pressed={active ? 'true' : 'false'}
+                      class:list={[
+                        'flex min-h-[64px] flex-col items-start justify-center rounded-2xl border p-3.5 text-left transition cursor-pointer',
+                        active
+                          ? 'border-eucalyptus bg-eucalyptus text-linen shadow-xs'
+                          : 'border-mist/35 bg-linen text-spruce hover:border-eucalyptus',
+                      ]}
+                    >
+                      <span class="flex w-full items-center justify-between gap-2 text-sm font-semibold">
+                        <span>{pkg.label}</span>
+                        <span class="font-mono text-xs opacity-90">From ${pkg.fromCad}</span>
+                      </span>
+                      <span
+                        data-service-tag
+                        class:list={[
+                          'mt-0.5 text-xs',
+                          active ? 'text-linen/90' : 'text-spruce/75',
+                        ]}
+                      >
+                        {pkg.tag}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <!-- Bedrooms & Bathrooms -->
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div>
+                <p class="text-xs font-bold uppercase tracking-wider text-spruce/75 mb-2">
+                  Bedrooms
+                </p>
+                <div class="grid grid-cols-5 gap-1.5" role="group" aria-label="Number of bedrooms">
+                  {[1, 2, 3, 4, 5].map((num) => {
+                    const active = num === defaultBedrooms;
+                    return (
+                      <button
+                        type="button"
+                        data-bed-btn={String(num)}
+                        aria-label={`${num} ${num === 1 ? 'bedroom' : 'bedrooms'}`}
+                        aria-pressed={active ? 'true' : 'false'}
+                        class:list={[
+                          'min-h-[44px] rounded-xl border text-sm font-semibold transition cursor-pointer',
+                          active
+                            ? 'border-eucalyptus bg-eucalyptus text-linen'
+                            : 'border-mist/35 bg-linen text-spruce hover:border-eucalyptus',
+                        ]}
+                      >
+                        {num}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <p class="text-xs font-bold uppercase tracking-wider text-spruce/75">
+                    Bathrooms
+                  </p>
+                  <span class="text-[11px] text-spruce/70">1st incl., +$25/extra</span>
+                </div>
+                <div class="grid grid-cols-5 gap-1.5" role="group" aria-label="Number of bathrooms">
+                  {[1, 2, 3, 4, 5].map((num) => {
+                    const active = num === defaultBathrooms;
+                    return (
+                      <button
+                        type="button"
+                        data-bath-btn={String(num)}
+                        aria-label={`${num} ${num === 1 ? 'bathroom' : 'bathrooms'}`}
+                        aria-pressed={active ? 'true' : 'false'}
+                        class:list={[
+                          'min-h-[44px] rounded-xl border text-sm font-semibold transition cursor-pointer',
+                          active
+                            ? 'border-eucalyptus bg-eucalyptus text-linen'
+                            : 'border-mist/35 bg-linen text-spruce hover:border-eucalyptus',
+                        ]}
+                      >
+                        {num}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hourly Custom Clean Controls -->
+          <div data-hourly-panel hidden={initialMode !== 'hourly'} class="space-y-5">
+            <div class="rounded-2xl border border-eucalyptus/30 bg-eucalyptus/8 p-4 text-xs sm:text-sm text-spruce">
+              <span class="font-semibold">$48/hr per specialist</span> (below the $50/hr Edmonton 30-company median). Hand us your priority room list—we work top-to-bottom with commercial HEPA &amp; botanical kits.
+            </div>
+
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div>
+                <p class="text-xs font-bold uppercase tracking-wider text-spruce/75 mb-2">
+                  Hours (3 to 10 hrs)
+                </p>
+                <div class="flex items-center gap-2">
+                  <button
+                    type="button"
+                    data-hours-step="-1"
+                    aria-label="Decrease hours"
+                    class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-mist/40 bg-linen text-base font-bold text-spruce hover:border-eucalyptus cursor-pointer"
+                  >
+                    −
+                  </button>
+                  <div
+                    data-hours-display
+                    class="flex min-h-[44px] flex-1 items-center justify-center rounded-xl border border-mist/35 bg-linen font-semibold text-spruce text-sm"
+                  >
+                    4 Hours
+                  </div>
+                  <button
+                    type="button"
+                    data-hours-step="1"
+                    aria-label="Increase hours"
+                    class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-mist/40 bg-linen text-base font-bold text-spruce hover:border-eucalyptus cursor-pointer"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <p class="text-xs font-bold uppercase tracking-wider text-spruce/75 mb-2">
+                  Specialists (1 to 3)
+                </p>
+                <div class="grid grid-cols-3 gap-2" role="group" aria-label="Number of cleaning specialists">
+                  {[1, 2, 3].map((count) => (
+                    <button
+                      type="button"
+                      data-cleaner-btn={String(count)}
+                      aria-pressed={count === 1 ? 'true' : 'false'}
+                      class:list={[
+                        'min-h-[44px] rounded-xl border text-xs sm:text-sm font-semibold transition cursor-pointer',
+                        count === 1
+                          ? 'border-eucalyptus bg-eucalyptus text-linen'
+                          : 'border-mist/35 bg-linen text-spruce hover:border-eucalyptus',
+                      ]}
+                    >
+                      {count} {count === 1 ? 'Cleaner' : 'Cleaners'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Frequency Selector -->
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <p class="text-xs font-bold uppercase tracking-wider text-spruce/75">
+                Visit Frequency
+              </p>
+              <span
+                data-moveout-freq-note
+                hidden={!(initialMode === 'flat_rate' && defaultService === 'move_out')}
+                class="text-xs font-medium text-eucalyptus"
+              >
+                Move-Out is a one-time inspection package
+              </span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" role="group" aria-label="Cleaning frequency">
+              {frequencyOptions.map((freq) => {
+                const isMoveOutInit = initialMode === 'flat_rate' && defaultService === 'move_out';
+                const active = isMoveOutInit ? freq.id === 'one_time' : freq.id === defaultFrequency;
+                const disabled = isMoveOutInit && freq.id !== 'one_time';
+                return (
+                  <button
+                    type="button"
+                    data-freq-btn={freq.id}
+                    disabled={disabled}
+                    aria-pressed={active ? 'true' : 'false'}
+                    class:list={[
+                      'flex min-h-[48px] flex-col items-center justify-center rounded-xl border px-3 py-2 text-xs transition',
+                      active
+                        ? 'border-eucalyptus bg-eucalyptus text-linen font-semibold'
+                        : 'border-mist/35 bg-linen text-spruce hover:border-eucalyptus',
+                      disabled ? 'opacity-45 cursor-not-allowed' : 'cursor-pointer',
+                    ]}
+                  >
+                    <span class="font-semibold">{freq.label}</span>
+                    <span class="text-[11px] opacity-85">{freq.sub}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <!-- Detail Add-Ons (Auto-locks Oven + Fridge + Cabinets FREE on Move-Out) -->
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+              <p class="text-xs font-bold uppercase tracking-wider text-spruce/75">
+                Precision Add-Ons
+              </p>
+              <span
+                data-moveout-free-banner
+                hidden={!(initialMode === 'flat_rate' && defaultService === 'move_out')}
+                class="inline-flex items-center gap-1 rounded-full bg-eucalyptus/15 border border-eucalyptus/35 px-3 py-0.5 text-xs font-semibold text-eucalyptus"
+              >
+                ✓ Oven + Fridge + Cabinets Included FREE ($135 value)
+              </span>
+            </div>
+
+            <div class="grid gap-2 sm:grid-cols-2">
+              {addonEntries.map(([addonId, addonCfg]) => {
+                const isLockedFree =
+                  initialMode === 'flat_rate' &&
+                  defaultService === 'move_out' &&
+                  moveOutFreeSet.has(addonId);
+                const isChecked = isLockedFree || defaultAddons.includes(addonId);
+                return (
+                  <label
+                    data-addon-card={addonId}
+                    class:list={[
+                      'flex min-h-[48px] items-center justify-between gap-2.5 rounded-2xl border px-3.5 py-2.5 text-xs sm:text-sm transition cursor-pointer',
+                      isChecked
+                        ? 'border-eucalyptus bg-eucalyptus/10 text-spruce font-medium'
+                        : 'border-mist/35 bg-linen text-spruce hover:border-eucalyptus',
+                    ]}
+                  >
+                    <span class="flex items-center gap-2.5 min-w-0">
+                      <input
+                        type="checkbox"
+                        value={addonId}
+                        checked={isChecked}
+                        disabled={isLockedFree}
+                        data-addon-checkbox={addonId}
+                        class="h-4 w-4 shrink-0 rounded accent-eucalyptus"
+                      />
+                      <span class="truncate">{addonCfg.label}</span>
+                    </span>
+                    <span
+                      data-addon-price-pill={addonId}
+                      data-regular-price={String(addonCfg.priceCad)}
+                      class:list={[
+                        'shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold',
+                        isLockedFree
+                          ? 'bg-eucalyptus text-linen'
+                          : 'bg-card text-spruce/85',
+                      ]}
+                    >
+                      {isLockedFree ? 'Included FREE' : `+$${addonCfg.priceCad}`}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: Lock In Date ($0 Upfront) + Snap & Lock + CASL Gate -->
+        <div class="rounded-3xl border border-mist/35 bg-card p-5 sm:p-7 shadow-2xs space-y-5">
+          <div class="flex items-center gap-2.5">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-spruce font-mono text-xs font-bold text-linen">
+              3
+            </span>
+            <div>
+              <h3 class="font-serif text-lg sm:text-xl font-semibold text-spruce">
+                Reserve With $0 Upfront Deposit
+              </h3>
+              <p class="text-xs text-spruce/75">
+                Pay only after your 50-point walkthrough sign-off (or SMS photo-verified report).
+              </p>
+            </div>
+          </div>
+
+          <!-- Hidden Honeypot -->
+          <div class="hidden" aria-hidden="true">
+            <label>
+              Website URL
+              <input type="text" name="honeypot" tabindex="-1" autocomplete="off" data-honeypot />
+            </label>
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="calc-name" class="block text-xs font-semibold text-spruce mb-1.5">
+                Full Name <span class="text-eucalyptus">*</span>
+              </label>
+              <input
+                id="calc-name"
+                name="name"
+                type="text"
+                required
+                autocomplete="name"
+                placeholder="Jordan Taylor"
+                data-name-input
+                class="w-full min-h-[46px] rounded-xl border border-mist/45 bg-linen px-3.5 py-2.5 text-sm text-spruce placeholder:text-spruce/45 focus:border-eucalyptus"
+              />
+            </div>
+
+            <div>
+              <label for="calc-phone" class="block text-xs font-semibold text-spruce mb-1.5">
+                Mobile Number (for SMS quote) <span class="text-eucalyptus">*</span>
+              </label>
+              <input
+                id="calc-phone"
+                name="phone"
+                type="tel"
+                required
+                autocomplete="tel"
+                placeholder="(780) 710-1503"
+                data-phone-input
+                class="w-full min-h-[46px] rounded-xl border border-mist/45 bg-linen px-3.5 py-2.5 text-sm text-spruce placeholder:text-spruce/45 focus:border-eucalyptus"
+              />
+            </div>
+
+            <div>
+              <label for="calc-email" class="block text-xs font-semibold text-spruce mb-1.5">
+                Email <span class="font-normal text-spruce/70">(Optional — for itemized receipt)</span>
+              </label>
+              <input
+                id="calc-email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                placeholder="you@example.ca"
+                data-email-input
+                class="w-full min-h-[46px] rounded-xl border border-mist/45 bg-linen px-3.5 py-2.5 text-sm text-spruce placeholder:text-spruce/45 focus:border-eucalyptus"
+              />
+            </div>
+
+            <div>
+              <label for="calc-date" class="block text-xs font-semibold text-spruce mb-1.5">
+                Preferred Cleaning Date <span class="font-normal text-spruce/70">(Optional)</span>
+              </label>
+              <input
+                id="calc-date"
+                name="preferredDate"
+                type="date"
+                data-date-input
+                class="w-full min-h-[46px] rounded-xl border border-mist/45 bg-linen px-3.5 py-2.5 text-sm text-spruce focus:border-eucalyptus"
+              />
+            </div>
+          </div>
+
+          <label class="flex min-h-[44px] items-center gap-3 rounded-2xl border border-mist/35 bg-linen px-4 py-2.5 text-xs sm:text-sm font-medium text-spruce cursor-pointer">
+            <input
+              type="checkbox"
+              name="hasPets"
+              data-pets-input
+              class="h-4 w-4 shrink-0 rounded accent-eucalyptus"
+            />
+            <span>Pets at home (our 100% bleach-free botanical eucalyptus kit is standard on every visit)</span>
+          </label>
+
+          <!-- Snap & Lock Exact Price (Canvas Browser Compression) -->
+          <div class="rounded-2xl border border-dashed border-mist/60 bg-linen/90 p-4 space-y-2.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <p class="text-xs sm:text-sm font-semibold text-spruce">
+                  Snap &amp; Lock Exact Price <span class="font-normal text-spruce/70">(Optional • 1–2 photos)</span>
+                </p>
+                <p class="text-xs text-spruce/75">
+                  Attach up to 2 quick kitchen/bath photos so our Edmonton lead team locks your exact rate before arrival.
+                </p>
+              </div>
+              <label class="inline-flex min-h-[44px] items-center justify-center rounded-full border border-spruce/25 bg-card px-4 py-2 text-xs font-semibold text-spruce hover:border-eucalyptus cursor-pointer">
+                <span>+ Attach Photos</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  data-snap-input
+                  class="sr-only"
+                />
+              </label>
+            </div>
+            <div data-snap-status class="text-xs text-spruce/75" aria-live="polite"></div>
+          </div>
+
+          <div>
+            <label for="calc-notes" class="block text-xs font-semibold text-spruce mb-1.5">
+              Access / Surface Notes <span class="font-normal text-spruce/70">(Optional — condo buzzer, lockbox, marble/quartz notes)</span>
+            </label>
+            <textarea
+              id="calc-notes"
+              name="notes"
+              rows="2"
+              placeholder="e.g. Vacant condo with lockbox, Calacatta quartz island, need RTA landlord receipt..."
+              data-notes-input
+              class="w-full rounded-xl border border-mist/45 bg-linen px-3.5 py-2.5 text-sm text-spruce placeholder:text-spruce/45 focus:border-eucalyptus"
+            ></textarea>
+          </div>
+
+          <!-- Mandatory Unchecked CASL SMS Consent Gate -->
+          <label
+            data-casl-wrapper
+            class="flex min-h-[48px] items-start gap-3 rounded-2xl border border-mist/45 bg-linen p-3.5 text-xs leading-relaxed text-spruce cursor-pointer"
+          >
+            <input
+              type="checkbox"
+              name="caslSmsConsent"
+              data-casl-checkbox
+              class="mt-0.5 h-4 w-4 shrink-0 rounded accent-eucalyptus"
+            />
+            <span>
+              <strong class="font-semibold">CASL SMS Consent (Required):</strong> I consent to receive text messages from LevelUp Cleaning (+1 (780) 710-1503) regarding my quote, scheduling, walkthrough photo report, and occasional Edmonton seasonal offers. Standard message rates apply; reply STOP anytime. <a href="/privacy" class="underline font-semibold hover:text-eucalyptus">Privacy &amp; CASL Terms</a>.
+            </span>
+          </label>
+
+          <!-- Validation Alert -->
+          <div
+            data-form-error
+            role="alert"
+            hidden
+            class="rounded-2xl border border-brass bg-brass/20 px-4 py-3 text-xs sm:text-sm font-semibold text-spruce"
+          ></div>
+
+          <!-- Confirmation Panel -->
+          <div
+            data-form-success
+            role="status"
+            hidden
+            class="rounded-2xl border border-eucalyptus bg-eucalyptus/12 p-5 space-y-3 text-spruce"
+          >
+            <p class="font-serif text-xl font-semibold text-spruce">
+              ✓ Request Received — $0 Upfront Reserved!
+            </p>
+            <p data-success-detail class="text-sm leading-relaxed text-spruce/90"></p>
+            <div class="pt-1">
+              <a
+                href={initialSmsHref}
+                data-success-sms
+                class="inline-flex min-h-[44px] items-center justify-center rounded-full bg-eucalyptus px-5 py-2.5 text-xs sm:text-sm font-semibold text-linen transition hover:bg-eucalyptus-hover"
+              >
+                Send Instant 1-Tap SMS Confirmation →
+              </a>
+            </div>
+          </div>
+
+          <!-- Primary Submit + 1-Tap Pre-Filled SMS Fallback -->
+          <div class="grid gap-3 sm:grid-cols-2 pt-1">
+            <button
+              type="submit"
+              data-submit-btn
+              class="inline-flex min-h-[50px] items-center justify-center gap-2 rounded-full bg-eucalyptus px-6 py-3 text-sm font-semibold text-linen shadow-sm transition hover:bg-eucalyptus-hover cursor-pointer"
+            >
+              <span>Lock In My Rate ($0 Upfront)</span>
+            </button>
+
+            <a
+              href={initialSmsHref}
+              data-sms-prefill
+              class="inline-flex min-h-[50px] items-center justify-center gap-2 rounded-full border border-spruce/30 bg-linen px-5 py-3 text-sm font-semibold text-spruce transition hover:border-eucalyptus"
+            >
+              <span>1-Tap Pre-Filled SMS</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Live Sticky Quote Summary Card -->
+      <aside class="lg:col-span-5 lg:sticky lg:top-24">
+        <div class="rounded-3xl border border-spruce/20 bg-spruce p-6 sm:p-8 text-linen shadow-xl space-y-5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-linen/75">
+              Live Estimated Total
+            </span>
+            <span
+              data-quote-promo-badge
+              hidden={initialQuote.promo.discountCad <= 0}
+              class="inline-flex items-center gap-1.5 rounded-full border border-brass/60 bg-brass/20 px-3 py-1 text-xs font-semibold text-linen"
+            >
+              {initialQuote.promo.badge}
+            </span>
+          </div>
+
+          <div>
+            <div class="flex items-baseline gap-2">
+              <span
+                data-quote-final
+                class="font-serif text-5xl sm:text-6xl font-semibold tracking-tight text-linen"
+              >
+                ${initialQuote.finalPreTaxCad}
+              </span>
+              <span class="text-base font-semibold text-linen/80">CAD pre-tax</span>
+            </div>
+            <p data-quote-gst class="mt-1.5 text-xs text-linen/80">
+              + 5% AB GST where applicable (est. ${initialQuote.estimatedGstCad.toFixed(2)} GST)
+            </p>
+          </div>
+
+          <!-- Competitor Median Savings & Move-Out Free Bundle Callouts -->
+          <div class="space-y-2">
+            <div
+              data-quote-savings-pill
+              hidden={initialQuote.competitorSavingsCad <= 0}
+              class="rounded-2xl border border-mist/35 bg-linen/10 px-4 py-2.5 text-xs font-semibold text-linen"
+            >
+              Saves ${initialQuote.competitorSavingsCad} CAD vs. ${initialQuote.competitorMedianCad} Edmonton 30-company median
+            </div>
+
+            <div
+              data-quote-free-bundle
+              hidden={initialQuote.includedFreeSavingsCad <= 0}
+              class="rounded-2xl border border-eucalyptus bg-eucalyptus/30 px-4 py-2.5 text-xs font-semibold text-linen"
+            >
+              ✓ Includes $135 Appliance Bundle FREE (Inside Oven, Fridge &amp; Cabinets)
+            </div>
+          </div>
+
+          <!-- Line-Item Breakdown -->
+          <div class="space-y-2.5 border-y border-linen/15 py-4 text-xs sm:text-sm">
+            <div class="flex items-center justify-between gap-3">
+              <span data-line-service-label class="text-linen/85">{initialQuote.serviceTitle}</span>
+              <span data-line-base-price class="font-semibold text-linen">${initialQuote.basePriceCad}</span>
+            </div>
+
+            <div
+              data-row-baths
+              hidden={initialQuote.extraBathroomFeeCad <= 0}
+              class="flex items-center justify-between gap-3"
+            >
+              <span class="text-linen/80">Extra Bathroom Detailing</span>
+              <span data-line-baths class="font-semibold text-linen">+${initialQuote.extraBathroomFeeCad}</span>
+            </div>
+
+            <div
+              data-row-addons
+              hidden={initialQuote.addonsTotalCad <= 0}
+              class="flex items-center justify-between gap-3"
+            >
+              <span class="text-linen/80">Selected Precision Add-Ons</span>
+              <span data-line-addons class="font-semibold text-linen">+${initialQuote.addonsTotalCad}</span>
+            </div>
+
+            <div class="flex items-center justify-between gap-3">
+              <span data-line-travel-label class="text-linen/80">Greater Edmonton Travel Zone</span>
+              <span data-line-travel class="font-semibold text-linen">
+                {initialQuote.travelFeeCad === 0 ? '$0 Travel' : `+$${initialQuote.travelFeeCad}`}
+              </span>
+            </div>
+
+            <div
+              data-row-freq
+              hidden={initialQuote.frequencyDiscountCad <= 0}
+              class="flex items-center justify-between gap-3 text-linen"
+            >
+              <span data-line-freq-label>Recurring Plan Discount ({initialQuote.frequencyDiscountPct}%)</span>
+              <span data-line-freq class="font-semibold text-brass">−${initialQuote.frequencyDiscountCad}</span>
+            </div>
+
+            <div
+              data-row-promo
+              hidden={initialQuote.promo.discountCad <= 0}
+              class="flex items-center justify-between gap-3 text-linen"
+            >
+              <span data-line-promo-label>Active Promo Savings</span>
+              <span data-line-promo class="font-semibold text-brass">−${initialQuote.promo.discountCad}</span>
+            </div>
+          </div>
+
+          <!-- Due Today $0 Assurance -->
+          <div class="rounded-2xl bg-linen/10 p-4 space-y-1.5">
+            <div class="flex items-center justify-between text-sm font-bold text-linen">
+              <span>Due Today to Book</span>
+              <span class="text-brass">$0.00 CAD</span>
+            </div>
+            <p class="text-xs leading-relaxed text-linen/80">
+              Settle via Interac e-Transfer or card only after your on-site 50-point walkthrough sign-off (or SMS photo-verified report for lockbox homes).
+            </p>
+          </div>
+
+          <ul class="space-y-1.5 text-xs text-linen/80">
+            <li>• City of Edmonton Licensed &amp; Background-Checked Specialists</li>
+            <li>• 100% Pet &amp; Kid Safe Botanical Eucalyptus Formulas</li>
+            <li>• Official Itemized Receipt Issued Upon Completion</li>
+          </ul>
+        </div>
+      </aside>
+    </form>
+  </div>
+</section>
+
+<script>
+  import type {
+    AddonId,
+    AttributionData,
+    Frequency,
+    LeadSubmissionPayload,
+    LeadSubmissionResult,
+    QuoteInput,
+    ServiceId,
+    SnapPhotoAttachment,
+  } from '../types/contracts';
+  import { lookupPostalCode } from '../lib/postal';
+  import { buildSmsPrefillHref, calculateQuote } from '../lib/pricing';
+
+  const MOVE_OUT_FREE_IDS: readonly AddonId[] = ['inside_oven', 'inside_fridge', 'inside_cabinets'];
+
+  function readCookie(name: string): string | undefined {
+    const match = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith(`${name}=`));
+    return match ? decodeURIComponent(match.split('=')[1] || '') : undefined;
+  }
+
+  function generateEventId(): string {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID();
+    }
+    return `lup-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  }
+
+  async function compressImageFile(file: File): Promise<SnapPhotoAttachment> {
+    const bitmapUrl = URL.createObjectURL(file);
+    try {
+      const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const el = new Image();
+        el.onload = () => resolve(el);
+        el.onerror = () => reject(new Error('Could not decode selected photo.'));
+        el.src = bitmapUrl;
+      });
+
+      const maxDim = 1024;
+      let { width, height } = img;
+      if (width > maxDim || height > maxDim) {
+        if (width >= height) {
+          height = Math.max(1, Math.round((height * maxDim) / width));
+          width = maxDim;
+        } else {
+          width = Math.max(1, Math.round((width * maxDim) / height));
+          height = maxDim;
+        }
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        throw new Error('Canvas compression context unavailable.');
+      }
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Compress iteratively to stay well under 350 KB (~466,000 base64 chars)
+      let quality = 0.78;
+      let base64Data = '';
+      while (quality >= 0.45) {
+        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+        base64Data = dataUrl.split(',')[1] || '';
+        if (base64Data.length <= 450_000) break;
+        quality -= 0.12;
+      }
+
+      const safeBase = file.name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 60) || 'room';
+      return {
+        filename: `${safeBase}.jpg`,
+        mimeType: 'image/jpeg',
+        base64Data,
+      };
+    } finally {
+      URL.revokeObjectURL(bitmapUrl);
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-calculator-root]').forEach((root) => {
+    const form = root.querySelector<HTMLFormElement>('[data-calc-form]');
+    if (!form) return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlPromo = urlParams.get('promo') || urlParams.get('offer');
+    const initialPromo = urlPromo || root.dataset.defaultPromo || null;
+
+    let mode: 'flat_rate' | 'hourly' =
+      root.dataset.defaultMode === 'hourly' ? 'hourly' : 'flat_rate';
+    let service: ServiceId = (root.dataset.defaultService as ServiceId) || 'move_out';
+    if (mode === 'flat_rate' && service === 'hourly') service = 'move_out';
+
+    let bedrooms = Number(root.dataset.defaultBedrooms || '2') || 2;
+    let bathrooms = Number(root.dataset.defaultBathrooms || '2') || 2;
+    let frequency: Frequency = (root.dataset.defaultFrequency as Frequency) || 'one_time';
+    let hours = 4;
+    let cleaners = 1;
+    let postalCode = '';
+    let userAddons = new Set<AddonId>(
+      JSON.parse(root.dataset.defaultAddons || '[]') as AddonId[],
+    );
+    let snapPhotos: SnapPhotoAttachment[] = [];
+
+    const postalInput = root.querySelector<HTMLInputElement>('[data-postal-input]');
+    const postalBadge = root.querySelector<HTMLElement>('[data-postal-badge]');
+    const flatPanel = root.querySelector<HTMLElement>('[data-flat-rate-panel]');
+    const hourlyPanel = root.querySelector<HTMLElement>('[data-hourly-panel]');
+    const hoursDisplay = root.querySelector<HTMLElement>('[data-hours-display]');
+    const moveOutFreqNote = root.querySelector<HTMLElement>('[data-moveout-freq-note]');
+    const moveOutFreeBanner = root.querySelector<HTMLElement>('[data-moveout-free-banner]');
+
+    const nameInput = root.querySelector<HTMLInputElement>('[data-name-input]');
+    const phoneInput = root.querySelector<HTMLInputElement>('[data-phone-input]');
+    const emailInput = root.querySelector<HTMLInputElement>('[data-email-input]');
+    const dateInput = root.querySelector<HTMLInputElement>('[data-date-input]');
+    const petsInput = root.querySelector<HTMLInputElement>('[data-pets-input]');
+    const notesInput = root.querySelector<HTMLTextAreaElement>('[data-notes-input]');
+    const honeypotInput = root.querySelector<HTMLInputElement>('[data-honeypot]');
+    const snapInput = root.querySelector<HTMLInputElement>('[data-snap-input]');
+    const snapStatus = root.querySelector<HTMLElement>('[data-snap-status]');
+    const caslCheckbox = root.querySelector<HTMLInputElement>('[data-casl-checkbox]');
+    const caslWrapper = root.querySelector<HTMLElement>('[data-casl-wrapper]');
+    const errorBox = root.querySelector<HTMLElement>('[data-form-error]');
+    const successBox = root.querySelector<HTMLElement>('[data-form-success]');
+    const successDetail = root.querySelector<HTMLElement>('[data-success-detail]');
+    const successSms = root.querySelector<HTMLAnchorElement>('[data-success-sms]');
+    const submitBtn = root.querySelector<HTMLButtonElement>('[data-submit-btn]');
+    const smsPrefillLink = root.querySelector<HTMLAnchorElement>('[data-sms-prefill]');
+
+    // Summary DOM refs
+    const finalEl = root.querySelector<HTMLElement>('[data-quote-final]');
+    const gstEl = root.querySelector<HTMLElement>('[data-quote-gst]');
+    const promoBadgeEl = root.querySelector<HTMLElement>('[data-quote-promo-badge]');
+    const savingsPillEl = root.querySelector<HTMLElement>('[data-quote-savings-pill]');
+    const freeBundleEl = root.querySelector<HTMLElement>('[data-quote-free-bundle]');
+    const serviceLabelEl = root.querySelector<HTMLElement>('[data-line-service-label]');
+    const basePriceEl = root.querySelector<HTMLElement>('[data-line-base-price]');
+    const rowBaths = root.querySelector<HTMLElement>('[data-row-baths]');
+    const lineBaths = root.querySelector<HTMLElement>('[data-line-baths]');
+    const rowAddons = root.querySelector<HTMLElement>('[data-row-addons]');
+    const lineAddons = root.querySelector<HTMLElement>('[data-line-addons]');
+    const lineTravelLabel = root.querySelector<HTMLElement>('[data-line-travel-label]');
+    const lineTravel = root.querySelector<HTMLElement>('[data-line-travel]');
+    const rowFreq = root.querySelector<HTMLElement>('[data-row-freq]');
+    const lineFreqLabel = root.querySelector<HTMLElement>('[data-line-freq-label]');
+    const lineFreq = root.querySelector<HTMLElement>('[data-line-freq]');
+    const rowPromo = root.querySelector<HTMLElement>('[data-row-promo]');
+    const linePromo = root.querySelector<HTMLElement>('[data-line-promo]');
+
+    function buildCurrentQuoteInput(): QuoteInput {
+      const effectiveFreq: Frequency =
+        mode === 'flat_rate' && service === 'move_out' ? 'one_time' : frequency;
+      return {
+        mode,
+        service: mode === 'hourly' ? 'hourly' : service,
+        bedrooms,
+        bathrooms,
+        frequency: effectiveFreq,
+        addons: Array.from(userAddons),
+        hours,
+        cleaners,
+        postalCode,
+        promoQuery: initialPromo,
+      };
+    }
+
+    function syncControlStates() {
+      const isMoveOut = mode === 'flat_rate' && service === 'move_out';
+
+      if (flatPanel) flatPanel.hidden = mode !== 'flat_rate';
+      if (hourlyPanel) hourlyPanel.hidden = mode !== 'hourly';
+      if (hoursDisplay) hoursDisplay.textContent = `${hours} Hours`;
+      if (moveOutFreqNote) moveOutFreqNote.hidden = !isMoveOut;
+      if (moveOutFreeBanner) moveOutFreeBanner.hidden = !isMoveOut;
+
+      root.querySelectorAll<HTMLButtonElement>('[data-mode-btn]').forEach((btn) => {
+        const active = btn.dataset.modeBtn === mode;
+        btn.setAttribute('aria-pressed', String(active));
+        btn.classList.toggle('bg-eucalyptus', active);
+        btn.classList.toggle('text-linen', active);
+        btn.classList.toggle('shadow-2xs', active);
+        btn.classList.toggle('text-spruce', !active);
+      });
+
+      root.querySelectorAll<HTMLButtonElement>('[data-service-btn]').forEach((btn) => {
+        const active = btn.dataset.serviceBtn === service;
+        btn.setAttribute('aria-pressed', String(active));
+        btn.classList.toggle('border-eucalyptus', active);
+        btn.classList.toggle('bg-eucalyptus', active);
+        btn.classList.toggle('text-linen', active);
+        btn.classList.toggle('border-mist/35', !active);
+        btn.classList.toggle('bg-linen', !active);
+        btn.classList.toggle('text-spruce', !active);
+        const tag = btn.querySelector<HTMLElement>('[data-service-tag]');
+        if (tag) {
+          tag.classList.toggle('text-linen/90', active);
+          tag.classList.toggle('text-spruce/75', !active);
+        }
+      });
+
+      root.querySelectorAll<HTMLButtonElement>('[data-bed-btn]').forEach((btn) => {
+        const active = Number(btn.dataset.bedBtn) === bedrooms;
+        btn.setAttribute('aria-pressed', String(active));
+        btn.classList.toggle('border-eucalyptus', active);
+        btn.classList.toggle('bg-eucalyptus', active);
+        btn.classList.toggle('text-linen', active);
+        btn.classList.toggle('border-mist/35', !active);
+        btn.classList.toggle('bg-linen', !active);
+        btn.classList.toggle('text-spruce', !active);
+      });
+
+      root.querySelectorAll<HTMLButtonElement>('[data-bath-btn]').forEach((btn) => {
+        const active = Number(btn.dataset.bathBtn) === bathrooms;
+        btn.setAttribute('aria-pressed', String(active));
+        btn.classList.toggle('border-eucalyptus', active);
+        btn.classList.toggle('bg-eucalyptus', active);
+        btn.classList.toggle('text-linen', active);
+        btn.classList.toggle('border-mist/35', !active);
+        btn.classList.toggle('bg-linen', !active);
+        btn.classList.toggle('text-spruce', !active);
+      });
+
+      root.querySelectorAll<HTMLButtonElement>('[data-cleaner-btn]').forEach((btn) => {
+        const active = Number(btn.dataset.cleanerBtn) === cleaners;
+        btn.setAttribute('aria-pressed', String(active));
+        btn.classList.toggle('border-eucalyptus', active);
+        btn.classList.toggle('bg-eucalyptus', active);
+        btn.classList.toggle('text-linen', active);
+        btn.classList.toggle('border-mist/35', !active);
+        btn.classList.toggle('bg-linen', !active);
+        btn.classList.toggle('text-spruce', !active);
+      });
+
+      root.querySelectorAll<HTMLButtonElement>('[data-freq-btn]').forEach((btn) => {
+        const id = btn.dataset.freqBtn as Frequency;
+        const disabled = isMoveOut && id !== 'one_time';
+        const active = isMoveOut ? id === 'one_time' : id === frequency;
+        btn.disabled = disabled;
+        btn.setAttribute('aria-pressed', String(active));
+        btn.classList.toggle('border-eucalyptus', active);
+        btn.classList.toggle('bg-eucalyptus', active);
+        btn.classList.toggle('text-linen', active);
+        btn.classList.toggle('font-semibold', active);
+        btn.classList.toggle('border-mist/35', !active);
+        btn.classList.toggle('bg-linen', !active);
+        btn.classList.toggle('text-spruce', !active);
+        btn.classList.toggle('opacity-45', disabled);
+        btn.classList.toggle('cursor-not-allowed', disabled);
+        btn.classList.toggle('cursor-pointer', !disabled);
+      });
+
+      root.querySelectorAll<HTMLInputElement>('[data-addon-checkbox]').forEach((cb) => {
+        const addonId = cb.dataset.addonCheckbox as AddonId;
+        const lockedFree = isMoveOut && MOVE_OUT_FREE_IDS.includes(addonId);
+        cb.disabled = lockedFree;
+        cb.checked = lockedFree || userAddons.has(addonId);
+
+        const card = root.querySelector<HTMLElement>(`[data-addon-card="${addonId}"]`);
+        if (card) {
+          card.classList.toggle('border-eucalyptus', cb.checked);
+          card.classList.toggle('bg-eucalyptus/10', cb.checked);
+          card.classList.toggle('font-medium', cb.checked);
+          card.classList.toggle('border-mist/35', !cb.checked);
+          card.classList.toggle('bg-linen', !cb.checked);
+        }
+
+        const pill = root.querySelector<HTMLElement>(`[data-addon-price-pill="${addonId}"]`);
+        if (pill) {
+          const regPrice = pill.dataset.regularPrice || '45';
+          pill.textContent = lockedFree ? 'Included FREE' : `+$${regPrice}`;
+          pill.classList.toggle('bg-eucalyptus', lockedFree);
+          pill.classList.toggle('text-linen', lockedFree);
+          pill.classList.toggle('bg-card', !lockedFree);
+          pill.classList.toggle('text-spruce/85', !lockedFree);
+        }
+      });
+    }
+
+    function updateSummaryUI() {
+      const quote = calculateQuote(buildCurrentQuoteInput());
+      const postalCheck = postalCode ? lookupPostalCode(postalCode) : null;
+
+      if (finalEl) finalEl.textContent = `$${quote.finalPreTaxCad}`;
+      if (gstEl) {
+        gstEl.textContent = `+ 5% AB GST where applicable (est. $${quote.estimatedGstCad.toFixed(2)} GST)`;
+      }
+
+      if (promoBadgeEl) {
+        promoBadgeEl.hidden = quote.promo.discountCad <= 0;
+        promoBadgeEl.textContent = quote.promo.badge;
+      }
+
+      if (savingsPillEl) {
+        savingsPillEl.hidden = quote.competitorSavingsCad <= 0;
+        savingsPillEl.textContent = `Saves $${quote.competitorSavingsCad} CAD vs. $${quote.competitorMedianCad} Edmonton 30-company median`;
+      }
+
+      if (freeBundleEl) {
+        freeBundleEl.hidden = quote.includedFreeSavingsCad <= 0;
+      }
+
+      if (serviceLabelEl) {
+        serviceLabelEl.textContent =
+          quote.mode === 'hourly'
+            ? `${hours} hrs × ${cleaners} ${cleaners === 1 ? 'Specialist' : 'Specialists'} ($48/hr)`
+            : `${quote.serviceTitle} (${bedrooms} Bed / ${bathrooms} Bath)`;
+      }
+      if (basePriceEl) basePriceEl.textContent = `$${quote.basePriceCad}`;
+
+      if (rowBaths) rowBaths.hidden = quote.extraBathroomFeeCad <= 0;
+      if (lineBaths) lineBaths.textContent = `+$${quote.extraBathroomFeeCad}`;
+
+      if (rowAddons) rowAddons.hidden = quote.addonsTotalCad <= 0;
+      if (lineAddons) lineAddons.textContent = `+$${quote.addonsTotalCad}`;
+
+      if (lineTravelLabel) {
+        lineTravelLabel.textContent =
+          postalCheck && postalCheck.valid
+            ? `Travel Zone (${postalCheck.municipality})`
+            : 'Greater Edmonton Travel Zone';
+      }
+      if (lineTravel) {
+        lineTravel.textContent =
+          quote.travelFeeCad === 0 ? '$0 Travel' : `+$${quote.travelFeeCad}`;
+      }
+
+      if (rowFreq) rowFreq.hidden = quote.frequencyDiscountCad <= 0;
+      if (lineFreqLabel) {
+        lineFreqLabel.textContent = `Recurring Plan Discount (${quote.frequencyDiscountPct}%)`;
+      }
+      if (lineFreq) lineFreq.textContent = `−$${quote.frequencyDiscountCad}`;
+
+      if (rowPromo) rowPromo.hidden = quote.promo.discountCad <= 0;
+      if (linePromo) linePromo.textContent = `−$${quote.promo.discountCad}`;
+
+      const smsHref = buildSmsPrefillHref(
+        quote,
+        postalCheck?.valid ? postalCheck.normalizedFsa : postalCode,
+        nameInput?.value,
+      );
+      if (smsPrefillLink) smsPrefillLink.href = smsHref;
+      document.querySelectorAll<HTMLAnchorElement>('[data-sticky-sms]').forEach((el) => {
+        el.href = smsHref;
+      });
+    }
+
+    function updatePostalUI() {
+      postalCode = (postalInput?.value || '').trim().toUpperCase();
+      if (!postalBadge) return;
+
+      if (!postalCode) {
+        postalBadge.className =
+          'flex min-h-[48px] items-center rounded-2xl border border-mist/30 bg-linen/80 px-4 py-2.5 text-xs sm:text-sm text-spruce/80';
+        postalBadge.textContent =
+          'Enter your 3-character FSA (T5*, T6*, T8N, T8A, T7X, T9E…) to verify $0 travel zone.';
+        return;
+      }
+
+      const cleaned = postalCode.replace(/[\s-]+/g, '');
+      if (cleaned.length < 3) {
+        postalBadge.className =
+          'flex min-h-[48px] items-center rounded-2xl border border-mist/30 bg-linen/80 px-4 py-2.5 text-xs sm:text-sm text-spruce/80';
+        postalBadge.textContent = 'Keep typing your 3-character Edmonton FSA (e.g. T5K, T6W, T8N)…';
+        return;
+      }
+
+      const res = lookupPostalCode(postalCode);
+      if (res.valid && res.travelFeeCad === 0) {
+        postalBadge.className =
+          'flex min-h-[48px] items-center rounded-2xl border border-eucalyptus/45 bg-eucalyptus/12 px-4 py-2.5 text-xs sm:text-sm font-semibold text-spruce';
+        postalBadge.textContent = `✓ ${res.areaName} — $0 Travel`;
+      } else if (res.valid && res.travelFeeCad > 0) {
+        postalBadge.className =
+          'flex min-h-[48px] items-center rounded-2xl border border-brass/60 bg-brass/18 px-4 py-2.5 text-xs sm:text-sm font-semibold text-spruce';
+        postalBadge.textContent = `✓ ${res.areaName} — +$${res.travelFeeCad} Greater Edmonton Ring`;
+      } else {
+        postalBadge.className =
+          'flex min-h-[48px] items-center rounded-2xl border border-brass bg-brass/20 px-4 py-2.5 text-xs sm:text-sm font-medium text-spruce';
+        postalBadge.textContent = res.message;
+      }
+    }
+
+    // Bind Step 1 & Step 2 listeners
+    postalInput?.addEventListener('input', () => {
+      updatePostalUI();
+      updateSummaryUI();
+    });
+
+    nameInput?.addEventListener('input', () => {
+      updateSummaryUI();
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('[data-mode-btn]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        mode = btn.dataset.modeBtn === 'hourly' ? 'hourly' : 'flat_rate';
+        if (mode === 'flat_rate' && service === 'hourly') service = 'move_out';
+        syncControlStates();
+        updateSummaryUI();
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('[data-service-btn]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        service = (btn.dataset.serviceBtn as ServiceId) || 'move_out';
+        syncControlStates();
+        updateSummaryUI();
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('[data-bed-btn]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        bedrooms = Number(btn.dataset.bedBtn) || 2;
+        syncControlStates();
+        updateSummaryUI();
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('[data-bath-btn]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        bathrooms = Number(btn.dataset.bathBtn) || 2;
+        syncControlStates();
+        updateSummaryUI();
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('[data-hours-step]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const delta = Number(btn.dataset.hoursStep) || 0;
+        hours = Math.min(10, Math.max(3, hours + delta));
+        syncControlStates();
+        updateSummaryUI();
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('[data-cleaner-btn]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        cleaners = Number(btn.dataset.cleanerBtn) || 1;
+        syncControlStates();
+        updateSummaryUI();
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('[data-freq-btn]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+        frequency = (btn.dataset.freqBtn as Frequency) || 'one_time';
+        syncControlStates();
+        updateSummaryUI();
+      });
+    });
+
+    root.querySelectorAll<HTMLInputElement>('[data-addon-checkbox]').forEach((cb) => {
+      cb.addEventListener('change', () => {
+        const addonId = cb.dataset.addonCheckbox as AddonId;
+        if (cb.disabled) return;
+        if (cb.checked) {
+          userAddons.add(addonId);
+        } else {
+          userAddons.delete(addonId);
+        }
+        syncControlStates();
+        updateSummaryUI();
+      });
+    });
+
+    // Snap & Lock Canvas photo upload
+    snapInput?.addEventListener('change', async () => {
+      const files = Array.from(snapInput.files || []);
+      if (!files.length) {
+        snapPhotos = [];
+        if (snapStatus) snapStatus.textContent = '';
+        return;
+      }
+
+      const selected = files.slice(0, 2);
+      if (snapStatus) {
+        snapStatus.textContent = 'Compressing room photo(s) locally in your browser…';
+      }
+
+      try {
+        const compressed = await Promise.all(selected.map((f) => compressImageFile(f)));
+        snapPhotos = compressed;
+        if (snapStatus) {
+          const totalKb = Math.round(
+            compressed.reduce((acc, p) => acc + (p.base64Data.length * 3) / 4, 0) / 1024,
+          );
+          const extraNote = files.length > 2 ? ' (attached first 2 photos — max 2)' : '';
+          snapStatus.textContent = `✓ Ready: ${compressed.map((c) => c.filename).join(', ')} (${totalKb} KB optimized)${extraNote}`;
+        }
+      } catch {
+        snapPhotos = [];
+        if (snapStatus) {
+          snapStatus.textContent =
+            'Could not compress photo — you can still submit your quote or text photos to +1 (780) 710-1503.';
+        }
+      }
+    });
+
+    caslCheckbox?.addEventListener('change', () => {
+      if (caslCheckbox.checked && caslWrapper) {
+        caslWrapper.classList.remove('border-brass', 'bg-brass/15');
+      }
+    });
+
+    function showError(msg: string) {
+      if (!errorBox) return;
+      errorBox.textContent = msg;
+      errorBox.hidden = false;
+    }
+
+    // Form Submission Gate
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (errorBox) errorBox.hidden = true;
+      if (successBox) successBox.hidden = true;
+
+      const currentPostal = (postalInput?.value || '').trim();
+      const postalCheck = lookupPostalCode(currentPostal);
+      if (!postalCheck.valid) {
+        showError(
+          postalCheck.message ||
+            'Please enter a valid Greater Edmonton postal code (e.g. T5K, T6W, T8N) in Step 1.',
+        );
+        postalInput?.focus();
+        return;
+      }
+
+      const nameVal = (nameInput?.value || '').trim();
+      if (!nameVal) {
+        showError('Please enter your full name so we can prepare your quote.');
+        nameInput?.focus();
+        return;
+      }
+
+      const phoneVal = (phoneInput?.value || '').trim();
+      const digits = phoneVal.replace(/\D+/g, '');
+      if (digits.length < 10 || digits.length > 15) {
+        showError('Please enter a valid 10-digit mobile phone number (e.g. 780-710-1503).');
+        phoneInput?.focus();
+        return;
+      }
+
+      const emailVal = (emailInput?.value || '').trim();
+      if (emailVal && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+        showError('Please enter a valid email address or leave the optional email field blank.');
+        emailInput?.focus();
+        return;
+      }
+
+      // Mandatory CASL SMS consent verification
+      if (!caslCheckbox?.checked) {
+        if (caslWrapper) {
+          caslWrapper.classList.add('border-brass', 'bg-brass/15');
+        }
+        showError(
+          'Explicit CASL SMS consent is required: please check the SMS consent box above so our Edmonton team can text your confirmed quote (or tap "1-Tap Pre-Filled SMS").',
+        );
+        caslCheckbox?.focus();
+        return;
+      }
+
+      const fbclid = urlParams.get('fbclid') || undefined;
+      const fbp = readCookie('_fbp');
+      const fbc = readCookie('_fbc') || (fbclid ? `fb.1.${Date.now()}.${fbclid}` : undefined);
+
+      const attribution: AttributionData = {
+        fbclid,
+        fbp,
+        fbc,
+        gclid: urlParams.get('gclid') || undefined,
+        utmSource: urlParams.get('utm_source') || undefined,
+        utmMedium: urlParams.get('utm_medium') || undefined,
+        utmCampaign: urlParams.get('utm_campaign') || undefined,
+        landingPath: window.location.pathname,
+        eventId: generateEventId(),
+      };
+
+      const quoteInput = buildCurrentQuoteInput();
+      const payload: LeadSubmissionPayload = {
+        name: nameVal,
+        phone: phoneVal,
+        ...(emailVal ? { email: emailVal } : {}),
+        postalCode: currentPostal.toUpperCase(),
+        ...(dateInput?.value ? { preferredDate: dateInput.value } : {}),
+        hasPets: Boolean(petsInput?.checked),
+        ...(notesInput?.value.trim() ? { notes: notesInput.value.trim() } : {}),
+        caslSmsConsent: true,
+        honeypot: honeypotInput?.value || '',
+        quoteInput,
+        ...(snapPhotos.length > 0 ? { snapPhotos } : {}),
+        attribution,
+      };
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Reserving Your Rate…';
+      }
+
+      try {
+        const res = await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        const contentType = res.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          const result = (await res.json()) as LeadSubmissionResult;
+          if (!res.ok || !result.ok) {
+            showError(
+              result.error || 'Could not submit your request right now. Please tap 1-Tap Pre-Filled SMS below.',
+            );
+            return;
+          }
+
+          if (successDetail) {
+            successDetail.textContent = `Reference #${result.leadId} for ${result.areaName}: $${result.finalPreTaxCad} CAD pre-tax (+ 5% AB GST where applicable). $0 due today — our Edmonton team will text ${phoneVal} shortly to confirm your arrival window.`;
+          }
+          if (successSms && result.smsPrefillHref) {
+            successSms.href = result.smsPrefillHref;
+          }
+          if (successBox) {
+            successBox.hidden = false;
+            successBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        } else {
+          // Local static preview fallback without Cloudflare Functions runtime
+          const localQuote = calculateQuote(quoteInput);
+          const fallbackHref = buildSmsPrefillHref(localQuote, postalCheck.normalizedFsa, nameVal);
+          if (successDetail) {
+            successDetail.textContent = `Estimated Quote for ${postalCheck.areaName}: $${localQuote.finalPreTaxCad} CAD pre-tax (+ 5% AB GST where applicable) with $0 upfront deposit. Tap below to send directly to our Edmonton dispatch via SMS.`;
+          }
+          if (successSms) successSms.href = fallbackHref;
+          if (successBox) successBox.hidden = false;
+        }
+      } catch {
+        showError(
+          'Network connection interrupted — tap "1-Tap Pre-Filled SMS" below to text your locked quote directly to +1 (780) 710-1503.',
+        );
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Lock In My Rate ($0 Upfront)';
+        }
+      }
+    });
+
+    // Hydrate initial URL promo override if present
+    syncControlStates();
+    updateSummaryUI();
+  });
+</script>

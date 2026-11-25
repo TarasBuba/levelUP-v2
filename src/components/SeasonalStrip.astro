@@ -1,0 +1,35 @@
+---
+import siteCopy from '../data/site_copy.json';
+
+const banner = siteCopy.home.seasonalBanner;
+---
+
+<div class="border-b border-mist/25 bg-spruce text-linen">
+  <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-2 px-4 py-2 sm:flex-row sm:items-center sm:px-6 lg:px-8">
+    <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm">
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-brass/55 bg-brass/15 px-2.5 py-0.5 text-[11px] font-semibold tracking-wider uppercase text-linen">
+        <span class="h-1.5 w-1.5 rounded-full bg-brass" aria-hidden="true"></span>
+        {banner.badge}
+      </span>
+      <p class="font-medium text-linen/95">
+        <span class="font-semibold text-linen">{banner.headline}:</span>{' '}
+        <span class="hidden md:inline text-linen/80">Save $50 on Holiday Deep Resets &amp; Move-Out Cleans ($0 upfront).</span>
+      </p>
+    </div>
+
+    <div class="flex items-center gap-2 self-stretch sm:self-auto">
+      <a
+        href={`/?promo=${banner.promoCode}#quote-calculator`}
+        class="inline-flex min-h-[44px] flex-1 sm:flex-initial items-center justify-center rounded-full bg-eucalyptus px-3.5 py-1.5 text-xs font-semibold text-linen transition hover:bg-eucalyptus-hover whitespace-nowrap shrink-0"
+      >
+        {banner.ctaLabel} →
+      </a>
+      <a
+        href={banner.secondaryCtaHref}
+        class="inline-flex min-h-[44px] items-center justify-center rounded-full border border-mist/45 px-3.5 py-1.5 text-xs font-semibold text-linen transition hover:bg-linen/10 whitespace-nowrap shrink-0"
+      >
+        {banner.secondaryCtaLabel}
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,143 @@
+{
+  "version": "2026.11.23",
+  "brand": {
+    "companyName": "LevelUp Cleaning",
+    "legalName": "LevelUp Cleaning Services Ltd.",
+    "foundedYear": 2024,
+    "badgeLabel": "EST. 2024 • EDMONTON, AB",
+    "slogan": "Level up your space. Next-level eco home & move-out cleaning in Edmonton.",
+    "phoneDisplay": "+1 (780) 710-1503",
+    "phoneE164": "+17807101503",
+    "email": "hello@levelupcleaning.ca",
+    "domain": "https://levelupcleaning.ca",
+    "instagramHandle": "@levelupcleaning.yeg",
+    "instagramUrl": "https://www.instagram.com/levelupcleaning.yeg/",
+    "facebookPageName": "LevelUp Cleaning",
+    "languages": ["English (Canadian)", "Ukrainian"],
+    "palette": {
+      "bgLinen": "#FAF7F2",
+      "bgCard": "#F3EFE6",
+      "primaryEucalyptus": "#3B6B56",
+      "primaryEucalyptusHover": "#2E5645",
+      "secondaryMist": "#729E8A",
+      "inkSpruce": "#172A22",
+      "accentBrass": "#B89352"
+    }
+  },
+  "guardrails": {
+    "forbiddenPatterns": [
+      "\\$2,000,000",
+      "\\$2M",
+      "\\binsured\\b",
+      "\\binsurance\\b",
+      "\\bbonded\\b",
+      "\\bWCB\\b",
+      "Workers' Compensation",
+      "free re-clean",
+      "re-clean guarantee",
+      "touch-up guarantee",
+      "555-LVL1"
+    ],
+    "approvedTrustPillars": [
+      "$0 Upfront Deposit — Pay Only After Completion (Interac e-Transfer or Card)",
+      "On-Site 50-Point Walkthrough Sign-Off (or SMS Photo-Verified Report for Empty/Lockbox Homes)",
+      "Official Itemized Move-Out Cleaning Receipt for Edmonton Landlords & Property Managers",
+      "City of Edmonton Licensed & Vetted Background-Checked Local Specialists",
+      "100% Pet-Safe & Kid-Safe Botanical Eucalyptus Formulas (Zero Bleach or Ammonia Fumes)"
+    ],
+    "surfaceSafetyRule": "Every DIY/chemistry tip mentioning vinegar, citric acid, baking soda, or descaling MUST warn: safe ONLY on sealed ceramic/porcelain tile or chrome mesh; NEVER apply vinegar or acids on marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures; always spot-test first.",
+    "taxDisplayRule": "Headline prices are pre-tax CAD. Show '+ 5% AB GST where applicable' as a small transparent note underneath."
+  },
+  "edmontonMarketBenchmarks": {
+    "companiesSurveyed": 30,
+    "dataPoints": 156,
+    "medianHourlyCad": 50,
+    "mediansCad": {
+      "regular": { "1bd": 145, "2bd": 189, "3bd": 234, "4bd": 292, "5bd": 345 },
+      "deep_clean": { "1bd": 229, "2bd": 315, "3bd": 380, "4bd": 433, "5bd": 510 },
+      "move_out": { "1bd": 254, "2bd": 325, "3bd": 424, "4bd": 525, "5bd": 615 }
+    }
+  },
+  "pricingModel": {
+    "currency": "CAD",
+    "minimumFloorCad": 95,
+    "extraBathroomFeeCad": 25,
+    "hourly": {
+      "ratePerCleanerCad": 48,
+      "minHours": 3,
+      "maxHours": 10,
+      "minCleaners": 1,
+      "maxCleaners": 3
+    },
+    "packages": {
+      "regular": {
+        "title": "Recurring Eco-Maintenance",
+        "baseByBedrooms": { "1": 130, "2": 170, "3": 215, "4": 270, "5": 325 },
+        "frequencyDiscountPct": { "one_time": 0, "monthly": 5, "biweekly": 10, "weekly": 15 }
+      },
+      "deep_clean": {
+        "title": "The LevelUp 50-Point Deep Reset",
+        "baseByBedrooms": { "1": 210, "2": 285, "3": 350, "4": 420, "5": 495 },
+        "frequencyDiscountPct": { "one_time": 0, "monthly": 5, "biweekly": 10, "weekly": 15 }
+      },
+      "move_out": {
+        "title": "Move-Out / Move-In Inspection Clean",
+        "baseByBedrooms": { "1": 235, "2": 310, "3": 395, "4": 490, "5": 575 },
+        "includedAddonsFree": ["inside_oven", "inside_fridge", "inside_cabinets"],
+        "frequencyDiscountPct": { "one_time": 0, "monthly": 0, "biweekly": 0, "weekly": 0 }
+      },
+      "airbnb": {
+        "title": "Airbnb & Short-Term 5-Star Turnover",
+        "baseByBedrooms": { "1": 120, "2": 160, "3": 220, "4": 275, "5": 330 },
+        "frequencyDiscountPct": { "one_time": 0, "monthly": 5, "biweekly": 10, "weekly": 15 }
+      }
+    },
+    "addons": {
+      "inside_oven": { "label": "Inside Oven & Glass Degrease", "priceCad": 45 },
+      "inside_fridge": { "label": "Inside Fridge & Crisper Sanitize", "priceCad": 45 },
+      "inside_cabinets": { "label": "Inside Kitchen & Bath Cabinets", "priceCad": 45 },
+      "interior_windows": { "label": "Interior Windows, Tracks & Sills", "priceCad": 50 },
+      "wall_spot_wash": { "label": "Wall Scuff & Door Frame Detailing", "priceCad": 45 },
+      "heavy_pet_hair": { "label": "Heavy Pet Fur HEPA Extraction", "priceCad": 35 },
+      "basement_suite": { "label": "Finished Basement Level", "priceCad": 65 }
+    },
+    "promoEngine": {
+      "defaultMode": "tiered",
+      "tiers": [
+        { "minSubtotalCad": 0, "discountCad": 25, "badge": "$25 OFF First Clean" },
+        { "minSubtotalCad": 300, "discountCad": 50, "badge": "$50 OFF Large Home / Move-Out" },
+        { "minSubtotalCad": 480, "discountCad": 75, "badge": "$75 OFF Full Estate Reset" }
+      ],
+      "namedPresets": {
+        "25": { "discountCad": 25, "badge": "$25 OFF Your First Clean" },
+        "50": { "discountCad": 50, "badge": "$50 OFF Special Promo" },
+        "100": { "discountCad": 100, "badge": "$100 OFF Executive / Recurring Bundle", "minSubtotalCad": 260 },
+        "holiday50": { "discountCad": 50, "badge": "$50 OFF December Holiday Reset", "minSubtotalCad": 220 }
+      }
+    }
+  },
+  "serviceAreas": [
+    "Downtown Edmonton & Ice District",
+    "Oliver / Wîhkwêntôwin",
+    "Old Strathcona / Whyte Ave & Garneau",
+    "Windermere, Keswick & Ambleside",
+    "Glenora, Crestwood & Westmount",
+    "Riverbend, Terwillegar & Haddow",
+    "Summerside & Ellerslie",
+    "Griesbach & North Edmonton",
+    "St. Albert",
+    "Sherwood Park",
+    "Spruce Grove & Stony Plain",
+    "Leduc, Beaumont & Fort Saskatchewan"
+  ],
+  "existingAssets": {
+    "masterLogoJpg": "data/branding/final_chosen_logo.jpg",
+    "realPetSupervisorReel": "data/posts/rendered/custom_reels/logo_reel_98b741d641.mp4",
+    "realPolishedFaucetVideo": "data/posts/rendered/wed_story_2_custom_c25a3570.mp4",
+    "fridayResetStudioReel": "data/posts/rendered/friday_reset_reel_studio.mp4"
+  },
+  "telegramIntegration": {
+    "authorizedAdminIds": ["633982504", "332623386"],
+    "defaultWeeklyOpenSlots": 3
+  }
+}

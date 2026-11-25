@@ -1,0 +1,1281 @@
+{
+  "home": {
+    "seasonalBanner": {
+      "badge": "NOVEMBER & DECEMBER 2026 • EDMONTON",
+      "headline": "December Holiday Reset & Move-Out Slots Filling Fast",
+      "subtext": "Lock in $50 OFF your Holiday Deep Reset or Move-Out Clean before winter hosting and end-of-month inspections. $0 upfront deposit — pay only after your walkthrough.",
+      "ctaLabel": "Claim Holiday Slot",
+      "ctaHref": "/#quote-calculator",
+      "secondaryCtaLabel": "Gift a Clean",
+      "secondaryCtaHref": "/gift-a-clean",
+      "promoCode": "holiday50"
+    },
+    "hero": {
+      "eyebrow": "EST. 2024 • EDMONTON, AB • 100% PET & KID SAFE",
+      "h1": "Quiet-Luxury Eco Cleaning,",
+      "h1Accent": "Built for Edmonton Homes.",
+      "subtitle": "From high-rise condo move-outs with oven, fridge, and cabinets included to recurring family resets in Windermere, Glenora, and St. Albert. Botanical eucalyptus formulas, zero harsh fumes, and $0 upfront until you sign off.",
+      "primaryCta": "Get Instant Flat-Rate Price",
+      "secondaryCta": "Text +1 (780) 710-1503",
+      "trustLine": "City of Edmonton Licensed • Background-Checked Local Specialists • English & Ukrainian Spoken",
+      "microBadges": [
+        "$0 Upfront Deposit",
+        "Oven + Fridge + Cabinets Included in Move-Out",
+        "50-Point Walkthrough Sign-Off",
+        "Pet & Kid Safe Botanical Formulas"
+      ],
+      "taxNote": "All headline rates are pre-tax CAD (+ 5% AB GST where applicable)."
+    },
+    "trustPillars": [
+      {
+        "id": "zero-upfront",
+        "title": "$0 Upfront Deposit",
+        "detail": "Reserve your date without putting a dollar down. Pay only after your clean is complete via Interac e-Transfer or card."
+      },
+      {
+        "id": "walkthrough-signoff",
+        "title": "On-Site 50-Point Walkthrough Sign-Off",
+        "detail": "Inspect every room with your lead specialist before we leave—or receive a timestamped SMS photo-verified report for lockbox and empty condo handoffs."
+      },
+      {
+        "id": "landlord-receipt",
+        "title": "Official Landlord Inspection Receipt",
+        "detail": "Every Move-Out Clean includes a detailed, itemized Canadian invoice formatted for Edmonton landlords, property managers, and Alberta RTA walkthroughs."
+      },
+      {
+        "id": "licensed-vetted",
+        "title": "City of Edmonton Licensed & Vetted Team",
+        "detail": "Locally owned in Edmonton since 2024. Every specialist is background-checked, trained on delicate stone and matte-black finishes, and brings commercial HEPA equipment."
+      },
+      {
+        "id": "pet-kid-botanical",
+        "title": "100% Pet-Safe & Kid-Safe Botanical Formulas",
+        "detail": "Zero chlorine bleach, zero ammonia clouds, and zero sticky synthetic fragrance. Safe for curious paws, toddlers on the floor, and sealed Alberta winter windows."
+      }
+    ],
+    "walkthroughSteps": [
+      {
+        "step": "01",
+        "title": "Check Your Postal Code & Lock Your Flat Rate",
+        "body": "Enter your Greater Edmonton FSA (T5, T6, T8, and surrounding communities), choose Flat-Rate Package or Hourly Custom Clean, and see your transparent pre-tax CAD total in 30 seconds."
+      },
+      {
+        "step": "02",
+        "title": "Seamless Key, Fob, or In-Home Arrival",
+        "body": "We arrive on time with colour-coded microfibres, pH-neutral botanical solutions, and sealed-system HEPA vacuums—whether you are home, at work, or handing off a condo concierge key."
+      },
+      {
+        "step": "03",
+        "title": "50-Point Surface-Safe Execution",
+        "body": "We detail every baseboard, range hood baffle, quartz seam, and matte-black fixture using finish-appropriate chemistry—never abrasive scouring pads or harsh acids on delicate stone."
+      },
+      {
+        "step": "04",
+        "title": "Walkthrough Sign-Off & Pay Only When Satisfied",
+        "body": "Walk through the home with us (or review our SMS photo-verified report for vacant move-outs), confirm every checklist line is spotless, and settle via Interac e-Transfer or card with an itemized receipt."
+      }
+    ],
+    "whyEdmontonCards": [
+      {
+        "id": "move-out-deposit",
+        "iconKey": "key",
+        "badge": "SAVES $135 VS. LOCAL MEDIAN",
+        "title": "Move-Out Deposit Focus",
+        "body": "Most Edmonton cleaners treat inside oven, inside fridge, and inside cabinets as $45-each extras. We build all three directly into every Move-Out Clean alongside an itemized landlord receipt aligned with Alberta RTA move-out inspections.",
+        "highlightStat": "Oven + Fridge + Cabinets Included ($0 Extra)"
+      },
+      {
+        "id": "hard-water-fixtures",
+        "iconKey": "droplet",
+        "badge": "EPCOR HARD-WATER CARE",
+        "title": "Edmonton Hard-Water & Delicate Fixtures",
+        "body": "North Saskatchewan River tap water leaves stubborn calcium halos on frameless shower glass and matte-black rain fixtures. We remove mineral haze carefully using finish-safe methods—never etching marble, quartz, or powder-coated hardware.",
+        "highlightStat": "pH-Neutral Stone & Matte-Black Safe"
+      },
+      {
+        "id": "winter-salt-furnace",
+        "iconKey": "snowflake",
+        "badge": "ALBERTA WINTER PROTOCOL",
+        "title": "Alberta Winter Salt & Furnace Dust",
+        "body": "Five months of -25°C slush, calcium road salt, and non-stop forced-air furnace cycles coat entryways in white crust and baseboards in fine grey silt. We dry-extract grit before damp-mopping so your oak and LVP floors never scratch or haze.",
+        "highlightStat": "Dry-HEPA First • Zero Salt Haze"
+      },
+      {
+        "id": "furry-supervisors",
+        "iconKey": "paw",
+        "badge": "REAL EDMONTON PET HOMES",
+        "title": "Approved by Our Furry Supervisors",
+        "body": "Dogs lick freshly cleaned floors and cats nap on sunlit quartz sills. That is why we clean with plant-derived eucalyptus and pH-neutral botanicals—zero bleach, zero ammonia, and HEPA fur extraction that leaves the air calm and breathable.",
+        "highlightStat": "Zero Bleach • Zero Ammonia Fumes"
+      }
+    ],
+    "furrySupervisorsSection": {
+      "eyebrow": "NO BLEACH. NO AMMONIA. NO STRESS.",
+      "title": "Approved by Our Furry Supervisors",
+      "subtitle": "Edmonton winters keep windows shut for months at a time. When conventional cleaners spray harsh synthetic quats or chlorine bleach indoors, those fumes stay trapped right at nose level for dogs, cats, and little ones.",
+      "paragraphs": [
+        "At LevelUp Cleaning, our everyday kit is built around pH-neutral, biodegradable botanical formulas with subtle natural eucalyptus—effective on kitchen grease and winter mud, yet gentle on paws, whiskers, and sensitive lungs.",
+        "We also run sealed HEPA filtration vacuums with dedicated pet-hair nozzles and fresh colour-coded microfibre cloths for every bathroom and kitchen zone, so allergens and fur are physically removed rather than stirred back into your furnace air."
+      ],
+      "highlights": [
+        "100% free of chlorine bleach, ammonia, and harsh aerosol oven fumes",
+        "Paw-safe floor finishes on engineered hardwood, LVP, ceramic, and natural stone",
+        "Calm, patient local specialists who love working around friendly dogs and indoor cats",
+        "Optional Heavy Pet Fur HEPA Extraction add-on (+$35 CAD) for double-coated shedding seasons"
+      ],
+      "videoCaption": "Real footage from an Edmonton LevelUp visit (@levelupcleaning.yeg)—our favourite furry inspectors checking every freshly mopped baseboard.",
+      "safetyNote": "Surface & Pet Chemistry Note: Even natural acids like vinegar or citric acid are safe ONLY on sealed ceramic/porcelain tile or chrome mesh; we NEVER use vinegar or acids on marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures, and we always spot-test first."
+    },
+    "faqs": [
+      {
+        "question": "How does your $0 upfront deposit and walkthrough sign-off work?",
+        "answer": "You pay $0 to book your date. Once our team finishes cleaning, we complete an on-site 50-point walkthrough with you—or, if you are at work or handing over a vacant condo via lockbox/concierge, we text a timestamped photo-verified report to your phone. Only after you confirm everything looks spotless do you settle the invoice via Interac e-Transfer or card."
+      },
+      {
+        "question": "Are inside oven, inside fridge, and inside cabinets really included in your Move-Out Clean?",
+        "answer": "Yes. Across 30 Greater Edmonton cleaning companies we benchmarked, those three items are typically charged separately at $35–$60 each ($135+ extra). LevelUp includes Inside Oven & Glass Degrease, Inside Fridge & Crisper Sanitize, and Inside Kitchen & Bath Cabinets in every Move-Out / Move-In Inspection Clean at no extra charge, plus an itemized landlord receipt."
+      },
+      {
+        "question": "Are your prices shown before or after Alberta GST?",
+        "answer": "All headline flat-rate and hourly prices are displayed in transparent pre-tax Canadian dollars (CAD), with + 5% AB GST where applicable clearly noted in your quote breakdown and itemized receipt. There are never hidden fuel surcharges inside Edmonton, St. Albert, or core Sherwood Park."
+      },
+      {
+        "question": "Which Edmonton and surrounding areas have $0 travel fee?",
+        "answer": "All City of Edmonton postal codes (T5 and T6 FSAs—including Downtown, Oliver/Wîhkwêntôwin, Old Strathcona, Garneau, Glenora, Crestwood, Windermere, Keswick, Terwillegar, Riverbend, Summerside, and Griesbach), plus St. Albert (T8N) and core Sherwood Park (T8A, T8H) have a $0 travel fee. Surrounding communities including Spruce Grove, Stony Plain, Leduc, Beaumont, Fort Saskatchewan, and rural Strathcona County carry a simple $15 CAD travel fee."
+      },
+      {
+        "question": "Are your cleaning solutions genuinely safe for dogs, cats, babies, and matte-black or quartz finishes?",
+        "answer": "Yes. We use non-toxic, plant-derived botanical solutions without chlorine bleach, ammonia, or harsh caustic oven aerosols. Just as importantly, we match chemistry to your surfaces: pH-neutral stone and wood cleaners for quartz, marble, hardwood, and matte-black fixtures. Safe ONLY on sealed ceramic/porcelain tile or chrome mesh; we NEVER use vinegar or acids on marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures, and we always spot-test an inconspicuous area first."
+      },
+      {
+        "question": "Can I book an hourly clean instead of a flat-rate package?",
+        "answer": "Absolutely. Use the Dual-Path toggle in our quote calculator to switch between Flat-Rate Packages and Hourly Custom Clean at $48/hr per cleaner (3-hour minimum, 1 to 3 cleaners)—below the $50/hr Edmonton median. Hourly bookings are ideal when you want us to focus on specific priority rooms like the kitchen, mudroom, and primary bath."
+      },
+      {
+        "question": "How do you handle Downtown, Ice District, or Whyte Ave condo parking and elevator access?",
+        "answer": "Our team regularly serves high-rise and mid-rise condos across Downtown, Oliver/Wîhkwêntôwin, Garneau, and Old Strathcona. Simply share your buzzer code, concierge instructions, or lockbox location when booking—and note any visitor parking or loading-zone instructions. For move-outs, we schedule cleanly around your booked service elevator window so the unit is completely empty before we detail every corner."
+      },
+      {
+        "question": "What languages does your Edmonton team speak, and how fast can I get a quote?",
+        "answer": "We serve Greater Edmonton in Canadian English and Ukrainian. You can calculate an instant flat-rate estimate on this page in under 30 seconds, attach up to 3 quick room photos via Snap-a-Quote, or text +1 (780) 710-1503 for a fast response from our local team."
+      }
+    ]
+  },
+  "services": {
+    "move_out": {
+      "id": "move_out",
+      "slug": "move-out-cleaning-edmonton",
+      "routePath": "/move-out-cleaning-edmonton",
+      "metaTitle": "Move-Out Cleaning Edmonton | Oven, Fridge & Cabinets Included | LevelUp Cleaning",
+      "metaDescription": "Inspection-ready Move-Out & Move-In Cleaning in Edmonton from $235 CAD (+ 5% AB GST where applicable). Inside oven, fridge & cabinets included ($135 value), $0 upfront deposit, itemized landlord receipt.",
+      "h1": "Move-Out & Move-In Inspection Cleaning in Edmonton",
+      "subtitle": "Built around Alberta RTA move-out walkthroughs—with Inside Oven, Inside Fridge, and Inside Cabinets included free ($135 value) and an official itemized landlord receipt.",
+      "startingPriceCad": 235,
+      "badge": "MOST POPULAR • $135 APPLIANCE BUNDLE INCLUDED",
+      "idealFor": [
+        "Edmonton renters preparing for a formal Alberta RTA move-out inspection and full security deposit return",
+        "Homeowners and realtors preparing Windermere, Glenora, or St. Albert listings for possession day",
+        "Buyers wanting a sanitized, allergen-free Move-In reset before unpacking boxes into a new home",
+        "Property managers needing lockbox/concierge coordination and an SMS photo-verified completion report"
+      ],
+      "edmontonContextParagraph": "Under the Alberta Residential Tenancies Act (RTA), landlords rely on side-by-side move-in and move-out inspection reports to evaluate cleaning deductions—and the top three triggers for deposit holdbacks in Edmonton are baked-on oven doors, sticky fridge crispers, and dusty upper cabinet shelves. While most local cleaning firms tack on $45 each for those three tasks, LevelUp builds all three directly into our flat-rate Move-Out Clean (1-bed from $235, 2-bed from $310, 3-bed from $395 pre-tax CAD + 5% AB GST where applicable). Whether you are vacating an Ice District high-rise condo after your booked elevator slot or handing over keys to a two-storey home in Terwillegar, we finish with a 50-point walkthrough sign-off and email your itemized receipt immediately.",
+      "checklistByRoom": {
+        "kitchen": [
+          "Inside oven cavity, racks, and tempered inner glass door degreased safely without caustic fumes or risky pyrolytic self-clean cycles (included free)",
+          "Inside refrigerator, freezer shelves, crisper bins, and door gaskets sanitized and dried (included free)",
+          "Inside and outside of all upper/lower kitchen cabinets, pantry shelves, and drawer interiors vacuumed and wiped (included free)",
+          "Range hood exterior and removable grease baffles degreased and polished",
+          "Quartz, granite, or laminate countertops and backsplash cleaned with pH-neutral stone-safe formulas",
+          "Undermount sink, drain rim, and chrome or matte-black faucet detailed and towel-buffed streak-free",
+          "Dishwasher front panel, handle, and door perimeter seal wiped clean",
+          "Kickplates (toe-kicks), baseboards, switch plates, and floor corners HEPA-vacuumed and damp-mopped"
+        ],
+        "bathrooms": [
+          "Frameless glass shower enclosures, tracks, and acrylic/tiled surrounds cleaned safely for EPCOR hard-water spots (note: descaling vinegar/acids are safe ONLY on sealed ceramic/porcelain tile or chrome mesh; NEVER use vinegar or acids on marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures; always spot-test first)",
+          "Matte-black, brushed-brass, or chrome rain showerheads and valves cleaned with pH-neutral microfiber care (zero harsh acids or abrasives)",
+          "Inside and outside of vanity drawers, medicine cabinets, and under-sink shelving wiped empty and fresh",
+          "Toilets thoroughly sanitized top-to-bottom including hinges, base bolts, and behind the bowl",
+          "Soaking tubs, tile grout lines, and sinks scrubbed with non-scratch tools",
+          "Mirrors, chrome trims, towel bars, and light fixtures polished lint-free",
+          "Exhaust fan grille dusted, baseboards hand-wiped, and bathroom floors sanitized"
+        ],
+        "bedroomsAndLiving": [
+          "All closet rods, upper shelving, closet tracks, and sliding mirror doors cleaned",
+          "Baseboards, door frames, window ledges, and sill tracks hand-wiped room-by-room",
+          "Ceiling fans, accessible light fixtures, and forced-air furnace vents/cold-air returns vacuumed and dusted",
+          "Light switches, outlets, stair spindles, and handrails sanitized",
+          "Carpets thoroughly vacuumed with sealed HEPA filtration including edge crevices",
+          "Hardwood, LVP, and tile floors dry-HEPA vacuumed first to lift winter grit, then damp-mopped with finish-safe pH-neutral solution"
+        ],
+        "specialExtras": [
+          "Official itemized Move-Out Cleaning Receipt formatted for Edmonton landlords & property managers",
+          "On-site 50-point walkthrough sign-off OR timestamped SMS photo-verified report for lockbox/concierge empty units",
+          "Optional add-ons available in calculator: Interior Windows, Tracks & Sills (+$50), Wall Scuff & Door Frame Detailing (+$45), Heavy Pet Fur HEPA Extraction (+$35), Finished Basement Level (+$65)"
+        ]
+      },
+      "whatIsExcluded": [
+        "Property must be fully emptied of furniture, boxes, and personal items before arrival (contact us for occupied Deep Reset pricing)",
+        "Exterior high-rise windows or exterior surfaces requiring ladders above a standard 2-step stool",
+        "Deep carpet steam/hot-water extraction shampooing (we perform thorough edge-to-edge HEPA vacuuming)",
+        "Biohazard remediation, heavy mould abatement, hoarding restoration, or post-fire soot removal",
+        "Repainting walls, drywall patching, or removing permanent burns, deep scratches, or pet-urine subfloor damage"
+      ],
+      "faqs": [
+        {
+          "question": "Do I need to be in the apartment during my Edmonton Move-Out Clean?",
+          "answer": "Not at all. Many clients leave keys with a Downtown or Oliver condo concierge, use a realtor lockbox, or share a smart-lock code. Once our team finishes, we text you a timestamped SMS photo-verified report showing the oven, fridge, cabinets, bathrooms, and floors before you send payment."
+        },
+        {
+          "question": "Will I receive an itemized receipt my landlord accepts under Alberta RTA?",
+          "answer": "Yes. Immediately upon completion we email an official LevelUp Cleaning Services Ltd. itemized invoice showing your unit address, date of service, GST breakdown where applicable, and line-by-line confirmation that inside oven, inside fridge, inside cabinets, bathrooms, and floors were professionally cleaned."
+        },
+        {
+          "question": "Should I run the oven self-clean cycle before your team arrives?",
+          "answer": "Please do not! Pyrolytic self-clean cycles push ranges to 800°F–1,000°F and frequently blow thermal fuses, warp digital control boards, or lock doors shut right before your landlord walkthrough. Leave the oven cool and untouched—our team degreases it safely by hand as part of your Move-Out Clean."
+        },
+        {
+          "question": "What if my condo requires a service elevator booking?",
+          "answer": "Because our cleaning specialists arrive with compact portable caddies and vacuums (no bulky furniture), we generally do not need a padded freight elevator—just make sure your movers finish and vacate the unit before our scheduled arrival window so every room is empty."
+        }
+      ]
+    },
+    "deep_clean": {
+      "id": "deep_clean",
+      "slug": "deep-cleaning-edmonton",
+      "routePath": "/deep-cleaning-edmonton",
+      "metaTitle": "Deep Cleaning Edmonton | 50-Point Botanical Home Reset | LevelUp Cleaning",
+      "metaDescription": "The LevelUp 50-Point Deep Reset in Edmonton from $210 CAD (+ 5% AB GST where applicable). Baseboards, winter salt haze, EPCOR hard-water glass & matte-black care. $0 upfront deposit.",
+      "h1": "The LevelUp 50-Point Deep Reset",
+      "subtitle": "A meticulous top-to-bottom restoration for lived-in Edmonton homes—tackling furnace dust, winter salt buildup, kitchen grease, and hard-water bathroom scale with 100% pet-safe botanical chemistry.",
+      "startingPriceCad": 210,
+      "badge": "IDEAL FOR FIRST VISIT & SEASONAL RESETS",
+      "idealFor": [
+        "Busy Edmonton households ready to erase months of winter furnace dust and entryway salt residue",
+        "Hosts preparing for December holiday dinners, family visits, or spring thaw refreshes",
+        "First-time clients establishing a spotless baseline before switching to bi-weekly Recurring Eco-Maintenance",
+        "Homes with quartz, natural stone, oak millwork, or matte-black fixtures requiring finish-safe care"
+      ],
+      "edmontonContextParagraph": "Living in Edmonton means five months of sealed winter windows, dry forced-air heat settling fine dust along every baseboard and blind slat, and North Saskatchewan River mineral spots creeping across shower glass. Our 50-Point Deep Reset goes far beyond surface tidying—hand-wiping cabinet fronts, trim, doors, light fixtures, and hard-to-reach corners with non-toxic botanical solutions so your home feels calm, bright, and genuinely refreshed without a trace of harsh chemical odour.",
+      "checklistByRoom": {
+        "kitchen": [
+          "Exterior of all upper and lower cabinets, handles, and toe-kicks hand-wiped to remove cooking oils and fingerprints",
+          "Range hood exterior, stovetop grates/burners, and backsplash degreased thoroughly",
+          "Microwave interior and exterior sanitized, plus small countertop appliances wiped down",
+          "Quartz, granite, or butcher-block countertops cleaned with pH-neutral finish-safe solutions",
+          "Sink basin, drain flange, and faucet detailed and towel-buffed to prevent water spots",
+          "Exterior of fridge, dishwasher, and oven polished streak-free (add Inside Oven, Fridge, or Cabinets anytime for $45 each)",
+          "Kitchen baseboards, window ledges, and floor edges HEPA-vacuumed and damp-mopped"
+        ],
+        "bathrooms": [
+          "Detailed mineral-spot removal on frameless glass showers and tiled enclosures (finish-safe chemistry)",
+          "Matte-black, brass, or chrome faucets and rain fixtures cleaned with pH-neutral soap and dry-buffed",
+          "Tile grout lines scrubbed along wet zones with non-abrasive detail brushes",
+          "Vanity tops, sinks, exterior cabinetry, mirrors, and light sconces detailed lint-free",
+          "Toilets sanitized completely from tank to floor bolts and rear base",
+          "Exhaust vent covers vacuumed, baseboards hand-wiped, and floors thoroughly washed"
+        ],
+        "bedroomsAndLiving": [
+          "Hand-wiping of all accessible baseboards, door panels, door frames, and window sills",
+          "Ceiling fans, accessible light fixtures, picture frames, and shelving high-to-low dusted",
+          "Furnace vent grilles and cold-air returns vacuumed to lift winter particulate",
+          "Upholstered sofas and chair crevices HEPA-vacuumed (surface cushions & under removable cushions)",
+          "Entryway mudroom tile and boot-tray zones dry-vacuumed for salt grit, then neutralized and mopped haze-free",
+          "Stair treads, risers, banisters, and handrails detailed; beds made neatly if fresh linens are left out"
+        ],
+        "specialExtras": [
+          "On-site 50-point walkthrough sign-off before payment ($0 upfront deposit)",
+          "Custom add-ons available in calculator: Inside Oven (+$45), Inside Fridge (+$45), Inside Cabinets (+$45), Interior Windows & Tracks (+$50), Wall Scuff Detailing (+$45), Heavy Pet Fur HEPA Extraction (+$35), Finished Basement (+$65)"
+        ]
+      },
+      "whatIsExcluded": [
+        "Moving heavy furniture (sofas, beds, fridges, washers) that risks scratching hardwood or LVP floors",
+        "Exterior window washing or high vaulted ceilings/chandeliers beyond a standard 2-step stool",
+        "Heavy decluttering, dishwashing full sinks of cookware, or laundry folding (available by request under Hourly Custom Clean)",
+        "Biohazard cleanup, insect/rodent remediation, or mould removal behind caulking/drywall"
+      ],
+      "faqs": [
+        {
+          "question": "How is the 50-Point Deep Reset different from Recurring Eco-Maintenance?",
+          "answer": "Our Deep Reset dedicates extra detail time to built-up areas that standard maintenance skips—such as hand-wiping baseboards, door frames, cabinet fronts, range hood grease, furnace vents, and heavy EPCOR hard-water bathroom scale. Many Edmonton clients book one Deep Reset first, then maintain that hotel-calm standard effortlessly on a bi-weekly plan."
+        },
+        {
+          "question": "How long does a 50-Point Deep Reset take?",
+          "answer": "Depending on home size and buildup, a 1–2 bedroom condo typically takes 3 to 4.5 labour-hours, while a 3–4 bedroom Edmonton family home takes 5 to 8 labour-hours (often dispatched as a 2-specialist team so we finish within half a day)."
+        },
+        {
+          "question": "Are your deep-clean products safe for my engineered quartz counters and hardwood floors?",
+          "answer": "Yes. We never use bleach on resin-bound quartz or vinegar on natural stone, hardwood, or matte-black hardware. Every specialist carries dedicated pH-neutral stone, wood, and botanical degreaser bottles—and follows our strict safety protocol: safe ONLY on sealed ceramic/porcelain tile or chrome mesh; NEVER apply vinegar or acids on marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures; always spot-test first."
+        },
+        {
+          "question": "Can I apply the December Holiday Reset promo to a Deep Clean?",
+          "answer": "Yes! Use promo code holiday50 (or open a promo link) on qualifying bookings over $220 CAD to take $50 OFF your December Holiday Reset, or enjoy our automatic tiered savings of $25–$75 OFF on your first clean."
+        }
+      ]
+    },
+    "regular": {
+      "id": "regular",
+      "slug": "recurring-cleaning-edmonton",
+      "routePath": "/recurring-cleaning-edmonton",
+      "metaTitle": "Regular House Cleaning Edmonton | Weekly & Bi-Weekly Eco Care | LevelUp Cleaning",
+      "metaDescription": "Recurring eco-friendly house cleaning in Edmonton, St. Albert & Sherwood Park from $130 CAD (+ 5% AB GST where applicable). Save up to 15% weekly or 10% bi-weekly. Pet & kid safe.",
+      "h1": "Recurring Eco-Maintenance Cleaning",
+      "subtitle": "Reclaim your Edmonton weekends with consistent, pet-safe weekly, bi-weekly, or monthly care—transparent flat rates starting at $130 CAD with up to 15% recurring savings.",
+      "startingPriceCad": 130,
+      "badge": "SAVE 15% WEEKLY • 10% BI-WEEKLY • 5% MONTHLY",
+      "idealFor": [
+        "Dual-income families in Windermere, Keswick, Terwillegar, St. Albert, and Sherwood Park reclaiming Saturday mornings",
+        "Busy Downtown, Oliver, and U of A professionals wanting a calm, dust-free condo all week",
+        "Pet-loving households needing dependable fur control and non-toxic floor maintenance",
+        "Homeowners with custom finishes who want the same careful, background-checked team on a predictable schedule"
+      ],
+      "edmontonContextParagraph": "Between hockey practices, Anthony Henday commutes, and keeping ahead of snow slush or spring mud, housecleaning easily swallows half a weekend. Our Recurring Eco-Maintenance plan keeps your kitchen, baths, floors, and living spaces consistently serene on a weekly (15% off), bi-weekly (10% off), or monthly (5% off) cadence. There are no rigid long-term contracts, $0 upfront deposits, and zero synthetic chemical residue left behind for kids or pets.",
+      "checklistByRoom": {
+        "kitchen": [
+          "Countertops, island surface, and backsplash wiped and sanitized with pH-neutral botanical spray",
+          "Stovetop surface, control knobs, and microwave interior/exterior cleaned",
+          "Sink basin, faucet, and exterior of major stainless or panelled appliances polished fingerprint-free",
+          "Cabinet fronts spot-wiped around pulls and high-touch zones",
+          "Kitchen table, bar stools, and chairs wiped clean; waste/recycling liners refreshed",
+          "Floors HEPA-vacuumed thoroughly (including corners and under toe-kicks) and damp-mopped"
+        ],
+        "bathrooms": [
+          "Showers, glass doors, and tubs cleaned and towel-dried to stay ahead of Edmonton hard-water rings",
+          "Matte-black, brass, or chrome faucets gently wiped with pH-neutral microfibre care",
+          "Toilets sanitized inside and out, including seat hinges and base",
+          "Vanities, sinks, mirrors, and chrome fixtures polished streak-free",
+          "Towels neatly straightened, bins emptied, and bathroom floors sanitized"
+        ],
+        "bedroomsAndLiving": [
+          "All accessible horizontal surfaces, nightstands, coffee tables, and window sills dusted with microfibre",
+          "Mirrors, glass inserts, and patio-door nose/finger smudges wiped crystal-clear",
+          "Light switches, doorknobs, and stair handrails sanitized",
+          "Beds neatly made (fresh sheet change on primary bed if clean linens are set out)",
+          "Carpets, rugs, and stairways vacuumed with sealed HEPA filtration",
+          "Hardwood, LVP, and entryway tiles dry-vacuumed for grit and damp-mopped with wood/stone-safe cleaner"
+        ],
+        "specialExtras": [
+          "Automatic recurring loyalty savings: 15% OFF Weekly, 10% OFF Bi-Weekly, 5% OFF Monthly (after introductory baseline)",
+          "Consistent local team preference with personalized home-care notes (pet routines, alarm/lockbox instructions, finish preferences)",
+          "Flexible rescheduling with 24+ hours notice—no locked-in annual contracts"
+        ]
+      },
+      "whatIsExcluded": [
+        "Heavy first-time buildup, inside ovens/fridges/cabinets, or full hand-scrubbed baseboards (start with a 50-Point Deep Reset or add selectively)",
+        "Washing full loads of personal dishes, folding family laundry, or organizing cluttered closets/playrooms",
+        "Exterior windows, garages, or areas requiring ladders above a 2-step stool",
+        "Pet waste pickup or litter box emptying"
+      ],
+      "faqs": [
+        {
+          "question": "Do I have to sign a contract for weekly or bi-weekly cleaning?",
+          "answer": "Never. Pause, skip a week while travelling, or adjust your schedule anytime with at least 24 hours notice—with zero cancellation fees."
+        },
+        {
+          "question": "Should my first visit be a Deep Reset or a Regular Clean?",
+          "answer": "If your home has not had a detailed professional clean in the last 60–90 days, we recommend starting with a 50-Point Deep Reset so we can clear baseboards, hard-water glass spots, and kitchen grease—then seamlessly stepping into lower-priced Weekly (15% off) or Bi-Weekly (10% off) maintenance."
+        },
+        {
+          "question": "Will I get the same specialist for my recurring visits?",
+          "answer": "We prioritize assigning the same trusted specialist or lead team to your recurring slot so they learn your home's layout, your pets' personalities, and your exact finish preferences."
+        },
+        {
+          "question": "How does billing work for recurring cleans?",
+          "answer": "Just like our one-time cleans, you pay $0 upfront. After each completed visit, we send a clean itemized receipt (pre-tax CAD + 5% AB GST where applicable) payable by Interac e-Transfer or card."
+        }
+      ]
+    },
+    "airbnb": {
+      "id": "airbnb",
+      "slug": "airbnb-cleaning-edmonton",
+      "routePath": "/airbnb-cleaning-edmonton",
+      "metaTitle": "Airbnb & Short-Term Rental Cleaning Edmonton | 5-Star Turnovers | LevelUp Cleaning",
+      "metaDescription": "Dependable Airbnb & VRBO turnover cleaning in Whyte Ave, Downtown, Ice District & Edmonton from $120 CAD (+ 5% AB GST where applicable). Photo-verified staging, hotel crispness.",
+      "h1": "Airbnb & Short-Term 5-Star Turnover",
+      "subtitle": "Hotel-calm presentation, crisp linen staging, and SMS photo-verified turnover proof for Edmonton hosts near Rogers Place, Whyte Ave, U of A, and West Edmonton Mall.",
+      "startingPriceCad": 120,
+      "badge": "SAME-DAY CHECK-IN WINDOWS • PHOTO PROOF",
+      "idealFor": [
+        "Downtown and Ice District condo hosts turning suites between Rogers Place concerts and Oilers games",
+        "Old Strathcona, Whyte Ave, and Garneau short-term rentals hosting Fringe Festival, Folk Fest, and U of A visitors",
+        "Remote or multi-unit Edmonton hosts needing reliable restock alerts, damage photo flags, and lockbox access",
+        "Executive furnished rentals demanding odour-free, allergen-conscious botanical presentation"
+      ],
+      "edmontonContextParagraph": "A single hair in a shower drain or a greasy microwave turntable can turn a 5-star Superhost streak into a 3-star cleanliness review. Edmonton's short-term rental calendar moves fast—from winter hockey weekends at Ice District to August Fringe Festival rushes on Whyte Ave. Starting at $120 CAD for 1-bedroom suites (pre-tax + 5% AB GST where applicable), our turnover specialists clean, sanitize, stage linens, verify consumables, and text you a timestamped photo-verified ready report before your 3:00 PM or 4:00 PM check-in.",
+      "checklistByRoom": {
+        "kitchen": [
+          "Countertops, island, dining table, and coffee-bar station sanitized and staged cleanly",
+          "Microwave interior, stovetop, kettle/coffee maker exterior, and fridge shelves checked and wiped",
+          "Dishes/glassware spot-checked for lipstick or water marks; dishwasher emptied if run by prior guest",
+          "Sink and faucet polished spotless; fresh dishcloth and sponge/pod starter placed from host supply",
+          "Garbage and recycling emptied, liners replaced, and floors HEPA-vacuumed and mopped"
+        ],
+        "bathrooms": [
+          "Shower glass, tub, chrome/matte-black fixtures, and drain hair-traps checked and detailed",
+          "Toilet thoroughly sanitized top-to-bottom; mirror and vanity wiped completely lint-free",
+          "Fresh host-provided bath, hand, and face towels folded in crisp hotel presentation",
+          "Toilet paper triangle-folded and host-supplied soap/shampoo dispensers topped or flagged if low",
+          "Bathroom floor sanitized and verified hair-free under direct light"
+        ],
+        "bedroomsAndLiving": [
+          "Beds stripped and remade crisp and taut using host-provided clean linen sets",
+          "Under-bed and nightstand check for left-behind guest chargers, clothing, or items (reported via SMS immediately)",
+          "Sofa cushions straightened, throw blankets folded neatly, and remotes/light switches sanitized",
+          "Entryway, mirrors, and patio/balcony glass wiped smudge-free",
+          "Full HEPA vacuuming and finish-safe mopping across all rooms and closets"
+        ],
+        "specialExtras": [
+          "Timestamped SMS Photo-Verified Turnover Report sent as soon as the suite is guest-ready",
+          "Immediate SMS alert for guest damage, missing items, or low consumables (paper goods, coffee, soap)",
+          "Recurring volume discounts available: 15% OFF Weekly, 10% OFF Bi-Weekly, 5% OFF Monthly schedules"
+        ]
+      },
+      "whatIsExcluded": [
+        "Off-site commercial linen laundering (hosts provide spare on-site linen sets; on-site washer/dryer cycle starts available if time permits)",
+        "Purchasing host supplies/groceries (we alert you promptly when your supply closet runs low)",
+        "Extreme party-damage restoration or biohazard cleanup (quoted separately with photo documentation)"
+      ],
+      "faqs": [
+        {
+          "question": "Can you complete same-day turnovers between 11:00 AM check-out and 3:00 PM check-in?",
+          "answer": "Yes. Tight 11:00 AM–3:00 PM check-in windows are our specialty across Downtown, Ice District, Oliver/Wîhkwêntôwin, and Old Strathcona. Advance calendar syncing lets us lock your turnovers cleanly around back-to-back bookings."
+        },
+        {
+          "question": "How do I know my unit is guest-ready if I manage remotely?",
+          "answer": "Every turnover concludes with an SMS photo-verified report showing staged beds, spotless bathrooms, kitchen counters, and thermostat/lock confirmation—plus immediate photos if a previous guest left stains, damage, or lost property."
+        },
+        {
+          "question": "Why does botanical, fragrance-light cleaning matter for Airbnb reviews?",
+          "answer": "Heavy artificial sprays and bleach fumes frequently trigger headaches or allergy complaints from travelling guests. Our subtle natural eucalyptus botanicals leave the suite smelling genuinely clean and fresh, never masked."
+        },
+        {
+          "question": "Do you clean mid-stay executive rentals as well as weekend Airbnbs?",
+          "answer": "Yes. We handle both fast weekend short-term turnovers and bi-weekly refreshes for corporate and medical-stay furnished suites near U of A Hospital and Royal Alexandra Hospital."
+        }
+      ]
+    }
+  },
+  "areaHubs": [
+    {
+      "slug": "central-edmonton-condos",
+      "title": "Central Edmonton & Condo Cleaning (Downtown, Oliver & Whyte Ave)",
+      "metaTitle": "Condo & Move-Out Cleaning Downtown Edmonton, Oliver & Whyte Ave | LevelUp",
+      "metaDescription": "Specialized condo move-out, deep & Airbnb cleaning in Downtown, Ice District, Oliver/Wîhkwêntôwin, Old Strathcona & Garneau (T5J, T5K, T6E, T6G). $0 travel fee, oven/fridge/cabinets included.",
+      "fsaCodes": ["T5J", "T5K", "T6E", "T6G"],
+      "neighborhoods": [
+        "Downtown Edmonton",
+        "Ice District",
+        "Oliver / Wîhkwêntôwin",
+        "Old Strathcona / Whyte Ave",
+        "Garneau",
+        "University of Alberta Area"
+      ],
+      "housingProfile": "High-rise glass towers around Ice District and Jasper Avenue, mid-rise concrete condos throughout Oliver/Wîhkwêntôwin, renovated character suites in Garneau, and vibrant Whyte Ave lofts and short-term rentals. Compact open-concept kitchens, stainless appliances, stacked in-suite laundry closets, and glass-railing balconies require nimble, quiet equipment and meticulous corner work.",
+      "parkingAndAccessNotes": "Zero travel fee across T5J, T5K, T6E, and T6G. Our specialists seamlessly handle concierge key/fob handoffs, buzzer entry, and realtor lockboxes—ideal when you are working downtown or moving out remotely. Moving out of a managed tower? Book your condo corporation's padded service elevator 2–3 weeks ahead for your movers, then schedule LevelUp right after the suite is empty; our portable caddies travel via regular passenger elevators without blocking loading bays. Please share visitor-stall or parkade instructions when booking.",
+      "localPainPoints": [
+        "Strict Edmonton condo landlord and property-manager move-out inspections under the Alberta RTA 10-day security deposit return timeline",
+        "Baked-on oven doors, range-hood grease in compact open-concept living/kitchen spaces, and sticky fridge gaskets",
+        "EPCOR hard-water spots on frameless walk-in glass showers and matte-black condo vanity hardware",
+        "Tight 11:00 AM–3:00 PM Airbnb turnovers during Oilers games, Rogers Place concerts, and August Fringe Festival",
+        "Fine street-level gravel dust and winter hallway salt tracked across wide-plank LVP and condo foyers"
+      ],
+      "popularPackage": "move_out",
+      "sampleQuotes": [
+        {
+          "label": "1-Bed Downtown / Oliver Condo Move-Out",
+          "priceCad": 235,
+          "includes": "Inside Oven, Inside Fridge & Inside Cabinets included free + Itemized Landlord Receipt (+ 5% AB GST where applicable)"
+        },
+        {
+          "label": "2-Bed Garneau / Whyte Ave Condo Move-Out",
+          "priceCad": 310,
+          "includes": "Full 50-point inspection clean, appliance bundle included, SMS photo-verified report (+ 5% AB GST where applicable)"
+        },
+        {
+          "label": "1-Bed Ice District / Whyte Ave Airbnb Turnover",
+          "priceCad": 120,
+          "includes": "Same-day hotel-crisp turnover, linen staging & timestamped SMS ready photos (+ 5% AB GST where applicable)"
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Do you charge extra for high-rise parking or elevator trips in Downtown Edmonton and Oliver?",
+          "answer": "There is $0 travel fee in T5J, T5K, T6E, and T6G. If your building has visitor parking stalls or a loading-zone pass, let us know in your booking notes; if paid street/parkade parking is the only option nearby, we simply coordinate it transparently up front with zero surprise fees."
+        },
+        {
+          "question": "Can you pick up keys from my condo concierge or lockbox while I am at work?",
+          "answer": "Yes! We do concierge and lockbox pickups daily across Downtown, Ice District, and Oliver/Wîhkwêntôwin. When we finish, we return the fob/key per your instructions and text you a full SMS photo-verified report before you pay."
+        },
+        {
+          "question": "Does your condo Move-Out Clean cover in-suite laundry closets and balcony glass?",
+          "answer": "Yes—we wipe down stacked washer/dryer exteriors, lint traps, and closet shelving, and polish the interior side of sliding balcony doors and interior tracks (add Interior Windows & Tracks +$50 for full multi-window sill detailing)."
+        },
+        {
+          "question": "Are your formulas safe for poorly ventilated interior condo bathrooms?",
+          "answer": "Completely. Unlike harsh bleach or aerosol degreasers that linger in windowless condo baths, our plant-derived eucalyptus botanicals clean cleanly with zero harsh fumes."
+        }
+      ]
+    },
+    {
+      "slug": "southwest-edmonton-homes",
+      "title": "Southwest Edmonton Home Cleaning (Windermere, Keswick & Terwillegar)",
+      "metaTitle": "House Cleaning Windermere, Keswick, Terwillegar & Riverbend | LevelUp Cleaning",
+      "metaDescription": "Pet & kid safe recurring, deep & move-out house cleaning in Windermere, Keswick, Ambleside, Terwillegar, Riverbend & Summerside (T6W, T6R, T6X). $0 travel fee, flat-rate CAD.",
+      "fsaCodes": ["T6W", "T6R", "T6X"],
+      "neighborhoods": [
+        "Windermere",
+        "Keswick",
+        "Ambleside",
+        "Terwillegar",
+        "Riverbend",
+        "Haddow",
+        "Summerside",
+        "Ellerslie"
+      ],
+      "housingProfile": "Spacious 2,000–3,800+ sq. ft. modern two-storey detached homes and contemporary executive townhouses featuring oversized Calacatta quartz kitchen islands, walk-through butler's pantries, open-riser staircases, wide-plank engineered hardwood or LVP, dual-sink ensuite spas, and high-traffic family mudrooms.",
+      "parkingAndAccessNotes": "Zero travel fee across T6W, T6R, and T6X. Driveway or residential street parking right outside your front door keeps arrival effortless in every season. Many Southwest Edmonton clients provide a garage keypad or smart-lock code so we can refresh the entire home mid-week while kids are at school and parents are commuting along Anthony Henday Drive or Terwillegar Drive.",
+      "localPainPoints": [
+        "Heavy Alberta winter road salt and slush tracked from double-attached garages into tiled mudrooms and onto adjacent LVP/hardwood",
+        "Daily fingerprints, cooking splatters, and water rings across large open-concept quartz islands and stainless-steel appliances",
+        "Pet hair from golden retrievers, shepherds, and indoor cats collecting along carpeted stairs and bedroom baseboards",
+        "EPCOR hard-water mineral spotting on walk-in frameless ensuite showers and matte-black bathroom fixtures",
+        "Zero free hours on Saturday mornings between kids' sports, errands, and maintaining 3–5 bedrooms plus bonus rooms"
+      ],
+      "popularPackage": "regular",
+      "sampleQuotes": [
+        {
+          "label": "3-Bed Bi-Weekly Eco-Maintenance (10% Off)",
+          "priceCad": 194,
+          "includes": "Regular $215 flat rate with 10% bi-weekly recurring savings; kitchen, baths, mudroom & floors (+ 5% AB GST where applicable)"
+        },
+        {
+          "label": "4-Bed Windermere / Keswick 50-Point Deep Reset",
+          "priceCad": 420,
+          "includes": "Baseboards, cabinet fronts, quartz care, hard-water ensuite glass & mudroom salt reset (+ 5% AB GST where applicable)"
+        },
+        {
+          "label": "3-Bed Possession Day Move-Out / Move-In Clean",
+          "priceCad": 395,
+          "includes": "Inside oven, inside fridge & inside cabinets included free + walkthrough sign-off (+ 5% AB GST where applicable)"
+        }
+      ],
+      "faqs": [
+        {
+          "question": "How do you protect our quartz kitchen islands and LVP/hardwood floors from winter salt?",
+          "answer": "We always HEPA dry-vacuum salt crystals and gravel first so grit never scratches your floor finish, then damp-mop with pH-neutral wood/LVP cleaner and wipe quartz with gentle botanical stone-safe formulas—never bleach, abrasives, or vinegar on stone or hardwood. Note: vinegar and acids are safe ONLY on sealed ceramic/porcelain tile or chrome mesh; NEVER use vinegar or acids on marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures; always spot-test first."
+        },
+        {
+          "question": "We have two large dogs—do we need to kennel them during cleaning?",
+          "answer": "Only if your dogs prefer quiet privacy! Our team loves working around friendly furry supervisors and uses 100% bleach-free, ammonia-free botanical products. Add our Heavy Pet Fur HEPA Extraction (+$35 CAD) whenever shedding season peaks."
+        },
+        {
+          "question": "Can we include our finished basement or walk-out level in a Southwest Edmonton home?",
+          "answer": "Yes—simply toggle the Finished Basement Level add-on (+$65 CAD) inside our instant calculator so our team allocates full time for lower-level rec rooms, bedrooms, and extra bathrooms."
+        },
+        {
+          "question": "Is there any travel surcharge for Windermere, Keswick, or Summerside?",
+          "answer": "None at all. Every T6W, T6R, and T6X address enjoys a $0 travel fee and our full $0 upfront deposit walkthrough protocol."
+        }
+      ]
+    },
+    {
+      "slug": "west-mature-edmonton",
+      "title": "Mature & Custom Infill Cleaning (Glenora, Crestwood, Westmount & Griesbach)",
+      "metaTitle": "Eco House Cleaning Glenora, Crestwood, Westmount & Griesbach | LevelUp",
+      "metaDescription": "Detail-obsessed eco cleaning for custom infills and heritage homes in Glenora, Crestwood, Westmount & Griesbach (T5N, T5P, T5M, T5E). Natural stone, hardwood & brass safe.",
+      "fsaCodes": ["T5N", "T5P", "T5M", "T5E"],
+      "neighborhoods": [
+        "Glenora",
+        "Crestwood",
+        "Westmount",
+        "Griesbach",
+        "Parkview",
+        "Laurier Heights",
+        "Grovenor"
+      ],
+      "housingProfile": "Architectural custom skinny infills, lovingly restored 1920s–1950s character homes along tree-lined avenues, and refined Griesbach residences. These homes feature bespoke white-oak or walnut millwork, heritage trim profiles, honed marble and travertine vanities, unlacquered or brushed-brass fixtures, original refinished hardwood, and chef-grade ranges that cannot tolerate rushed, one-chemical-fits-all cleaning.",
+      "parkingAndAccessNotes": "Zero travel fee across T5N, T5P, T5M, and T5E. Whether your home sits on a quiet Crestwood crescent with rear-lane garage access or a Westmount tree-lined avenue, our specialists arrive neatly parked with floor-protecting indoor shoes and clearly labelled surface-specific kits. We welcome detailed walkthrough notes for delicate antiques, art glass, and custom woodwork.",
+      "localPainPoints": [
+        "Risk of permanent chemical etching on natural marble, travertine, and soapstone countertops from harsh or acidic cleaners",
+        "Protecting heritage stained baseboards, crown mouldings, leaded-glass built-ins, and site-finished hardwood floors",
+        "Caring for designer matte-black, brushed-nickel, and brass kitchen/bath plumbing fixtures without dulling coatings",
+        "Tree pollen, river-valley leaf dust, and older forced-air duct particulate settling on deep window sills and wainscoting",
+        "Finding trustworthy, background-checked local specialists who clean methodically rather than rushing on a timer"
+      ],
+      "popularPackage": "deep_clean",
+      "sampleQuotes": [
+        {
+          "label": "3-Bed Custom Infill 50-Point Deep Reset",
+          "priceCad": 350,
+          "includes": "pH-neutral natural stone & hardwood protocol, detailed millwork & baseboard care (+ 5% AB GST where applicable)"
+        },
+        {
+          "label": "3-Bed Weekly Eco-Maintenance (15% Off)",
+          "priceCad": 183,
+          "includes": "Regular $215 flat rate with 15% weekly savings; consistent lead specialist (+ 5% AB GST where applicable)"
+        },
+        {
+          "label": "4-Bed Heritage / Griesbach Deep Reset",
+          "priceCad": 420,
+          "includes": "Full 50-point top-to-bottom restoration, botanical wood/stone care, $0 upfront (+ 5% AB GST where applicable)"
+        }
+      ],
+      "faqs": [
+        {
+          "question": "How do you clean honed marble, travertine, and natural stone vanities safely?",
+          "answer": "Natural stone is calcium-based and etches instantly on contact with vinegar, lemon, or acidic bathroom sprays. We clean all natural stone exclusively with pH-neutral stone cleaners, soft microfibres, clean-water rinsing, and thorough dry buffing. Safe ONLY on sealed ceramic/porcelain tile or chrome mesh; NEVER use vinegar or acids on marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures; always spot-test first."
+        },
+        {
+          "question": "Will your team care properly for original hardwood and stained heritage woodwork?",
+          "answer": "Yes. We never soak hardwood with wet string mops or use vinegar mixtures that cloud polyurethane or wax finishes. We dry-HEPA vacuum with soft-bristle floor heads first, then use lightly dampened microfibre pads with pH-neutral wood cleaner. Remember: acidic cleaners like vinegar are safe ONLY on sealed ceramic/porcelain tile or chrome mesh; NEVER apply them to marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures; always spot-test first."
+        },
+        {
+          "question": "Can we book an Hourly Custom Clean for specific rooms in a larger Glenora home?",
+          "answer": "Yes—our Hourly Custom Clean ($48/hr per cleaner, 3-hour minimum) lets you hand us a prioritized checklist (for example: chef's kitchen, primary suite, powder room, and main-floor hardwoods) with complete flexibility."
+        },
+        {
+          "question": "Do you bring your own non-toxic equipment, or can you use our specialty wood/stone products?",
+          "answer": "We bring a complete professional kit of botanical, pH-neutral solutions and HEPA vacuums—and if your builder or stone fabricator left a specific branded sealer/cleaner you prefer, we are happy to use it on request."
+        }
+      ]
+    },
+    {
+      "slug": "st-albert-sherwood-park",
+      "title": "St. Albert, Sherwood Park & Metro Edmonton Cleaning",
+      "metaTitle": "House Cleaning St. Albert, Sherwood Park, Spruce Grove, Leduc & Beaumont | LevelUp",
+      "metaDescription": "Eco-friendly recurring, deep & move-out house cleaning in St. Albert, Sherwood Park, Spruce Grove, Leduc & Beaumont (T8N, T8A, T8H, T7X, T9E, T4X). $0 travel in St. Albert & core Sherwood Park.",
+      "fsaCodes": ["T8N", "T8A", "T8H", "T7X", "T7Y", "T7Z", "T9E", "T4X", "T8L"],
+      "neighborhoods": [
+        "St. Albert (Erin Ridge, Oakmont, Lacombe Park, Jensen Lakes)",
+        "Sherwood Park (Emerald Hills, Summerwood, Glen Allan, Heritage Hills)",
+        "Spruce Grove & Stony Plain",
+        "Leduc",
+        "Beaumont",
+        "Fort Saskatchewan"
+      ],
+      "housingProfile": "Generous suburban family residences, executive two-storeys, walk-out bungalows, and multi-level homes with finished basements, bonus rooms, mudrooms built for Alberta winters, and busy family kitchens serving kids, pets, and extended-family gatherings.",
+      "parkingAndAccessNotes": "St. Albert (T8N) and core Sherwood Park (T8A, T8H) enjoy a $0 travel fee—the exact same flat-rate pricing as central Edmonton. Neighbouring metro communities including Spruce Grove (T7X, T7Y), Stony Plain (T7Z), Leduc (T9E), Beaumont (T4X), Fort Saskatchewan (T8L), and rural Strathcona County (T8B/T8C/T8E/T8G) carry one transparent $15 CAD travel fee automatically calculated when you type your postal code.",
+      "localPainPoints": [
+        "Keeping 3- to 5-bedroom family homes plus finished basements clean alongside busy commutes and youth sports",
+        "Heavy winter road salt, gravel grit, and pet paw prints across main-floor mudrooms and kitchen tile",
+        "High-mineral hard water leaving cloudy deposits on shower glass and dark bathroom faucets",
+        "Preparing larger homes for December holiday hosting, family dinners, or stress-free possession-day move-outs",
+        "Wanting reliable, transparent flat rates without big-franchise surprise upsells or harsh chemical odours"
+      ],
+      "popularPackage": "regular",
+      "sampleQuotes": [
+        {
+          "label": "4-Bed St. Albert / Sherwood Park Bi-Weekly (10% Off)",
+          "priceCad": 243,
+          "includes": "Regular $270 flat rate with 10% bi-weekly savings; $0 travel fee in T8N/T8A/T8H (+ 5% AB GST where applicable)"
+        },
+        {
+          "label": "4-Bed Deep Reset + Finished Basement",
+          "priceCad": 485,
+          "includes": "50-Point Deep Reset ($420) + Finished Basement Level ($65); eligible for $75 OFF first-clean tier (+ 5% AB GST where applicable)"
+        },
+        {
+          "label": "3-Bed Spruce Grove / Leduc / Beaumont Move-Out",
+          "priceCad": 410,
+          "includes": "3-Bed Move-Out ($395 with oven/fridge/cabinets free) + $15 metro travel fee (+ 5% AB GST where applicable)"
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Is there a travel fee for St. Albert or Sherwood Park?",
+          "answer": "No! St. Albert (T8N) and core Sherwood Park (T8A, T8H) have a $0 travel fee. Spruce Grove, Stony Plain, Leduc, Beaumont, Fort Saskatchewan, and rural Strathcona County carry a flat $15 CAD travel fee shown clearly in our instant quote calculator."
+        },
+        {
+          "question": "Can I add a finished basement to my St. Albert or Sherwood Park flat-rate clean?",
+          "answer": "Yes! Toggle Finished Basement Level (+$65 CAD) in our calculator to cover your lower-level rec room, guest bedrooms, and floors alongside your main and upper levels."
+        },
+        {
+          "question": "Do you offer recurring weekend-reclaim discounts for larger suburban homes?",
+          "answer": "Yes—save 15% on Weekly, 10% on Bi-Weekly, and 5% on Monthly Recurring Eco-Maintenance plans, with no lock-in contracts and $0 upfront deposit."
+        },
+        {
+          "question": "Can I gift a clean to family members in St. Albert, Sherwood Park, or Beaumont?",
+          "answer": "Absolutely! Our digital Gift a Clean certificates ($150, $250, and $350 CAD) can be redeemed anywhere across Greater Edmonton, St. Albert, Sherwood Park, Spruce Grove, Leduc, and Beaumont."
+        }
+      ]
+    }
+  ],
+  "roomXRay": {
+    "kitchenTitle": "Kitchen X-Ray: What We Detail That Others Skip",
+    "kitchenSubtitle": "Tap any hotspot to inspect how our 50-Point standard protects delicate Edmonton surfaces and saves $135+ on Move-Out appliance detailing.",
+    "kitchenHotspots": [
+      {
+        "id": "oven",
+        "label": "Oven Interior & Glass",
+        "xPct": 51,
+        "yPct": 59,
+        "detail": "Manual botanical degreasing of cavity walls, racks, and inner tempered viewing glass—zero toxic aerosol fumes and zero risky pyrolytic self-clean thermal shock.",
+        "competitorNote": "Most Edmonton cleaners charge $45–$60 extra even on Move-Out packages, or skip baked-on glass edges entirely.",
+        "levelupStandard": "Included FREE in every Move-Out Clean (or +$45 add-on on Deep/Regular). We soften carbonized spills safely by hand to protect your oven's thermal fuse and control board."
+      },
+      {
+        "id": "hood",
+        "label": "Range Hood Baffles",
+        "xPct": 51,
+        "yPct": 20,
+        "detail": "Degreasing the hood canopy, underside lip, control buttons, and removable stainless mesh baffles where airborne cooking oil traps winter dust.",
+        "competitorNote": "Often glanced over or wiped only on the front face, leaving sticky yellow film underneath that fails landlord walkthroughs.",
+        "levelupStandard": "Removable mesh filters degreased and rinsed clean (safe ONLY on stainless/chrome mesh; never harsh acids on matte or stone surfaces), underside canopy buffed fingerprint-free."
+      },
+      {
+        "id": "island",
+        "label": "Calacatta Quartz Island",
+        "xPct": 24,
+        "yPct": 68,
+        "detail": "pH-neutral botanical cleaning across seams, waterfall edges, and overhang seating ledges to lift grease and coffee rings without clouding resin binders.",
+        "competitorNote": "Generic all-purpose sprays with bleach, ammonia, or vinegar can gradually dull quartz sheen or leave hazy streaks under winter sunlight.",
+        "levelupStandard": "Exclusively pH-neutral stone-safe solutions and plush dry-buffed microfibre—zero vinegar, zero bleach, zero abrasive pads."
+      },
+      {
+        "id": "sink",
+        "label": "Sink & Chrome/Matte Faucet",
+        "xPct": 89,
+        "yPct": 53,
+        "detail": "Detailing the undermount silicone lip, strainer rim, soap dispenser base, and faucet aerator where EPCOR hard water leaves chalky white crusts.",
+        "competitorNote": "Quick sponge swipes leave mineral rings around the faucet collar and water spots drying instantly on dark or stainless finishes.",
+        "levelupStandard": "Gentle finish-safe cleaning followed by immediate microfibre towel-drying so chrome gleams and matte-black coatings stay velvety and intact."
+      },
+      {
+        "id": "cabinets",
+        "label": "Upper & Lower Cabinets",
+        "xPct": 64,
+        "yPct": 18,
+        "detail": "Grease-free detailing of cabinet faces, shaker bevels, pulls, and—on Move-Out Cleans—every interior shelf, hinge zone, and cutlery drawer.",
+        "competitorNote": "Competitors typically charge $45+ extra for inside cabinets and miss sticky oil buildup along shaker rail grooves near the range.",
+        "levelupStandard": "Interior cabinets and drawers included FREE in every Move-Out Clean; faces, bevels, and handles hand-wiped in Deep Resets with wood-safe botanical spray."
+      },
+      {
+        "id": "baseboards",
+        "label": "Baseboards & Toe-Kicks",
+        "xPct": 69,
+        "yPct": 76,
+        "detail": "Vacuuming crumb traps under recessed cabinet toe-kicks and hand-wiping baseboards coated in five months of Edmonton forced-air furnace dust.",
+        "competitorNote": "Frequently skipped by flat-mop-only crews, leaving grey dust lines and drip marks along lower kickplates.",
+        "levelupStandard": "Crevice-tool HEPA vacuuming first, then damp microfibre hand-wiping along every toe-kick and baseboard corner."
+      },
+      {
+        "id": "seals",
+        "label": "Appliance Seals",
+        "xPct": 73,
+        "yPct": 54,
+        "detail": "Opening fridge and dishwasher perimeters to clean hidden rubber door gaskets, inner door lips, and chrome handle undersides.",
+        "competitorNote": "Almost universally missed—yet one of the first spots Alberta landlords check during a move-out inspection.",
+        "levelupStandard": "Every rubber gasket crease and dishwasher rim lip is wiped clean and dry (with full Inside Fridge & Crisper Sanitize included FREE on Move-Outs)."
+      }
+    ],
+    "bathroomTitle": "Bathroom X-Ray: Hard-Water & Matte-Black Precision",
+    "bathroomSubtitle": "Edmonton tap water (~160–185 mg/L CaCO3) punishes glass and dark hardware. Tap each hotspot to see our surface-safe spa standard.",
+    "bathroomHotspots": [
+      {
+        "id": "shower_glass",
+        "label": "Frameless Shower Glass",
+        "xPct": 30,
+        "yPct": 45,
+        "detail": "Lifting soap film and North Saskatchewan River calcium spots across both sides of heavy tempered panels, hinges, and bottom rubber sweeps.",
+        "competitorNote": "Rushed spray-and-wipe leaves stubborn mineral haze visible the moment daylight hits the glass.",
+        "levelupStandard": "Non-scratch mechanical lifting paired with finish-safe rinsing and dry microfibre buffing—leaving panels optically clear with zero acid splatter on nearby stone."
+      },
+      {
+        "id": "matte_fixture",
+        "label": "Matte Black Rain Fixture",
+        "xPct": 17,
+        "yPct": 36,
+        "detail": "Protecting powder-coated and PVD matte-black rain heads, thermostatic valves, and hand-wands from water-spot buildup without stripping the finish.",
+        "competitorNote": "Harsh lime removers, CLR, vinegar soaks, or magic erasers permanently etch, haze, or shine-burnish matte-black coatings.",
+        "levelupStandard": "Warm water, mild pH-neutral botanical soap, plush microfibre, and complete dry-buffing—NEVER acids, abrasives, or melamine sponges."
+      },
+      {
+        "id": "grout",
+        "label": "Tile Grout Lines",
+        "xPct": 15,
+        "yPct": 80,
+        "detail": "Detail-brushing shower corners, niche ledges, and tub surrounds to lift body oils and early pinkish biofilm before it stains porous grout.",
+        "competitorNote": "Standard maintenance passes rarely touch corners or shower niches, letting soap scum harden along grout seams.",
+        "levelupStandard": "Soft nylon detail brushing with botanical cleaners—avoiding harsh bleach fumes and keeping acids strictly away from unsealed grout and natural stone."
+      },
+      {
+        "id": "vanity",
+        "label": "Vanity & Mirror",
+        "xPct": 84,
+        "yPct": 60,
+        "detail": "Polishing mirrors edge-to-edge, sanitizing countertop basins and toothpaste splatters, and wiping oak or painted vanity drawer fronts and pulls.",
+        "competitorNote": "Paper-towel streaks on mirrors and wet ring marks left around soap pumps and stone edges.",
+        "levelupStandard": "Lint-free glass microfibre polishing plus pH-neutral vanity care—safe on quartz, marble, porcelain, and solid oak cabinetry."
+      },
+      {
+        "id": "tub",
+        "label": "Freestanding Tub",
+        "xPct": 50,
+        "yPct": 72,
+        "detail": "Cleaning inside the soaking basin, overflow plate, outer acrylic/cast-iron apron, and the tight dust-catching gap behind freestanding tubs.",
+        "competitorNote": "Crews wipe the tub floor but leave dust bunnies and hair trapped behind the tub skirt and floor-mount filler.",
+        "levelupStandard": "Full inside-and-out tub scrub with non-scratch pads, plus crevice HEPA vacuuming and damp wipe behind the tub base."
+      },
+      {
+        "id": "vent_baseboard",
+        "label": "Exhaust Fan & Baseboards",
+        "xPct": 41,
+        "yPct": 6,
+        "detail": "Vacuuming humid-air lint from ceiling exhaust grilles and hand-wiping damp-prone bathroom baseboards and behind-toilet floor edges.",
+        "competitorNote": "Exhaust fans clogged with grey fuzz and dusty hair glued to baseboards by shower steam are routinely ignored.",
+        "levelupStandard": "Dry-HEPA extraction on exhaust vents and floor corners first, followed by botanical hand-wiping so every corner feels hotel-fresh."
+      }
+    ]
+  },
+  "guides": [
+    {
+      "slug": "edmonton-winter-salt-floor-safety",
+      "title": "How to Safely Remove Edmonton Winter Road Salt Without Ruining Hardwood, LVP, or Stone",
+      "metaTitle": "Remove Winter Road Salt from Hardwood & Tile Safely | Edmonton Guide | LevelUp",
+      "metaDescription": "Learn how to lift white calcium chloride salt stains from Edmonton entryways without scratching hardwood, dulling LVP, or etching natural stone. Includes strict surface-safety rules.",
+      "publishedDate": "2026-11-18",
+      "readTimeMinutes": 5,
+      "category": "Edmonton Winter Care",
+      "heroImage": "/media/photos/winter-entryway-1024w.webp",
+      "summary": "From November through March, Edmonton boots drag sodium chloride, calcium chloride, and sharp street gravel straight into foyers. Here is the exact dry-first, pH-neutral protocol that eliminates white winter haze without stripping polyurethane or etching stone.",
+      "surfaceSafetyWarning": "Surface Safety Warning: Acidic solutions such as vinegar or citric acid are safe ONLY on sealed ceramic/porcelain tile or chrome mesh; NEVER use vinegar or acids on marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures; always spot-test an inconspicuous area first.",
+      "sections": [
+        {
+          "heading": "Why Edmonton Winter Salt Wrecks Floors Faster Than Dirt",
+          "paragraphs": [
+            "Edmonton winter de-icers rely on alkaline mineral salts—primarily sodium chloride and calcium chloride—mixed with traction sand and fine crushed gravel. When snow melts off winter boots in a warm Windermere mudroom or Downtown condo entryway, those dissolved minerals dry into stubborn chalky white rings.",
+            "The damage happens in two ways: first, undissolved salt crystals and sand act like 80-grit sandpaper underfoot, micro-scratching engineered hardwood polyurethane and luxury vinyl plank (LVP) wear layers. Second, overly wet mopping or harsh internet DIY vinegar hacks can strip protective floor finishes, swell wood seams, or chemically etch natural stone tile."
+          ]
+        },
+        {
+          "heading": "Step 1: Always Dry-HEPA Vacuum Before Touching Water",
+          "paragraphs": [
+            "Never drag a wet mop directly across a salty winter entryway. Turning dry gravel and salt crystals into wet slurry grinds abrasive grit right across your floor finish and spreads mineral haze into clean hallways.",
+            "Use a vacuum with a soft-brush hard-floor head (turn off aggressive carpet beater bars) to lift every loose crystal from floor grooves, boot-tray edges, and baseboards before introducing a drop of moisture."
+          ],
+          "bullets": [
+            "Lift and shake entryway mats outdoors, then dry-vacuum underneath where fine salt sifts through",
+            "Use a crevice tool along baseboard trim and door thresholds where dried white slush accumulates",
+            "Wipe boot trays separately in a utility sink rather than splashing salty runoff onto foyer floors"
+          ]
+        },
+        {
+          "heading": "Step 2: Match the Cleaner to Your Exact Floor Material",
+          "paragraphs": [
+            "Once all abrasive grit is gone, the safest way to remove alkaline winter residue depends completely on what your floor is made of. One bottle never fits every Edmonton surface.",
+            "For engineered or solid hardwood and LVP, use a dedicated pH-neutral water-based wood/LVP cleaner on a lightly damp (never dripping) flat microfibre pad, swapping to a fresh pad frequently so you lift salt rather than smearing it. Dry immediately with a clean microfibre towel to protect seams.",
+            "For natural stone entryways (slate, travertine, marble, or limestone), stick strictly to a dedicated pH-neutral stone cleaner followed by a clean-water rinse and dry buffing. Never touch natural stone with vinegar or acidic salt-neutralizers—acids react chemically with calcium in the stone and leave permanent dull etch marks."
+          ],
+          "bullets": [
+            "Hardwood & LVP: Dry-vacuum -> lightly damp pH-neutral wood/LVP cleaner -> fresh rinse pass -> dry towel buff",
+            "Natural Stone (Slate, Marble, Travertine): Dry-vacuum -> pH-neutral stone cleaner ONLY -> clean-water rinse -> buff dry",
+            "Sealed Ceramic or Porcelain Tile ONLY: Dry-vacuum -> warm pH-neutral cleaner (or carefully spot-tested mild descaling ONLY on fully sealed ceramic/porcelain with sealed grout) -> thorough plain-water rinse -> dry wipe"
+          ]
+        },
+        {
+          "heading": "The 5-Minute Edmonton Entryway Prevention System",
+          "paragraphs": [
+            "Preventing 80% of winter floor haze is simpler than scrubbing it out in April. Set up a two-zone landing pad right inside your garage or front door: a heavy ribbed boot tray to catch melting slush, paired with a washable absorbent cotton/microfibre runner to catch residual dampness on socks and dog paws.",
+            "Keep a small spray bottle of pH-neutral floor cleaner and two dry microfibre cloths in the coat closet for quick 60-second evening wipe-ups after heavy snowstorms—and schedule a mid-winter or spring 50-Point Deep Reset to clear trapped baseboard salt and furnace dust."
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can I use vinegar and warm water to remove road salt from my hardwood floors?",
+          "answer": "We strongly advise against it. Acidic vinegar solutions can gradually dull polyurethane topcoats and damage waxed or oiled hardwood—and they permanently etch natural stone or unsealed grout. Safe ONLY on sealed ceramic/porcelain tile or chrome mesh; NEVER use vinegar or acids on marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures; always spot-test first."
+        },
+        {
+          "question": "Why does white salt haze keep coming back after I mop?",
+          "answer": "Usually because the mop pad became saturated with dissolved salt and simply spread a thin mineral film across the tile. Switch to a clean-water rinse pass with a fresh microfibre pad, then buff dry with a clean towel so minerals are physically lifted off the floor."
+        },
+        {
+          "question": "Is road salt residue harmful to dogs' paws indoors?",
+          "answer": "Yes—calcium chloride crystals can dry, crack, and irritate dog paw pads if licked off entryway floors. Dry-vacuuming daily and mopping with 100% pet-safe pH-neutral botanical cleaners keeps both your floors and your furry supervisors comfortable all winter."
+        }
+      ]
+    },
+    {
+      "slug": "why-oven-self-clean-destroys-control-boards",
+      "title": "Why You Should Never Run Your Oven's Self-Clean Cycle (Especially Before a Move-Out)",
+      "metaTitle": "Why Oven Self-Clean Breaks Control Boards & Thermal Fuses | Edmonton Guide",
+      "metaDescription": "Appliance techs warn against 900°F pyrolytic self-clean cycles that blow thermal fuses and fry control boards right before move-out inspections. Learn safer non-toxic alternatives.",
+      "publishedDate": "2026-11-19",
+      "readTimeMinutes": 5,
+      "category": "Appliance Care & Move-Out",
+      "heroImage": "/media/photos/hero-kitchen-1024w.webp",
+      "summary": "Hitting 'Self-Clean' the night before an Edmonton landlord walkthrough or holiday roast feels tempting—until 900°F heat blows a thermal fuse, fries your digital control board, or locks the door shut. Here is why appliance technicians skip it and how to clean an oven safely.",
+      "surfaceSafetyWarning": "Surface Safety Warning: When using gentle baking-soda paste inside enamel oven cavities, rinse thoroughly and avoid bare aluminum, heating elements, or surrounding stone counters. Acidic solutions like vinegar are safe ONLY on sealed ceramic/porcelain tile or chrome mesh; NEVER use vinegar or acids on marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures; always spot-test first.",
+      "sections": [
+        {
+          "heading": "What Actually Happens Inside a 900°F Pyrolytic Self-Clean Cycle",
+          "paragraphs": [
+            "Normal baking runs around 350°F to 450°F (175°C–230°C). When you press Self-Clean, the oven mechanically locks the door and ramps internal temperatures to an extreme 800°F–1,000°F (425°C–540°C) for two to four hours to incinerate grease into dry ash.",
+            "Modern ranges pack delicate microprocessors, touchscreens, and wiring harnesses just centimetres away from the oven cavity. Sustained extreme heat pushes insulation, cooling fans, and safety components right to their failure threshold—especially on ranges older than three to five years."
+          ]
+        },
+        {
+          "heading": "The 3 Most Expensive Breakdowns Caused by Self-Clean",
+          "paragraphs": [
+            "Across Canadian appliance repair shops, November/December pre-holiday hosting and end-of-month move-out weeks produce a predictable spike in dead ovens triggered directly by self-clean cycles."
+          ],
+          "bullets": [
+            "Blown One-Time Thermal Fuses: Designed as a fire safeguard, thermal fuses permanently trip if radiant heat bleeds past insulation or a cooling fan lags—leaving your entire oven dead and unheatable.",
+            "Fried Digital Control Boards (PCBs): Extreme radiant heat warps circuit boards, dries out capacitors, and melts solder joints behind the upper display console, often costing $350–$700+ in parts and labour.",
+            "Seized Motorized Door Latches & Burned Elements: Thermal expansion jams mechanical door locks shut mid-cycle—forcing a technician service call just to open the door without shattering the glass."
+          ]
+        },
+        {
+          "heading": "Indoor Air & Pet Safety Risks During Edmonton Winters",
+          "paragraphs": [
+            "In July, you can throw open patio doors. In an Edmonton November or January at -20°C, incinerating old cooking grease inside a sealed condo or family home fills the kitchen with acrid smoke and volatile fumes that linger for hours—creating serious irritation for dogs, cats, pet birds, and sensitive lungs."
+          ]
+        },
+        {
+          "heading": "How to Safely Degrease an Oven Without Thermal Shock or Harsh Aerosols",
+          "paragraphs": [
+            "Skip both pyrolytic self-clean and caustic yellow-cap lye sprays. Instead, let the oven cool completely, remove the racks to soak in warm soapy water in a lined basin, and apply a gentle warm water + baking soda paste (or non-caustic botanical degreaser) to the cool porcelain-enamel cavity—staying well clear of exposed heating elements, gas igniters, bare aluminum/soft-metal trims, door gaskets, and surrounding stone or quartz counters (always spot-test an inconspicuous area first).",
+            "Allow the paste to soften baked-on grease for several hours, lift residue with a non-scratch nylon scraper and damp microfibre cloth, and finish with a thorough plain-water wipe-down. Planning a move-out? Remember that LevelUp includes professional hand-degreasing of your oven interior and glass FREE inside every Move-Out Clean."
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Is the lower-temperature 'Steam Clean' button safer than pyrolytic Self-Clean?",
+          "answer": "Yes. Dedicated steam-clean cycles typically run around 200°F–250°F for 20–30 minutes using a cup of water in the bottom reservoir, softening light spills without subjecting thermal fuses or control boards to 900°F shock."
+        },
+        {
+          "question": "Should I run Self-Clean before LevelUp arrives for my Move-Out Clean?",
+          "answer": "No! Leave the oven completely cool and off. Our specialists degrease the oven cavity, racks, and inner viewing glass manually with non-toxic botanical formulas—included at $0 extra in every Move-Out Clean."
+        },
+        {
+          "question": "Can I spray vinegar inside the oven to fizz away baking soda?",
+          "answer": "Avoid spraying vinegar carelessly near oven doors, surrounding quartz/marble counters, or stainless/matte-black trims where drips can etch or discolour finishes—plain warm water and a clean microfibre cloth rinse baking soda cleanly with zero surface risk. Remember: acids are safe ONLY on sealed ceramic/porcelain tile or chrome mesh; NEVER use vinegar or acids on marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures; always spot-test first."
+        }
+      ]
+    },
+    {
+      "slug": "edmonton-hard-water-matte-black-fixtures",
+      "title": "Edmonton Hard Water vs. Matte-Black Fixtures & Frameless Shower Glass",
+      "metaTitle": "Clean Matte-Black Fixtures & Shower Glass in Edmonton Hard Water | LevelUp",
+      "metaDescription": "EPCOR Edmonton tap water (~160–185 mg/L CaCO3) leaves stubborn spots on matte-black faucets and shower glass. Learn the safe pH-neutral care method that prevents ruined finishes.",
+      "publishedDate": "2026-11-20",
+      "readTimeMinutes": 5,
+      "category": "Surface & Bathroom Care",
+      "heroImage": "/media/photos/xray-bathroom-1024w.webp",
+      "summary": "Matte-black rain showerheads and frameless glass look architectural on possession day—until Edmonton's mineral-rich North Saskatchewan River water dries into chalky white spots. Here is how to keep dark fixtures velvety and glass crystal-clear without ruining expensive coatings.",
+      "surfaceSafetyWarning": "Surface Safety Warning: Acidic descalers and vinegar are safe ONLY on sealed ceramic/porcelain tile or chrome mesh; NEVER use vinegar or acids on marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures; always spot-test an inconspicuous area first.",
+      "sections": [
+        {
+          "heading": "Why Edmonton Bathrooms Develop White Crust So Quickly",
+          "paragraphs": [
+            "Edmonton's EPCOR drinking water comes from the North Saskatchewan River and typically measures moderately hard to hard—roughly 160 to 185 mg/L as calcium carbonate (CaCO3). Every time warm shower droplets evaporate on a dark faucet or clear glass panel, dissolved calcium and magnesium stay behind as stubborn white rings.",
+            "On polished chrome, light mineral haze blends in for a week or two. On architectural matte-black or brushed-brass hardware popular in new Windermere, Keswick, and Glenora custom homes, white calcium contrast shows up immediately."
+          ]
+        },
+        {
+          "heading": "What Destroys Matte-Black & Brushed-Brass Finishes Permanently",
+          "paragraphs": [
+            "Matte-black fixtures rely on electroplated, PVD, or powder-coated surface layers to create that low-sheen satin look. Once that top layer is etched or abraded, no cleaner can restore it—the fixture has to be replaced."
+          ],
+          "bullets": [
+            "Acidic Descalers & Vinegar Soaks: Commercial lime removers (like CLR), lemon juice, and vinegar attack dark coatings and brass lacquers, causing chalky discolouration or peeling.",
+            "Melamine Sponges ('Magic Erasers') & Green Scour Pads: Melamine foam acts like ultra-fine sandpaper; scrubbing matte-black metal permanently buffs ugly glossy bald spots into the matte finish.",
+            "Wax-Based Polishes & Oil Sprays: Leaving oily polishes on matte hardware attracts bathroom dust and creates blotchy fingerprint halos."
+          ]
+        },
+        {
+          "heading": "The Safe LevelUp Protocol for Matte-Black Hardware",
+          "paragraphs": [
+            "Consistency beats harsh chemistry every single time. Wipe matte-black faucets, thermostatic valves, and rain heads with warm water, two drops of mild pH-neutral botanical dish soap, and a plush clean microfibre cloth.",
+            "Rinse thoroughly with a plain damp microfibre cloth and immediately buff completely dry with a second dry microfibre towel. Drying is the secret weapon: when water cannot evaporate on the metal, calcium minerals never get a chance to crystallize."
+          ]
+        },
+        {
+          "heading": "Keeping Frameless Shower Glass Crystal-Clear Around Stone & Tile",
+          "paragraphs": [
+            "For frameless glass enclosures, keep a silicone-blade squeegee hanging inside the shower and take 20 seconds after the last morning shower to clear standing droplets—especially along the lower third where soap film binds to calcium.",
+            "During weekly maintenance, clean glass with pH-neutral botanical glass cleaner and a tight-weave microfibre cloth. Watch overspray carefully: if your shower floor or bench is marble, travertine, or unsealed grout, never spray acidic glass descalers that can run down the glass and permanently etch the stone beneath."
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can I wrap a vinegar-soaked bag around my matte-black showerhead to clear clogged nozzles?",
+          "answer": "Never soak a matte-black or brass showerhead in vinegar or acidic lime remover—the acid can strip or discolour the dark coating. Instead, gently massage flexible silicone spray nozzles with warm soapy water and a soft toothbrush, rinse cleanly, and dry with microfibre. Remember: vinegar/acids are safe ONLY on sealed ceramic/porcelain tile or chrome mesh; NEVER use vinegar or acids on marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures; always spot-test first."
+        },
+        {
+          "question": "Will a water softener eliminate white spots in Edmonton?",
+          "answer": "A whole-home water softener removes calcium and magnesium ions dramatically, cutting glass and fixture spotting by over 80%. Even with softened water, quick squeegeeing and weekly pH-neutral microfibre drying keep matte fixtures looking brand-new."
+        },
+        {
+          "question": "Does LevelUp bring separate safe products for natural stone and matte-black bathrooms?",
+          "answer": "Yes. Every specialist carries clearly labelled pH-neutral stone, glass, and botanical soap bottles plus colour-coded microfibre cloths so delicate custom bathrooms in Glenora, Windermere, or Downtown condos are never exposed to harsh acids or abrasives."
+        }
+      ]
+    },
+    {
+      "slug": "alberta-move-out-inspection-checklist",
+      "title": "The 2026 Alberta Move-Out Inspection Checklist: Protect Your Edmonton Security Deposit",
+      "metaTitle": "Alberta Move-Out Inspection Checklist (2026) | Edmonton Security Deposit Guide",
+      "metaDescription": "Everything Edmonton renters need for an Alberta RTA move-out inspection: the 10-day deposit return rule, condo elevator booking timelines, and the exact 50-point rooms landlords check.",
+      "publishedDate": "2026-11-22",
+      "readTimeMinutes": 6,
+      "category": "Alberta RTA & Move-Out",
+      "heroImage": "/media/photos/moveout-condo-1024w.webp",
+      "summary": "Moving out of an Edmonton apartment, condo, or townhouse? Understanding Alberta Residential Tenancies Act (RTA) timelines, condo service-elevator bylaws, and the exact kitchen/bath details landlords scrutinize makes the difference between a fast full deposit return and stressful deductions.",
+      "surfaceSafetyWarning": "Surface Safety Warning: Avoid quick-fix harsh chemicals during move-out panic—damage to landlord fixtures can trigger deposit deductions! Acidic cleaners like vinegar are safe ONLY on sealed ceramic/porcelain tile or chrome mesh; NEVER use vinegar or acids on marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures; always spot-test first.",
+      "sections": [
+        {
+          "heading": "Know Your Rights Under the Alberta Residential Tenancies Act (RTA)",
+          "paragraphs": [
+            "In Alberta, both a written move-in inspection report and a written move-out inspection report are legally mandatory and must be completed within one week before or after possession ends. Crucially, if a landlord fails to complete proper inspection reports, they lose the legal right under the RTA to deduct money from your security deposit for physical damages.",
+            "When you return the suite clean (allowing for normal wear and tear) with no unpaid rent, your landlord must return your full security deposit plus any statutory interest within 10 days of vacating. If legitimate deductions apply, they must send an itemized statement of account and any remaining balance within 30 days. Always provide your forwarding address in writing on or before key handoff."
+          ]
+        },
+        {
+          "heading": "Edmonton Condo Bylaw Trap: Book Your Service Elevator 2–3 Weeks Early",
+          "paragraphs": [
+            "Renting in Downtown, Ice District, Oliver/Wîhkwêntôwin, Garneau, or Old Strathcona? Your condo corporation's bylaws under the Condominium Property Act require reserving the padded service elevator and loading bay weeks in advance.",
+            "Moving furniture without an elevator booking—or overrunning your reserved slot—can trigger condo bylaw fines that leases often pass straight onto your security deposit. Schedule your movers first, confirm the suite will be 100% empty, and book your professional Move-Out Clean right after the truck pulls away."
+          ]
+        },
+        {
+          "heading": "The Top 8 Spots Edmonton Landlords Check First (Room-by-Room)",
+          "paragraphs": [
+            "Most renters vacuum the living room and wipe counters—then lose $150 to $350 from their deposit over eight overlooked inspection hotspots:"
+          ],
+          "bullets": [
+            "Inside the Oven & Viewing Glass: Baked-on grease along racks and inner glass edges (never risk a 900°F self-clean cycle right before moving—clean manually!).",
+            "Inside the Fridge, Freezer & Rubber Door Seals: Sticky crisper bottoms, shelf brackets, and hidden gasket creases.",
+            "Inside Kitchen & Bathroom Cabinets/Drawers: Stray crumbs in cutlery trays and dusty upper cabinet shelves.",
+            "Range Hood Grease Baffles & Stovetop Drip Zones: Sticky oil film under the hood canopy.",
+            "Bathroom Shower Glass, Tracks & Behind-Toilet Bolts: EPCOR hard-water spots and dust trapped around toilet hinges.",
+            "Baseboards, Door Frames & Light Switches: Five months of Edmonton winter furnace dust settled along white trim.",
+            "Closet Shelving, Mirror Tracks & Laundry Lint Traps: Often missed during rushed last-minute packing.",
+            "Window Ledges & Interior Tracks: Dark gravel dust blown in from Edmonton spring/summer streets."
+          ]
+        },
+        {
+          "heading": "Why an Itemized Professional Cleaning Receipt Protects You",
+          "paragraphs": [
+            "Handing your landlord an official itemized Move-Out Cleaning Receipt alongside timestamped completion photos demonstrates immediately that every RTA cleanliness requirement was met—eliminating guesswork during your walkthrough.",
+            "With LevelUp Cleaning, Inside Oven, Inside Fridge, and Inside Cabinets are included FREE ($135 value) in every Move-Out Clean (starting at $235 pre-tax CAD + 5% AB GST where applicable), with $0 upfront deposit and an on-site 50-point walkthrough or SMS photo-verified report."
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "How long does my Edmonton landlord have to return my security deposit?",
+          "answer": "Under the Alberta Residential Tenancies Act, if no rent is owed and the property is returned clean without damage beyond normal wear and tear, your landlord must return your full security deposit within 10 days of vacating. If deductions are claimed, an itemized statement and remaining balance are due within 30 days."
+        },
+        {
+          "question": "Should the apartment be completely empty before LevelUp arrives for a Move-Out Clean?",
+          "answer": "Yes—having all furniture, boxes, and fridge contents cleared lets our specialists clean inside every cabinet, drawer, closet corner, and baseboard cleanly so you breeze through your landlord walkthrough."
+        },
+        {
+          "question": "Do I get a receipt I can email directly to my Edmonton property manager?",
+          "answer": "Yes. Every Move-Out Clean includes an official itemized Canadian receipt from LevelUp Cleaning Services Ltd. confirming all rooms plus inside oven, inside fridge, and inside cabinets were detailed."
+        }
+      ]
+    }
+  ],
+  "giftPage": {
+    "metaTitle": "Gift a Clean Edmonton | December Holiday Reset Certificates | LevelUp Cleaning",
+    "metaDescription": "Give the gift of a calm, spotless home this December in Edmonton, St. Albert & Sherwood Park. Instant digital eco-cleaning certificates ($150, $250, $350 CAD) with zero expiry stress.",
+    "h1": "Gift a Clean — Give Back a Calm Weekend",
+    "subtitle": "Skip clutter that collects dust. Treat new parents, busy Edmonton families, seniors, or holiday hosts to a botanical, pet-safe home reset with an instant digital certificate.",
+    "holidayBannerNote": "DECEMBER PRE-HOLIDAY RESET • Redeemable across Edmonton, St. Albert, Sherwood Park, Spruce Grove, Leduc & Beaumont. Headline amounts are pre-tax CAD (+ 5% AB GST applied at redemption where applicable).",
+    "tiers": [
+      {
+        "id": "gift-150",
+        "amountCad": 150,
+        "badge": "CONDO & MINI RESET",
+        "title": "The Weekend Refresh",
+        "bestFor": "Ideal for 1-bedroom condos, busy students/professionals, or a 3-hour Hourly Custom Clean ($48/hr).",
+        "highlights": [
+          "Covers a full 1-bedroom Recurring Eco-Maintenance clean ($130) with credit toward add-ons",
+          "Or covers a full 3-hour Hourly Custom Clean ($144) focused on kitchen, baths & floors",
+          "100% pet & kid safe botanical eucalyptus formulas",
+          "Instant custom digital certificate ready to print or email"
+        ]
+      },
+      {
+        "id": "gift-250",
+        "amountCad": 250,
+        "badge": "MOST POPULAR HOLIDAY GIFT",
+        "title": "The Calm Home Reset",
+        "bestFor": "Our favourite gift for new parents, holiday hosts, and 2–3 bedroom Edmonton family homes.",
+        "highlights": [
+          "Covers a 1-bedroom 50-Point Deep Reset ($210) or a 3-bedroom Regular Clean ($215) with extra credit",
+          "Applies seamlessly toward a larger family Deep Reset or Move-In Clean",
+          "Zero travel fee across Edmonton, St. Albert & core Sherwood Park",
+          "Includes our 50-point walkthrough sign-off with zero surprises"
+        ]
+      },
+      {
+        "id": "gift-350",
+        "amountCad": 350,
+        "badge": "SIGNATURE DEEP RESET",
+        "title": "The Full Sanctuary Reset",
+        "bestFor": "Built for spacious 3-bedroom homes in Windermere, Glenora, St. Albert & Sherwood Park.",
+        "highlights": [
+          "Covers a complete 3-bedroom 50-Point Deep Reset ($350) top-to-bottom",
+          "Or covers a 2-bedroom Move-Out/Move-In Clean ($310) with oven, fridge & cabinets included",
+          "Finish-safe care for quartz islands, hardwood floors, and matte-black fixtures",
+          "Recipient chooses their own preferred date directly with our Edmonton team"
+        ]
+      }
+    ],
+    "howItWorks": [
+      {
+        "step": "01",
+        "title": "Choose Your Gift Tier ($150, $250, or $350)",
+        "body": "Pick the certificate amount that fits your recipient's home size—or text +1 (780) 710-1503 for a custom amount covering a full 4–5 bedroom estate."
+      },
+      {
+        "step": "02",
+        "title": "Send Your Request & Personal Message",
+        "body": "Submit your recipient's name and your holiday note via our quick request form or SMS. We confirm payment via Interac e-Transfer or card and deliver your crisp printable/email-ready digital certificate the same day."
+      },
+      {
+        "step": "03",
+        "title": "They Pick Their Ideal Day",
+        "body": "Your recipient simply texts +1 (780) 710-1503 or emails hello@levelupcleaning.ca with their certificate code to book whenever a calm reset helps most—before holiday hosting or after the New Year."
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Do LevelUp Cleaning gift certificates expire in Alberta?",
+        "answer": "In accordance with Alberta consumer protection rules, the dollar value of your paid LevelUp Cleaning gift certificate never expires."
+      },
+      {
+        "question": "What if my recipient's home clean costs more than the gift certificate amount?",
+        "answer": "They simply apply the full certificate value as a credit toward any Flat-Rate Package or Hourly Custom Clean and cover only the remaining difference after their walkthrough."
+      },
+      {
+        "question": "How fast will I receive the digital certificate for a last-minute December gift?",
+        "answer": "Same day! Once confirmed via Interac e-Transfer or card, we send a beautifully formatted eucalyptus-linen digital PDF directly to your email or SMS so you can forward it or tuck it into a card right away."
+      },
+      {
+        "question": "Where can the gift certificate be redeemed?",
+        "answer": "Anywhere in Greater Edmonton, St. Albert, Sherwood Park ($0 travel fee), as well as Spruce Grove, Stony Plain, Leduc, Beaumont, and Fort Saskatchewan ($15 metro travel fee)."
+      }
+    ]
+  },
+  "privacyPage": {
+    "metaTitle": "Privacy Policy & CASL SMS Terms | LevelUp Cleaning Edmonton",
+    "metaDescription": "Alberta PIPA, federal PIPEDA, and Canada CASL compliant privacy policy and SMS communication terms for LevelUp Cleaning Services Ltd. in Edmonton, AB.",
+    "lastUpdated": "November 2026",
+    "sections": [
+      {
+        "heading": "1. Who We Are & Scope (Alberta PIPA / PIPEDA)",
+        "paragraphs": [
+          "LevelUp Cleaning Services Ltd. ('LevelUp Cleaning', 'we', 'us'), established in 2024 in Edmonton, Alberta, respects your privacy and handles personal information in compliance with Alberta's Personal Information Protection Act (PIPA), Canada's federal Personal Information Protection and Electronic Documents Act (PIPEDA), and Canada's Anti-Spam Legislation (CASL).",
+          "This policy explains what information we collect when you request an instant quote, book a residential cleaning service, upload optional Snap-a-Quote room photos, or communicate with us at +1 (780) 710-1503 or hello@levelupcleaning.ca."
+        ]
+      },
+      {
+        "heading": "2. Information We Collect",
+        "paragraphs": [
+          "We collect only the personal information reasonably needed to calculate accurate quotes, coordinate home access, deliver your cleaning service, and issue itemized Canadian receipts:"
+        ],
+        "bullets": [
+          "Contact Details: Name, mobile/telephone number, email address, and Greater Edmonton postal code / service address.",
+          "Service & Home Details: Bedroom/bathroom counts, selected package or hourly hours, pet presence, parking/concierge/lockbox access notes, and optional Snap-a-Quote room photos you voluntarily attach.",
+          "Transactional Records: Itemized invoice history, payment method confirmation (Interac e-Transfer or card payment status—we never store raw credit card numbers on our website servers), and walkthrough photo-verification records.",
+          "Technical & Ad Attribution Data: Standard web analytics and advertising measurement identifiers (such as UTM parameters, fbclid, gclid, _fbp, and _fbc cookies) used to measure which Edmonton ads help homeowners find us."
+        ]
+      },
+      {
+        "heading": "3. How We Use Your Information & Advertising Measurement",
+        "paragraphs": [
+          "We use your information strictly to prepare accurate flat-rate or hourly quotes, dispatch our local background-checked Edmonton specialists, send appointment reminders and SMS photo-verified walkthrough reports, issue official landlord/tax receipts, and improve our website performance.",
+          "To measure advertising effectiveness responsibly, when you submit a quote request we may transmit a one-way cryptographically hashed (SHA-256) version of your phone number or email along with a deduplicated event ID to advertising platforms (such as Meta Conversions API) strictly for conversion measurement. We NEVER sell, rent, or trade your personal contact list to third-party data brokers."
+        ]
+      },
+      {
+        "heading": "4. Canada's Anti-Spam Legislation (CASL) & SMS Communication Terms",
+        "paragraphs": [
+          "By checking the explicit SMS consent checkbox on our quote form or texting +1 (780) 710-1503 directly, you provide express consent under CASL to receive text messages from LevelUp Cleaning regarding your quote, booking confirmation, arrival updates, lockbox/concierge coordination, photo-verified walkthrough reports, and occasional seasonal Edmonton offers (such as Holiday Resets).",
+          "Message frequency varies based on your active booking. Standard Canadian carrier message and data rates may apply. You may withdraw consent and opt out of promotional or non-essential SMS messages at any time by replying STOP to any message or emailing hello@levelupcleaning.ca. Opting out of promotional texts never prevents us from sending essential service/receipt messages for an active booking you requested."
+        ]
+      },
+      {
+        "heading": "5. Snap-a-Quote Photos, Retention & Safeguards",
+        "paragraphs": [
+          "Optional room photos uploaded via Snap-a-Quote are used solely by our Edmonton estimating team to verify condition, surface types (e.g., marble vs. ceramic, matte-black fixtures), and accurate labour allocation. We never publish client interior photos on social media or our website without separate, explicit written permission.",
+          "We retain customer invoices and tax records only as long as required under Alberta and Canada Revenue Agency (CRA) guidelines, and delete inquiry photos and temporary quote records once they are no longer needed for service delivery."
+        ]
+      },
+      {
+        "heading": "6. Your Alberta Privacy Rights & Contacting Our Privacy Officer",
+        "paragraphs": [
+          "Under Alberta PIPA, you have the right to request access to the personal information we hold about you, request corrections to inaccurate details, withdraw marketing consent, or ask questions about our data practices.",
+          "To exercise any privacy right or request deletion of quote data, contact our Edmonton Privacy Officer directly at hello@levelupcleaning.ca or by phone/SMS at +1 (780) 710-1503. You also have the right to contact the Office of the Information and Privacy Commissioner of Alberta (OIPC) if a concern remains unresolved."
+        ]
+      }
+    ]
+  },
+  "landingPages": {
+    "moveOut": {
+      "slug": "move-out",
+      "routePath": "/lp/move-out",
+      "metaTitle": "Edmonton Move-Out Cleaning | Oven, Fridge & Cabinets Free | LevelUp",
+      "metaDescription": "Inspection-ready Edmonton Move-Out Cleaning with Inside Oven, Fridge & Cabinets included ($135 value). $0 upfront deposit, itemized landlord receipt.",
+      "eyebrow": "EDMONTON MOVE-OUT SPECIALISTS • $0 UPFRONT DEPOSIT",
+      "headline": "Claim {PROMO} Your Inspection-Ready Move-Out Clean in Edmonton",
+      "subheadline": "Inside Oven, Inside Fridge & Inside Cabinets included FREE ($135 value) + Official Itemized Landlord Receipt for Alberta RTA walkthroughs. Pay only after your 50-point sign-off.",
+      "primaryCta": "Lock In My {PROMO} Move-Out Rate",
+      "secondaryCta": "Text +1 (780) 710-1503",
+      "defaultService": "move_out",
+      "bulletPoints": [
+        "Saves $135+ vs. Edmonton competitors: Inside Oven, Inside Fridge & Inside Cabinets included at $0 extra",
+        "$0 upfront deposit — pay via Interac e-Transfer or card only after on-site walkthrough or SMS photo-verified report",
+        "Official itemized Canadian Move-Out Cleaning Receipt ready for Edmonton landlords & property managers",
+        "Zero travel fee across Edmonton, St. Albert & core Sherwood Park • Seamless condo concierge/lockbox handoff"
+      ],
+      "taxNote": "Pre-tax CAD flat rates from $235 (1-bed) / $310 (2-bed) / $395 (3-bed) + 5% AB GST where applicable.",
+      "urgencyNote": "End-of-month move-out slots fill quickly across Downtown, Oliver, Whyte Ave & Southwest Edmonton. Reserve with $0 down today."
+    },
+    "deepReset": {
+      "slug": "deep-reset",
+      "routePath": "/lp/deep-reset",
+      "metaTitle": "50-Point Deep House Cleaning Edmonton | Pet-Safe Reset | LevelUp",
+      "metaDescription": "Claim your special offer on The LevelUp 50-Point Deep Reset in Edmonton. Baseboards, winter salt haze, EPCOR hard-water glass & matte-black fixture care. $0 upfront.",
+      "eyebrow": "EDMONTON 50-POINT DEEP RESET • BOTANICAL & FINISH-SAFE",
+      "headline": "Claim {PROMO} Your 50-Point Deep Home Reset in Edmonton",
+      "subheadline": "Erase months of winter furnace dust, entryway salt haze, kitchen grease, and hard-water bathroom spots in one calm visit—100% pet & kid safe, $0 upfront deposit.",
+      "primaryCta": "Calculate My {PROMO} Deep Reset",
+      "secondaryCta": "Text +1 (780) 710-1503",
+      "defaultService": "deep_clean",
+      "bulletPoints": [
+        "50-point top-to-bottom detail: baseboards, door frames, cabinet fronts, range hood, vents & frameless shower glass",
+        "Finish-safe pH-neutral chemistry for Calacatta quartz, natural stone, hardwood, LVP & matte-black fixtures",
+        "$0 upfront deposit — walk through every room with our Edmonton lead specialist before you pay",
+        "City of Edmonton Licensed • Background-checked local team • English & Ukrainian spoken"
+      ],
+      "taxNote": "Pre-tax CAD flat rates from $210 (1-bed) / $285 (2-bed) / $350 (3-bed) + 5% AB GST where applicable.",
+      "urgencyNote": "Limited weekly Deep Reset slots open across Windermere, Glenora, St. Albert & Sherwood Park—lock yours with $0 upfront."
+    },
+    "petSafe": {
+      "slug": "pet-safe",
+      "routePath": "/lp/pet-safe",
+      "metaTitle": "100% Pet-Safe Eco House Cleaning Edmonton | Zero Bleach | LevelUp",
+      "metaDescription": "Non-toxic, bleach-free botanical house cleaning approved by Edmonton pet parents. HEPA fur extraction, paw-safe floors, $0 upfront deposit.",
+      "eyebrow": "APPROVED BY OUR FURRY SUPERVISORS • ZERO BLEACH OR AMMONIA",
+      "headline": "Claim {PROMO} 100% Pet-Safe Eco Cleaning in Edmonton",
+      "subheadline": "Spotless floors, fresh air, and zero harsh chemical fumes for your dogs, cats, and family—backed by sealed HEPA fur filtration and our $0 upfront walkthrough sign-off.",
+      "primaryCta": "Get My {PROMO} Pet-Safe Quote",
+      "secondaryCta": "Text +1 (780) 710-1503",
+      "defaultService": "regular",
+      "bulletPoints": [
+        "Zero chlorine bleach, zero ammonia, zero caustic aerosol clouds trapped behind sealed Edmonton winter windows",
+        "Paw-safe pH-neutral botanical eucalyptus formulas safe for hardwood, LVP, tile, and natural stone",
+        "Sealed HEPA vacuuming plus optional Heavy Pet Fur Extraction (+$35 CAD) for shedding seasons",
+        "Save up to 15% on Weekly or 10% on Bi-Weekly Recurring Eco-Maintenance — no lock-in contracts"
+      ],
+      "taxNote": "Pre-tax CAD flat rates from $130 (1-bed) / $170 (2-bed) / $215 (3-bed) + 5% AB GST where applicable.",
+      "urgencyNote": "Join Edmonton pet parents reclaiming calm weekends—book online in 30 seconds with $0 upfront."
+    }
+  }
+}

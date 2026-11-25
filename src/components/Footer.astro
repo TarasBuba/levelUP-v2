@@ -1,0 +1,161 @@
+---
+import siteContext from '../data/site_context_lock.json';
+import siteCopy from '../data/site_copy.json';
+
+const { brand } = siteContext;
+---
+
+<footer class="border-t border-mist/30 bg-spruce text-linen">
+  <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+    <div class="grid gap-10 lg:grid-cols-12">
+      <!-- Brand Identity & Contacts -->
+      <div class="lg:col-span-4 space-y-5">
+        <div class="flex items-center gap-3.5">
+          <div class="h-14 w-14 shrink-0 rounded-full bg-linen/10 p-0.5 ring-1 ring-mist/40">
+            <img
+              src="/media/logo-badge.webp"
+              alt="LevelUp Cleaning Edmonton emblem"
+              width="56"
+              height="56"
+              loading="lazy"
+              class="h-full w-full rounded-full object-cover"
+            />
+          </div>
+          <div>
+            <p class="font-serif text-xl font-semibold text-linen">{brand.companyName}</p>
+            <p class="text-xs font-semibold tracking-wider uppercase text-linen/75">{brand.badgeLabel}</p>
+          </div>
+        </div>
+
+        <p class="text-sm leading-relaxed text-linen/85">
+          {brand.slogan} City of Edmonton Licensed • Background-Checked Local Team • 100% Pet &amp; Kid Safe Botanical Formulas.
+        </p>
+
+        <div class="inline-flex items-center gap-2 rounded-full border border-brass/50 bg-brass/15 px-3.5 py-1.5 text-xs font-semibold text-linen">
+          <span class="h-2 w-2 rounded-full bg-brass" aria-hidden="true"></span>
+          <span>English &amp; Ukrainian spoken</span>
+        </div>
+
+        <div class="space-y-1 pt-1 text-sm">
+          <p>
+            <a
+              href={`tel:${brand.phoneE164}`}
+              class="inline-flex min-h-[44px] items-center font-semibold text-linen underline decoration-mist/50 underline-offset-4 hover:text-brass"
+            >
+              Call / Text: {brand.phoneDisplay}
+            </a>
+          </p>
+          <p>
+            <a
+              href={`mailto:${brand.email}`}
+              class="inline-flex min-h-[44px] items-center text-linen/90 underline decoration-mist/50 underline-offset-4 hover:text-linen"
+            >
+              {brand.email}
+            </a>
+          </p>
+          <p class="flex flex-wrap items-center gap-x-4 text-xs text-linen/80">
+            <a
+              href={brand.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex min-h-[44px] items-center underline decoration-mist/50 underline-offset-4 hover:text-linen"
+            >
+              Instagram {brand.instagramHandle}
+            </a>
+            <span class="inline-flex min-h-[44px] items-center">Facebook: {brand.facebookPageName}</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Services -->
+      <div class="sm:col-span-6 lg:col-span-3">
+        <h2 class="font-serif text-base font-semibold text-linen">Edmonton Services</h2>
+        <ul class="mt-3 space-y-0.5 text-sm text-linen/85">
+          <li>
+            <a href="/move-out-cleaning-edmonton" class="inline-flex min-h-[44px] items-center hover:text-linen hover:underline">
+              Move-Out / Move-In Clean (From $235)
+            </a>
+          </li>
+          <li>
+            <a href="/deep-cleaning-edmonton" class="inline-flex min-h-[44px] items-center hover:text-linen hover:underline">
+              50-Point Deep Reset (From $210)
+            </a>
+          </li>
+          <li>
+            <a href="/recurring-cleaning-edmonton" class="inline-flex min-h-[44px] items-center hover:text-linen hover:underline">
+              Recurring Eco-Maintenance (From $130)
+            </a>
+          </li>
+          <li>
+            <a href="/airbnb-cleaning-edmonton" class="inline-flex min-h-[44px] items-center hover:text-linen hover:underline">
+              Airbnb &amp; Short-Term Turnover (From $120)
+            </a>
+          </li>
+          <li>
+            <a href="/gift-a-clean" class="inline-flex min-h-[44px] items-center text-linen font-semibold hover:underline">
+              Gift a Clean Certificates ($150–$350)
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Area Hubs -->
+      <div class="sm:col-span-6 lg:col-span-3">
+        <h2 class="font-serif text-base font-semibold text-linen">Service Areas</h2>
+        <ul class="mt-3 space-y-0.5 text-sm text-linen/85">
+          {siteCopy.areaHubs.map((hub) => (
+            <li>
+              <a href={`/areas/${hub.slug}`} class="inline-flex min-h-[44px] items-center hover:text-linen hover:underline">
+                {hub.title.split('(')[0].trim()}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p class="mt-3 text-xs leading-relaxed text-linen/75">
+          $0 travel fee across all Edmonton (T5* &amp; T6*), St. Albert (T8N), and core Sherwood Park (T8A, T8H). $15 flat metro travel for Spruce Grove, Stony Plain, Leduc, Beaumont &amp; Fort Saskatchewan.
+        </p>
+      </div>
+
+      <!-- Guides & Governance -->
+      <div class="lg:col-span-2">
+        <h2 class="font-serif text-base font-semibold text-linen">Local Guides</h2>
+        <ul class="mt-3 space-y-0.5 text-sm text-linen/85">
+          <li>
+            <a href="/guides" class="inline-flex min-h-[44px] items-center font-semibold hover:text-linen hover:underline">
+              All Edmonton Care Guides
+            </a>
+          </li>
+          <li>
+            <a href="/guides/alberta-move-out-inspection-checklist" class="inline-flex min-h-[44px] items-center hover:text-linen hover:underline">
+              Alberta RTA Move-Out Guide
+            </a>
+          </li>
+          <li>
+            <a href="/guides/edmonton-hard-water-matte-black-fixtures" class="inline-flex min-h-[44px] items-center hover:text-linen hover:underline">
+              EPCOR Hard-Water Care
+            </a>
+          </li>
+          <li>
+            <a href="/guides/edmonton-winter-salt-floor-safety" class="inline-flex min-h-[44px] items-center hover:text-linen hover:underline">
+              Winter Road-Salt Safety
+            </a>
+          </li>
+          <li>
+            <a href="/privacy" class="inline-flex min-h-[44px] items-center hover:text-linen hover:underline">
+              Privacy &amp; CASL SMS Terms
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-10 border-t border-mist/25 pt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-xs text-linen/75">
+      <p>
+        © 2026 {brand.legalName} ({brand.companyName}). All rights reserved. Established 2024 in Edmonton, Alberta.
+      </p>
+      <p>
+        All headline prices in pre-tax CAD (+ 5% AB GST where applicable) • $0 Upfront Deposit • Pay After Walkthrough Sign-Off.
+      </p>
+    </div>
+  </div>
+</footer>

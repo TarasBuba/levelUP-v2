@@ -1,0 +1,221 @@
+---
+import siteCopy from '../data/site_copy.json';
+import mediaManifest from '../data/media_manifest.json';
+
+type VideoKey = 'pet_supervisors' | 'polished_faucet' | 'friday_reset';
+
+interface Props {
+  singleVideoId?: VideoKey;
+  priorityPoster?: boolean;
+}
+
+const { singleVideoId, priorityPoster = false } = Astro.props;
+const copy = siteCopy.home.furrySupervisorsSection;
+
+const allVideos = [
+  mediaManifest.videos.pet_supervisors,
+  mediaManifest.videos.polished_faucet,
+  mediaManifest.videos.friday_reset,
+];
+
+const selectedSingle = singleVideoId ? mediaManifest.videos[singleVideoId] : null;
+---
+
+{selectedSingle ? (
+  <div
+    data-video-facade
+    data-mp4-src={selectedSingle.mp4.path}
+    class="relative mx-auto w-full max-w-sm overflow-hidden rounded-3xl border border-mist/40 bg-spruce shadow-xl"
+  >
+    <div class="relative aspect-[9/16] w-full">
+      <div data-facade-poster class="absolute inset-0">
+        <picture>
+          <source type="image/avif" srcset={selectedSingle.poster.avif.path} />
+          <source type="image/webp" srcset={selectedSingle.poster.webp.path} />
+          <img
+            src={selectedSingle.poster.webp.path}
+            alt={selectedSingle.alt}
+            width={selectedSingle.poster.width}
+            height={selectedSingle.poster.height}
+            loading={priorityPoster ? undefined : 'lazy'}
+            fetchpriority={priorityPoster ? 'high' : undefined}
+            class="h-full w-full object-cover"
+          />
+        </picture>
+        <div class="absolute inset-0 bg-gradient-to-t from-spruce/85 via-spruce/15 to-transparent"></div>
+
+        <button
+          type="button"
+          data-facade-play
+          aria-label={`Play video: ${selectedSingle.title}`}
+          class="group absolute inset-0 flex flex-col items-center justify-center p-6 text-linen cursor-pointer"
+        >
+          <span class="inline-flex h-16 w-16 items-center justify-center rounded-full bg-eucalyptus/95 text-linen shadow-lg ring-4 ring-linen/30 transition-transform duration-200 group-hover:scale-105">
+            <svg class="ml-1 h-7 w-7" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </span>
+          <span class="mt-3 rounded-full bg-spruce/80 px-3.5 py-1 text-xs font-semibold tracking-wide text-linen backdrop-blur-xs">
+            Tap to Watch ({Math.round(selectedSingle.durationSec)}s)
+          </span>
+        </button>
+
+        <div class="pointer-events-none absolute inset-x-0 bottom-0 p-4 text-left text-linen">
+          <p class="font-serif text-base font-semibold">{selectedSingle.title}</p>
+          <p class="mt-0.5 text-xs text-linen/85">{selectedSingle.caption}</p>
+        </div>
+      </div>
+
+      <video
+        data-facade-video
+        preload="none"
+        playsinline
+        controls
+        poster={selectedSingle.poster.webp.path}
+        width={selectedSingle.width}
+        height={selectedSingle.height}
+        hidden
+        class="h-full w-full object-cover"
+      ></video>
+    </div>
+  </div>
+) : (
+  <section class="py-16 sm:py-22 bg-spruce text-linen">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-10 lg:grid-cols-12 lg:items-center">
+        <!-- Editorial Story & Safety Guardrail -->
+        <div class="lg:col-span-5 space-y-5">
+          <span class="inline-flex items-center gap-2 rounded-full border border-brass/55 bg-brass/15 px-3.5 py-1 text-xs font-semibold tracking-wider uppercase text-linen">
+            <span class="h-1.5 w-1.5 rounded-full bg-brass" aria-hidden="true"></span>
+            {copy.eyebrow}
+          </span>
+          <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-linen">
+            {copy.title}
+          </h2>
+          <p class="text-base leading-relaxed text-linen/85">
+            {copy.subtitle}
+          </p>
+
+          {copy.paragraphs.map((p) => (
+            <p class="text-sm leading-relaxed text-linen/80">{p}</p>
+          ))}
+
+          <ul class="space-y-2.5 pt-1">
+            {copy.highlights.map((item) => (
+              <li class="flex items-start gap-2.5 text-sm text-linen/95">
+                <span class="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-eucalyptus text-xs font-bold text-linen" aria-hidden="true">
+                  ✓
+                </span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="rounded-2xl border border-brass/45 bg-linen/8 p-4 text-xs leading-relaxed text-linen/85">
+            {copy.safetyNote}
+          </div>
+        </div>
+
+        <!-- 3 Real Edmonton Video Facade Cards (Zero eager MP4 network download) -->
+        <div class="lg:col-span-7">
+          <div class="grid gap-4 sm:grid-cols-3">
+            {allVideos.map((vid) => (
+              <article
+                data-video-facade
+                data-mp4-src={vid.mp4.path}
+                class="relative overflow-hidden rounded-2xl border border-mist/30 bg-spruce shadow-lg"
+              >
+                <div class="relative aspect-[9/16] w-full">
+                  <div data-facade-poster class="absolute inset-0">
+                    <picture>
+                      <source type="image/avif" srcset={vid.poster.avif.path} />
+                      <source type="image/webp" srcset={vid.poster.webp.path} />
+                      <img
+                        src={vid.poster.webp.path}
+                        alt={vid.alt}
+                        width={vid.poster.width}
+                        height={vid.poster.height}
+                        loading="lazy"
+                        class="h-full w-full object-cover"
+                      />
+                    </picture>
+                    <div class="absolute inset-0 bg-gradient-to-t from-spruce/90 via-spruce/20 to-transparent"></div>
+
+                    <button
+                      type="button"
+                      data-facade-play
+                      aria-label={`Play real Edmonton video: ${vid.title}`}
+                      class="group absolute inset-0 flex flex-col items-center justify-center p-4 text-linen cursor-pointer"
+                    >
+                      <span class="inline-flex h-14 w-14 items-center justify-center rounded-full bg-eucalyptus/95 text-linen shadow-lg ring-4 ring-linen/25 transition-transform duration-200 group-hover:scale-105">
+                        <svg class="ml-0.5 h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </span>
+                      <span class="mt-2.5 rounded-full bg-spruce/80 px-3 py-1 text-[11px] font-semibold text-linen backdrop-blur-xs">
+                        Play ({Math.round(vid.durationSec)}s)
+                      </span>
+                    </button>
+
+                    <div class="pointer-events-none absolute inset-x-0 bottom-0 p-3.5 text-left">
+                      <h3 class="font-serif text-sm font-semibold leading-snug text-linen">
+                        {vid.title}
+                      </h3>
+                      <p class="mt-1 text-[11px] leading-snug text-linen/80 line-clamp-3">
+                        {vid.caption}
+                      </p>
+                    </div>
+                  </div>
+
+                  <video
+                    data-facade-video
+                    preload="none"
+                    playsinline
+                    controls
+                    poster={vid.poster.webp.path}
+                    width={vid.width}
+                    height={vid.height}
+                    hidden
+                    class="h-full w-full object-cover"
+                  ></video>
+                </div>
+              </article>
+            ))}
+          </div>
+          <p class="mt-3 text-xs text-linen/75">
+            {copy.videoCaption}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-video-facade]').forEach((card) => {
+    const playBtn = card.querySelector<HTMLButtonElement>('[data-facade-play]');
+    const posterWrap = card.querySelector<HTMLElement>('[data-facade-poster]');
+    const videoEl = card.querySelector<HTMLVideoElement>('[data-facade-video]');
+    const mp4Src = card.dataset.mp4Src;
+
+    if (!playBtn || !posterWrap || !videoEl || !mp4Src) return;
+
+    playBtn.addEventListener('click', () => {
+      // Pause any other playing facade videos
+      document.querySelectorAll<HTMLVideoElement>('[data-facade-video]').forEach((other) => {
+        if (other !== videoEl && !other.paused) {
+          other.pause();
+        }
+      });
+
+      if (!videoEl.getAttribute('src')) {
+        videoEl.setAttribute('src', mp4Src);
+      }
+      posterWrap.hidden = true;
+      videoEl.hidden = false;
+      videoEl.play().catch(() => {
+        // Controls remain visible if browser autoplay policy requires direct video tap
+      });
+    });
+  });
+</script>

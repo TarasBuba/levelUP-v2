@@ -1,0 +1,355 @@
+---
+import siteCopy from '../data/site_copy.json';
+import mediaManifest from '../data/media_manifest.json';
+
+const xray = siteCopy.roomXRay;
+const kitchenPhoto = mediaManifest.photos.hero_kitchen;
+const bathPhoto = mediaManifest.photos.xray_bathroom;
+
+const firstKitchen = xray.kitchenHotspots[0];
+---
+
+<section id="room-xray" class="py-16 sm:py-22" data-xray-widget>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <!-- Header & Room Switcher -->
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div class="max-w-2xl">
+        <span class="inline-flex items-center gap-2 rounded-full border border-brass/45 bg-brass/15 px-3.5 py-1 text-xs font-semibold tracking-wider uppercase text-spruce">
+          <span class="h-1.5 w-1.5 rounded-full bg-brass" aria-hidden="true"></span>
+          Interactive 50-Point Surface X-Ray
+        </span>
+        <h2 data-xray-heading class="mt-3 font-serif text-3xl sm:text-4xl font-semibold text-spruce">
+          {xray.kitchenTitle}
+        </h2>
+        <p data-xray-subtitle class="mt-2.5 text-base leading-relaxed text-spruce/80">
+          {xray.kitchenSubtitle}
+        </p>
+      </div>
+
+      <div
+        role="tablist"
+        aria-label="Choose room to inspect"
+        class="inline-flex self-start rounded-full border border-mist/35 bg-card p-1.5"
+      >
+        <button
+          type="button"
+          role="tab"
+          aria-selected="true"
+          data-xray-room-btn="kitchen"
+          data-room-title={xray.kitchenTitle}
+          data-room-subtitle={xray.kitchenSubtitle}
+          class="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-eucalyptus px-5 py-2 text-xs sm:text-sm font-semibold text-linen shadow-2xs transition cursor-pointer"
+        >
+          <span>Kitchen X-Ray (7)</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected="false"
+          data-xray-room-btn="bathroom"
+          data-room-title={xray.bathroomTitle}
+          data-room-subtitle={xray.bathroomSubtitle}
+          class="inline-flex min-h-[44px] items-center gap-2 rounded-full px-5 py-2 text-xs sm:text-sm font-semibold text-spruce transition hover:bg-linen cursor-pointer"
+        >
+          <span>Spa Bathroom X-Ray (6)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Interactive Canvas + Detail Card -->
+    <div class="mt-8 grid gap-6 lg:grid-cols-12 lg:items-start">
+      <!-- Left: Annotated Architectural Photo -->
+      <div class="lg:col-span-7">
+        <!-- Kitchen Stage -->
+        <div data-xray-stage="kitchen" class="space-y-4">
+          <div class="relative aspect-video w-full overflow-hidden rounded-3xl border border-mist/35 bg-spruce shadow-md">
+            <picture>
+              <source type="image/avif" srcset={kitchenPhoto.srcset.avif} sizes="(min-width: 1024px) 58vw, 100vw" />
+              <source type="image/webp" srcset={kitchenPhoto.srcset.webp} sizes="(min-width: 1024px) 58vw, 100vw" />
+              <img
+                src={kitchenPhoto.fallback.path}
+                alt={kitchenPhoto.alt}
+                width="1440"
+                height="810"
+                loading="lazy"
+                class="h-full w-full object-cover"
+              />
+            </picture>
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-spruce/35 via-transparent to-spruce/10"></div>
+
+            {xray.kitchenHotspots.map((spot, idx) => (
+              <button
+                type="button"
+                data-xray-pin="kitchen"
+                data-spot-id={spot.id}
+                data-spot-index={`0${idx + 1}`}
+                data-spot-label={spot.label}
+                data-spot-detail={spot.detail}
+                data-spot-competitor={spot.competitorNote}
+                data-spot-standard={spot.levelupStandard}
+                aria-label={`Inspect kitchen hotspot ${idx + 1}: ${spot.label}`}
+                aria-pressed={idx === 0 ? 'true' : 'false'}
+                style={`left: ${spot.xPct}%; top: ${spot.yPct}%;`}
+                class:list={[
+                  'group absolute -translate-x-1/2 -translate-y-1/2 inline-flex h-11 w-11 items-center justify-center rounded-full focus:outline-none cursor-pointer',
+                ]}
+              >
+                <span
+                  data-pin-core
+                  class:list={[
+                    'inline-flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold shadow-md ring-2 transition-transform duration-200 group-hover:scale-110',
+                    idx === 0
+                      ? 'bg-eucalyptus text-linen ring-linen scale-110'
+                      : 'bg-linen/95 text-spruce ring-eucalyptus/70',
+                  ]}
+                >
+                  {idx + 1}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <!-- Quick Hotspot Selector Pills -->
+          <div class="flex flex-wrap gap-2" aria-label="Kitchen checklist hotspots">
+            {xray.kitchenHotspots.map((spot, idx) => (
+              <button
+                type="button"
+                data-xray-pill="kitchen"
+                data-spot-id={spot.id}
+                class:list={[
+                  'inline-flex min-h-[44px] items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition cursor-pointer',
+                  idx === 0
+                    ? 'border-eucalyptus bg-eucalyptus text-linen'
+                    : 'border-mist/35 bg-card text-spruce hover:border-eucalyptus',
+                ]}
+              >
+                <span class="font-mono text-[11px] opacity-80">0{idx + 1}</span>
+                <span>{spot.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- Bathroom Stage -->
+        <div data-xray-stage="bathroom" hidden class="space-y-4">
+          <div class="relative aspect-video w-full overflow-hidden rounded-3xl border border-mist/35 bg-spruce shadow-md">
+            <picture>
+              <source type="image/avif" srcset={bathPhoto.srcset.avif} sizes="(min-width: 1024px) 58vw, 100vw" />
+              <source type="image/webp" srcset={bathPhoto.srcset.webp} sizes="(min-width: 1024px) 58vw, 100vw" />
+              <img
+                src={bathPhoto.fallback.path}
+                alt={bathPhoto.alt}
+                width="1440"
+                height="810"
+                loading="lazy"
+                fetchpriority="low"
+                class="h-full w-full object-cover"
+              />
+            </picture>
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-spruce/35 via-transparent to-spruce/10"></div>
+
+            {xray.bathroomHotspots.map((spot, idx) => (
+              <button
+                type="button"
+                data-xray-pin="bathroom"
+                data-spot-id={spot.id}
+                data-spot-index={`0${idx + 1}`}
+                data-spot-label={spot.label}
+                data-spot-detail={spot.detail}
+                data-spot-competitor={spot.competitorNote}
+                data-spot-standard={spot.levelupStandard}
+                aria-label={`Inspect bathroom hotspot ${idx + 1}: ${spot.label}`}
+                aria-pressed={idx === 0 ? 'true' : 'false'}
+                style={`left: ${spot.xPct}%; top: ${spot.yPct}%;`}
+                class="group absolute -translate-x-1/2 -translate-y-1/2 inline-flex h-11 w-11 items-center justify-center rounded-full focus:outline-none cursor-pointer"
+              >
+                <span
+                  data-pin-core
+                  class:list={[
+                    'inline-flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold shadow-md ring-2 transition-transform duration-200 group-hover:scale-110',
+                    idx === 0
+                      ? 'bg-eucalyptus text-linen ring-linen scale-110'
+                      : 'bg-linen/95 text-spruce ring-eucalyptus/70',
+                  ]}
+                >
+                  {idx + 1}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <div class="flex flex-wrap gap-2" aria-label="Bathroom checklist hotspots">
+            {xray.bathroomHotspots.map((spot, idx) => (
+              <button
+                type="button"
+                data-xray-pill="bathroom"
+                data-spot-id={spot.id}
+                class:list={[
+                  'inline-flex min-h-[44px] items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition cursor-pointer',
+                  idx === 0
+                    ? 'border-eucalyptus bg-eucalyptus text-linen'
+                    : 'border-mist/35 bg-card text-spruce hover:border-eucalyptus',
+                ]}
+              >
+                <span class="font-mono text-[11px] opacity-80">0{idx + 1}</span>
+                <span>{spot.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Inspector Detail Card -->
+      <div
+        aria-live="polite"
+        class="lg:col-span-5 rounded-3xl border border-mist/40 bg-card p-6 sm:p-8 shadow-sm space-y-5"
+      >
+        <div class="flex items-center justify-between gap-3 border-b border-mist/25 pb-4">
+          <div class="flex items-center gap-2.5">
+            <span
+              data-inspector-index
+              class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-eucalyptus font-mono text-xs font-bold text-linen"
+            >
+              01
+            </span>
+            <div>
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-spruce/70">
+                Selected Inspection Zone
+              </p>
+              <h3 data-inspector-label class="font-serif text-xl sm:text-2xl font-semibold text-spruce">
+                {firstKitchen.label}
+              </h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <p class="text-xs font-bold uppercase tracking-wider text-spruce/75">What We Detail</p>
+          <p data-inspector-detail class="text-sm sm:text-base leading-relaxed text-spruce">
+            {firstKitchen.detail}
+          </p>
+        </div>
+
+        <div class="rounded-2xl border border-spruce/15 bg-linen p-4 space-y-1.5">
+          <p class="text-xs font-bold uppercase tracking-wider text-spruce/75">
+            What Typical Cleaners Miss or Upcharge
+          </p>
+          <p data-inspector-competitor class="text-xs sm:text-sm leading-relaxed text-spruce/85">
+            {firstKitchen.competitorNote}
+          </p>
+        </div>
+
+        <div class="rounded-2xl border border-eucalyptus/35 bg-eucalyptus/10 p-4 space-y-1.5">
+          <p class="text-xs font-bold uppercase tracking-wider text-eucalyptus">
+            The LevelUp Botanical Standard
+          </p>
+          <p data-inspector-standard class="text-xs sm:text-sm font-medium leading-relaxed text-spruce">
+            {firstKitchen.levelupStandard}
+          </p>
+        </div>
+
+        <div class="pt-1 flex flex-wrap items-center justify-between gap-3">
+          <span class="text-xs text-spruce/75">Tap any numbered pin on the photo to inspect</span>
+          <a
+            href="#quote-calculator"
+            class="inline-flex min-h-[44px] items-center justify-center rounded-full bg-eucalyptus px-5 py-2.5 text-xs sm:text-sm font-semibold text-linen transition hover:bg-eucalyptus-hover"
+          >
+            Quote My Home →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-xray-widget]').forEach((widget) => {
+    const headingEl = widget.querySelector<HTMLElement>('[data-xray-heading]');
+    const subtitleEl = widget.querySelector<HTMLElement>('[data-xray-subtitle]');
+    const roomBtns = Array.from(widget.querySelectorAll<HTMLButtonElement>('[data-xray-room-btn]'));
+    const stages = Array.from(widget.querySelectorAll<HTMLElement>('[data-xray-stage]'));
+
+    const indexEl = widget.querySelector<HTMLElement>('[data-inspector-index]');
+    const labelEl = widget.querySelector<HTMLElement>('[data-inspector-label]');
+    const detailEl = widget.querySelector<HTMLElement>('[data-inspector-detail]');
+    const compEl = widget.querySelector<HTMLElement>('[data-inspector-competitor]');
+    const stdEl = widget.querySelector<HTMLElement>('[data-inspector-standard]');
+
+    const selectHotspot = (room: string, spotId: string) => {
+      const pins = Array.from(widget.querySelectorAll<HTMLButtonElement>(`[data-xray-pin="${room}"]`));
+      const pills = Array.from(widget.querySelectorAll<HTMLButtonElement>(`[data-xray-pill="${room}"]`));
+      const targetPin = pins.find((p) => p.dataset.spotId === spotId) || pins[0];
+      if (!targetPin) return;
+
+      pins.forEach((pin) => {
+        const active = pin === targetPin;
+        pin.setAttribute('aria-pressed', String(active));
+        const core = pin.querySelector<HTMLElement>('[data-pin-core]');
+        if (core) {
+          core.classList.toggle('bg-eucalyptus', active);
+          core.classList.toggle('text-linen', active);
+          core.classList.toggle('ring-linen', active);
+          core.classList.toggle('scale-110', active);
+          core.classList.toggle('bg-linen/95', !active);
+          core.classList.toggle('text-spruce', !active);
+          core.classList.toggle('ring-eucalyptus/70', !active);
+        }
+      });
+
+      pills.forEach((pill) => {
+        const active = pill.dataset.spotId === targetPin.dataset.spotId;
+        pill.classList.toggle('border-eucalyptus', active);
+        pill.classList.toggle('bg-eucalyptus', active);
+        pill.classList.toggle('text-linen', active);
+        pill.classList.toggle('border-mist/35', !active);
+        pill.classList.toggle('bg-card', !active);
+        pill.classList.toggle('text-spruce', !active);
+      });
+
+      if (indexEl) indexEl.textContent = targetPin.dataset.spotIndex || '01';
+      if (labelEl) labelEl.textContent = targetPin.dataset.spotLabel || '';
+      if (detailEl) detailEl.textContent = targetPin.dataset.spotDetail || '';
+      if (compEl) compEl.textContent = targetPin.dataset.spotCompetitor || '';
+      if (stdEl) stdEl.textContent = targetPin.dataset.spotStandard || '';
+    };
+
+    roomBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const room = btn.dataset.xrayRoomBtn || 'kitchen';
+        roomBtns.forEach((b) => {
+          const active = b === btn;
+          b.setAttribute('aria-selected', String(active));
+          b.classList.toggle('bg-eucalyptus', active);
+          b.classList.toggle('text-linen', active);
+          b.classList.toggle('shadow-2xs', active);
+          b.classList.toggle('text-spruce', !active);
+        });
+
+        stages.forEach((s) => {
+          s.hidden = s.dataset.xrayStage !== room;
+        });
+
+        if (headingEl && btn.dataset.roomTitle) headingEl.textContent = btn.dataset.roomTitle;
+        if (subtitleEl && btn.dataset.roomSubtitle) subtitleEl.textContent = btn.dataset.roomSubtitle;
+
+        const firstPin = widget.querySelector<HTMLButtonElement>(`[data-xray-pin="${room}"]`);
+        if (firstPin?.dataset.spotId) {
+          selectHotspot(room, firstPin.dataset.spotId);
+        }
+      });
+    });
+
+    ['kitchen', 'bathroom'].forEach((room) => {
+      widget.querySelectorAll<HTMLButtonElement>(`[data-xray-pin="${room}"]`).forEach((pin) => {
+        pin.addEventListener('click', () => {
+          if (pin.dataset.spotId) selectHotspot(room, pin.dataset.spotId);
+        });
+      });
+      widget.querySelectorAll<HTMLButtonElement>(`[data-xray-pill="${room}"]`).forEach((pill) => {
+        pill.addEventListener('click', () => {
+          if (pill.dataset.spotId) selectHotspot(room, pill.dataset.spotId);
+        });
+      });
+    });
+  });
+</script>

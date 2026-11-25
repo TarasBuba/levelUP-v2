@@ -1,0 +1,367 @@
+{
+  "gate": "Gate 1 — Pre-Code Red Team Audit",
+  "verdict": "CHANGES_REQUIRED",
+  "checkedAt": "2026-11-24T16:48:00Z",
+  "auditor": "red-team-auditor",
+  "summary": {
+    "overview": "Zero forbidden claims (0 matches across all data/type files) and 100% visual pass on the circular-masked logo badge and all 5 Nano 2 architectural WebP renders. However, Gate 1 caught 3 P0 cross-file blockers (4 broken guide heroImage paths that will 404, 4 non-canonical /services/* routes + regular slug mismatch, and 13 misaligned Room X-Ray hotspot coordinates in site_copy.json vs visually measured media_manifest.json), 3 P1 compliance/consistency gaps (adFunnels['pet-safe'] heroVisualSlot key mismatch, 3 standalone Area Hub FAQs + Move-Out descaling copy missing the full surface-safety warning, and Stony Plain FSA listed as T7Y instead of T7Z), and 4 P2 preventative polish items.",
+    "countsBySeverity": {
+      "P0": 3,
+      "P1": 3,
+      "P2": 4,
+      "total": 10
+    },
+    "dimensionVerdicts": {
+      "a_zeroForbiddenClaims": "PASS",
+      "b_preTaxCadPricingAndCanonicalContacts": "PASS_WITH_P2_NOTES",
+      "c_diySurfaceSafetyWarnings": "CHANGES_REQUIRED_P1",
+      "d_visualLogoAndArchitecturalRenders": "PASS",
+      "e_crossFilePathRouteAndCoordinateConsistency": "FAIL_P0_BLOCKERS"
+    }
+  },
+  "forbiddenClaimScan": {
+    "status": "PASS",
+    "filesScanned": [
+      "website/src/data/strategy.json",
+      "website/src/data/site_copy.json",
+      "website/src/data/media_manifest.json",
+      "website/src/types/contracts.ts"
+    ],
+    "totalViolations": 0,
+    "patternsChecked": [
+      { "ruleId": "FP-01", "lockIndex": 0, "description": "Two-million-dollar numeric liability figure", "matches": 0 },
+      { "ruleId": "FP-02", "lockIndex": 1, "description": "Abbreviated 2-million-dollar liability token", "matches": 0 },
+      { "ruleId": "FP-03", "lockIndex": 2, "description": "Unverified coverage status adjective (insur*)", "matches": 0 },
+      { "ruleId": "FP-04", "lockIndex": 3, "description": "Unverified policy noun (insur*)", "matches": 0 },
+      { "ruleId": "FP-05", "lockIndex": 4, "description": "Unverified surety status adjective (bond*)", "matches": 0 },
+      { "ruleId": "FP-06", "lockIndex": 5, "description": "Provincial workplace board acronym", "matches": 0 },
+      { "ruleId": "FP-07", "lockIndex": 6, "description": "Provincial workplace coverage full phrase", "matches": 0 },
+      { "ruleId": "FP-08", "lockIndex": 7, "description": "Complimentary redo service claim", "matches": 0 },
+      { "ruleId": "FP-09", "lockIndex": 8, "description": "Redo promise phrase", "matches": 0 },
+      { "ruleId": "FP-10", "lockIndex": 9, "description": "Post-visit redo promise phrase", "matches": 0 },
+      { "ruleId": "FP-11", "lockIndex": 10, "description": "Legacy placeholder 780 phone suffix", "matches": 0 },
+      { "ruleId": "FP-12", "lockIndex": null, "description": "Fabricated customer reviews / fake star ratings", "matches": 0, "note": "Airbnb copy refers only to hosts' own guest cleanliness ratings ('5-Star Turnover', '5-star Superhost streak'); zero fabricated LevelUp customer quotes or fake review counts." },
+      { "ruleId": "FP-13", "lockIndex": null, "description": "Synthetic AI split comparison pairs presented as real jobs", "matches": 0, "note": "Zero split comparison images or claims in copy or public/media/." }
+    ],
+    "pricingAndContactsAudit": {
+      "preTaxCadMatchWithLock": true,
+      "packagesVerified": {
+        "regular": { "1": 130, "2": 170, "3": 215, "4": 270, "5": 325 },
+        "deep_clean": { "1": 210, "2": 285, "3": 350, "4": 420, "5": 495 },
+        "move_out": { "1": 235, "2": 310, "3": 395, "4": 490, "5": 575, "includedFree": ["inside_oven", "inside_fridge", "inside_cabinets"] },
+        "airbnb": { "1": 120, "2": 160, "3": 220, "4": 275, "5": 330 },
+        "hourlyCadPerCleaner": 48
+      },
+      "canonicalContactsVerifiedInSiteCopy": {
+        "phone": "+1 (780) 710-1503 (9/9 occurrences exact in site_copy.json; 1 unparenthesized '+1 780-710-1503' in strategy.json flagged as P2)",
+        "email": "hello@levelupcleaning.ca (4/4 occurrences exact)",
+        "instagram": "@levelupcleaning.yeg (exact in home.furrySupervisorsSection.videoCaption)",
+        "estBadge": "EST. 2024 • EDMONTON, AB (exact prefix in home.hero.eyebrow)",
+        "gstNote": "+ 5% AB GST where applicable (exact across site_copy.json; 2 shortened '+ 5% AB GST' strings in strategy.json flagged as P2)"
+      }
+    }
+  },
+  "visualInspection": {
+    "overallStatus": "PASS",
+    "staticAssetBudgetCheck": {
+      "status": "PASS",
+      "totalPublicFiles": 47,
+      "rawOriginalsInPublic": 0,
+      "largestStaticImageBytes": 143294,
+      "largestStaticImagePath": "/media/photos/holiday-living-fallback.jpg",
+      "budgetLimitBytes": 163840
+    },
+    "logoBadge": {
+      "path": "website/public/media/logo-badge.webp",
+      "dimensions": "256x256",
+      "bytes": 11292,
+      "status": "PASS",
+      "maskAndHaloNotes": "Clean circular alpha mask with 4x SSAA anti-aliasing. All typography ('LEVELUP CLEANING') and house/eucalyptus line art sit well inside the sage-green outer ring with zero clipping. Radial pixel audit confirms 0 opaque corner pixels and pure sage-green outer edge pixels (r=123..125px RGB ~[125,141,124,255], r=126px RGB [121,139,121,149], r=127px RGB [121,137,119,25], r=128px fully transparent) — zero cream/beige halo on dark #172A22 Cedar Spruce."
+    },
+    "architecturalRenders": [
+      {
+        "path": "website/public/media/photos/hero-kitchen-1024w.webp",
+        "dimensions": "1024x576",
+        "aspect": "16:9",
+        "bytes": 38242,
+        "status": "PASS",
+        "notes": "Photorealistic sunlit Edmonton kitchen with natural white-oak cabinetry, veined Calacatta quartz waterfall island, amber glass botanical spray bottle, fresh eucalyptus stems in ceramic vase, stainless gas range/oven and chimney hood, stainless undermount sink/chrome faucet, knotty oak hardwood floor, and clean white baseboards. Zero CGI gloss, distorted geometry, or text artifacts. Visually confirmed all 7 media_manifest.json kitchen hotspot coordinates align accurately."
+      },
+      {
+        "path": "website/public/media/photos/xray-bathroom-1024w.webp",
+        "dimensions": "1024x576",
+        "aspect": "16:9",
+        "bytes": 20908,
+        "status": "PASS",
+        "notes": "Photorealistic Canadian spa master bathroom with optically clear frameless glass walk-in shower, matte-black ceiling rain showerhead, matte-black handheld slider rail & wall valve, clean linear drain & floor grout, freestanding white soaking tub with matte-black floor filler, ceiling exhaust grille, and floating white-oak vanity with waffle linen towels and matte-black faucet. Zero distorted reflections or artifacts. Visually confirmed all 6 media_manifest.json bathroom hotspot coordinates align accurately."
+      },
+      {
+        "path": "website/public/media/photos/moveout-condo-1024w.webp",
+        "dimensions": "1024x768",
+        "aspect": "4:3",
+        "bytes": 44180,
+        "status": "PASS",
+        "notes": "Photorealistic bright vacant Edmonton high-rise condo interior with gleaming wide-plank LVP floors, clean white baseboards, flat-panel white kitchen cabinets, stainless sink/faucet, and brass house keys + black condo fob resting on a spotless quartz island overlooking urban mid/high-rise buildings. Zero AI artifacts. Minor note: exterior trees through window show summer greenery (suitable for year-round Move-Out pages; avoid pairing with snow-specific captions)."
+      },
+      {
+        "path": "website/public/media/photos/winter-entryway-1024w.webp",
+        "dimensions": "1024x768",
+        "aspect": "4:3",
+        "bytes": 38094,
+        "status": "PASS",
+        "notes": "Photorealistic Edmonton winter foyer and mudroom with white-oak built-in bench and black coat hooks, neat black boot tray holding winter boots, spotless dry matte grey porcelain floor tile with zero white salt crust, crisp baseboards, and snowy residential street + winter wreath visible through front-door sidelights. Zero AI artifacts."
+      },
+      {
+        "path": "website/public/media/photos/holiday-living-1024w.webp",
+        "dimensions": "1024x768",
+        "aspect": "4:3",
+        "bytes": 75388,
+        "status": "PASS",
+        "notes": "Photorealistic warm winter sunlit Edmonton living room with snow-covered yard and suburban homes outside large picture window, wide-plank oak hardwood floors, vacuumed cream sectional sofa with warm throw, and oak coffee table styled with fresh cedar/pinecone holiday greenery. Zero AI artifacts; seamless match with Quiet Luxury palette."
+      }
+    ],
+    "authenticVideoPostersChecked": [
+      "website/public/media/videos/pet-supervisors-poster.webp (540x960, 20.4 KB — real grey/white cat inspecting clean tile floor with subtle LevelUp badge)",
+      "website/public/media/videos/polished-faucet-poster.webp (540x960, 20.9 KB — real mirror-polished chrome bathroom faucet close-up)",
+      "website/public/media/videos/friday-reset-poster.webp (540x960, 27.7 KB — sunlit white-oak & quartz island walkthrough frame)"
+    ]
+  },
+  "findings": [
+    {
+      "id": "RT-P0-01",
+      "severity": "P0",
+      "category": "cross_file_assets",
+      "title": "All 4 Guide heroImage paths in site_copy.json use underscores and '-1024.webp' instead of hyphenated '-1024w.webp' (HTTP 404 on disk)",
+      "file": "website/src/data/site_copy.json",
+      "jsonPaths": [
+        "$.guides[0].heroImage",
+        "$.guides[1].heroImage",
+        "$.guides[2].heroImage",
+        "$.guides[3].heroImage"
+      ],
+      "currentValue": {
+        "$.guides[0].heroImage": "/media/photos/winter_entryway-1024.webp",
+        "$.guides[1].heroImage": "/media/photos/hero_kitchen-1024.webp",
+        "$.guides[2].heroImage": "/media/photos/xray_bathroom-1024.webp",
+        "$.guides[3].heroImage": "/media/photos/moveout_condo-1024.webp"
+      },
+      "expectedValue": {
+        "$.guides[0].heroImage": "/media/photos/winter-entryway-1024w.webp",
+        "$.guides[1].heroImage": "/media/photos/hero-kitchen-1024w.webp",
+        "$.guides[2].heroImage": "/media/photos/xray-bathroom-1024w.webp",
+        "$.guides[3].heroImage": "/media/photos/moveout-condo-1024w.webp"
+      },
+      "impact": "None of the 4 referenced files exist in website/public/media/photos/. Every /guides/* article hero image, Guides index card thumbnail, and OG image derived from guide.heroImage will return 404.",
+      "fixInstructions": "In website/src/data/site_copy.json (lines 838, 905, 964, 1024), replace underscore slugs and '-1024.webp' suffixes with the exact hyphenated '-1024w.webp' paths from media_manifest.json -> $.photos.*.variants['1024'].webp.path."
+    },
+    {
+      "id": "RT-P0-02",
+      "severity": "P0",
+      "category": "canonical_routes",
+      "title": "Service routePath values in site_copy.json use '/services/*' prefix and 'regular-house-cleaning-edmonton' instead of canonical root SEO routes",
+      "file": "website/src/data/site_copy.json",
+      "jsonPaths": [
+        "$.services.move_out.routePath",
+        "$.services.deep_clean.routePath",
+        "$.services.regular.slug",
+        "$.services.regular.routePath",
+        "$.services.airbnb.routePath"
+      ],
+      "currentValue": {
+        "$.services.move_out.routePath": "/services/move-out-cleaning-edmonton",
+        "$.services.deep_clean.routePath": "/services/deep-cleaning-edmonton",
+        "$.services.regular.slug": "regular-house-cleaning-edmonton",
+        "$.services.regular.routePath": "/services/regular-house-cleaning-edmonton",
+        "$.services.airbnb.routePath": "/services/airbnb-cleaning-edmonton"
+      },
+      "expectedValue": {
+        "$.services.move_out.routePath": "/move-out-cleaning-edmonton",
+        "$.services.deep_clean.routePath": "/deep-cleaning-edmonton",
+        "$.services.regular.slug": "recurring-cleaning-edmonton",
+        "$.services.regular.routePath": "/recurring-cleaning-edmonton",
+        "$.services.airbnb.routePath": "/airbnb-cleaning-edmonton"
+      },
+      "impact": "Internal navigation links, service cards, canonical tags, JSON-LD Service URLs, BreadcrumbList items, and sitemap entries reading site_copy.services.*.routePath or slug will point to non-canonical '/services/*' URLs and '/services/regular-house-cleaning-edmonton', causing 404s or SEO canonical split.",
+      "fixInstructions": "In website/src/data/site_copy.json (lines 168, 245, 317–318, 390), strip the '/services' prefix on all 4 routePath fields and update $.services.regular.slug to 'recurring-cleaning-edmonton' and $.services.regular.routePath to '/recurring-cleaning-edmonton'."
+    },
+    {
+      "id": "RT-P0-03",
+      "severity": "P0",
+      "category": "hotspot_coordinates",
+      "title": "All 13 Room X-Ray hotspot (xPct, yPct) coordinates in site_copy.json contradict the visually measured coordinates in media_manifest.json",
+      "file": "website/src/data/site_copy.json",
+      "jsonPaths": [
+        "$.roomXRay.kitchenHotspots[0..6].{xPct,yPct}",
+        "$.roomXRay.bathroomHotspots[0..5].{xPct,yPct}"
+      ],
+      "currentValue": {
+        "kitchen": {
+          "oven": { "xPct": 24, "yPct": 68 },
+          "hood": { "xPct": 24, "yPct": 28 },
+          "island": { "xPct": 58, "yPct": 66 },
+          "sink": { "xPct": 52, "yPct": 54 },
+          "cabinets": { "xPct": 72, "yPct": 30 },
+          "baseboards": { "xPct": 44, "yPct": 88 },
+          "seals": { "xPct": 86, "yPct": 58 }
+        },
+        "bathroom": {
+          "shower_glass": { "xPct": 26, "yPct": 44 },
+          "matte_fixture": { "xPct": 20, "yPct": 24 },
+          "grout": { "xPct": 38, "yPct": 62 },
+          "vanity": { "xPct": 76, "yPct": 46 },
+          "tub": { "xPct": 58, "yPct": 74 },
+          "vent_baseboard": { "xPct": 86, "yPct": 86 }
+        }
+      },
+      "expectedValue": {
+        "kitchen": {
+          "oven": { "xPct": 51, "yPct": 59 },
+          "hood": { "xPct": 51, "yPct": 20 },
+          "island": { "xPct": 24, "yPct": 68 },
+          "sink": { "xPct": 89, "yPct": 53 },
+          "cabinets": { "xPct": 64, "yPct": 18 },
+          "baseboards": { "xPct": 69, "yPct": 76 },
+          "seals": { "xPct": 73, "yPct": 54 }
+        },
+        "bathroom": {
+          "shower_glass": { "xPct": 30, "yPct": 45 },
+          "matte_fixture": { "xPct": 17, "yPct": 36 },
+          "grout": { "xPct": 15, "yPct": 80 },
+          "vanity": { "xPct": 84, "yPct": 60 },
+          "tub": { "xPct": 50, "yPct": 72 },
+          "vent_baseboard": { "xPct": 41, "yPct": 6 }
+        }
+      },
+      "impact": "site_copy.json contains pre-image blind guesses: e.g., 'oven' (24,68) lands on the quartz island, 'sink' (52,54) lands on the oven door, 'grout' (38,62) lands on dry grey wall, and 'vent_baseboard' (86,86) lands on the oak vanity drawer. Because HotspotItem in contracts.ts carries xPct/yPct directly, RoomXRay pins will point to wrong features if bound to site_copy.roomXRay.",
+      "fixInstructions": "Sync all 7 $.roomXRay.kitchenHotspots and all 6 $.roomXRay.bathroomHotspots (xPct, yPct) pairs in website/src/data/site_copy.json (lines 709–822) to match website/src/data/media_manifest.json -> $.xrayHotspots.{kitchen,bathroom}.targets 1:1."
+    },
+    {
+      "id": "RT-P1-01",
+      "severity": "P1",
+      "category": "ad_funnel_asset_mapping",
+      "title": "strategy.json adFunnels['pet-safe'] heroVisualSlot uses 'realPetSupervisorReel' instead of media_manifest.json key 'pet_supervisors'",
+      "file": "website/src/data/strategy.json",
+      "jsonPaths": [
+        "$.adFunnels['pet-safe'].adCreativeMatch.heroVisualSlot"
+      ],
+      "currentValue": "realPetSupervisorReel",
+      "expectedValue": "pet_supervisors",
+      "impact": "While move-out ('moveout_condo') and deep-reset ('hero_kitchen') match media_manifest.json keys directly, 'realPetSupervisorReel' comes from site_context_lock.json -> existingAssets and does not exist in media_manifest.json (where the video key is 'pet_supervisors'). Dynamic AdFunnelLayout media lookup against media_manifest.json will fail on /lp/pet-safe.",
+      "fixInstructions": "In website/src/data/strategy.json (line 746), change $.adFunnels['pet-safe'].adCreativeMatch.heroVisualSlot from 'realPetSupervisorReel' to 'pet_supervisors'."
+    },
+    {
+      "id": "RT-P1-02",
+      "severity": "P1",
+      "category": "surface_safety_guardrail",
+      "title": "3 standalone Area Hub FAQs and Move-Out descaling copy mention vinegar, acids, or descaling without the complete mandatory surface-safety warning",
+      "file": "website/src/data/site_copy.json",
+      "jsonPaths": [
+        "$.areaHubs[1].faqs[0].answer",
+        "$.areaHubs[2].faqs[0].answer",
+        "$.areaHubs[2].faqs[1].answer",
+        "$.services.move_out.checklistByRoom.bathrooms[0]"
+      ],
+      "currentValue": {
+        "$.areaHubs[1].faqs[0].answer": "Mentions 'never bleach, abrasives, or vinegar on stone or hardwood' without 'safe ONLY on sealed ceramic/porcelain tile or chrome mesh', 'travertine', 'marble', 'unsealed grout', 'matte-black/brass fixtures', or 'always spot-test first'.",
+        "$.areaHubs[2].faqs[0].answer": "Mentions 'vinegar, lemon, or acidic bathroom sprays' without 'safe ONLY on sealed ceramic/porcelain tile or chrome mesh' or 'quartz, hardwood, unsealed grout, or matte-black/brass fixtures'.",
+        "$.areaHubs[2].faqs[1].answer": "Mentions 'vinegar mixtures' without the full surface-safety warning and 'spot-test first'.",
+        "$.services.move_out.checklistByRoom.bathrooms[0]": "Mentions 'descaled safely for EPCOR hard-water spots' while /move-out-cleaning-edmonton has no surface-safety disclaimer anywhere in its copy or FAQs."
+      },
+      "expectedValue": "Every FAQ answer or service section referencing vinegar, citric/lemon acid, baking soda, or descaling includes the explicit guardrail: 'Safe ONLY on sealed ceramic/porcelain tile or chrome mesh; NEVER use vinegar or acids on marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures; always spot-test first.'",
+      "impact": "Violates levelup-brand-rules Section 4. Because Area Hub and Service FAQs are emitted into standalone FAQPage JSON-LD schema for Google/GEO AI answers, partial chemistry answers could be surfaced without the mandatory surface exclusion list.",
+      "fixInstructions": "Append the canonical surface-safety sentence ('Note: vinegar and acids are safe ONLY on sealed ceramic/porcelain tile or chrome mesh; NEVER use vinegar or acids on marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures; always spot-test first.') to $.areaHubs[1].faqs[0].answer, $.areaHubs[2].faqs[0].answer, $.areaHubs[2].faqs[1].answer, and add a surface-safety FAQ or checklist note on $.services.move_out."
+    },
+    {
+      "id": "RT-P1-03",
+      "severity": "P1",
+      "category": "fsa_consistency",
+      "title": "site_copy.json areaHubs[3] labels Stony Plain as FSA 'T7Y' instead of 'T7Z' and omits T7Z/T8L from fsaCodes",
+      "file": "website/src/data/site_copy.json",
+      "jsonPaths": [
+        "$.areaHubs[3].parkingAndAccessNotes",
+        "$.areaHubs[3].fsaCodes"
+      ],
+      "currentValue": {
+        "parkingAndAccessNotesSnippet": "Spruce Grove (T7X), Stony Plain (T7Y), Leduc (T9E), Beaumont (T4X), Fort Saskatchewan (T8L)",
+        "fsaCodes": ["T8N", "T8A", "T8H", "T7X", "T9E", "T4X"]
+      },
+      "expectedValue": {
+        "parkingAndAccessNotesSnippet": "Spruce Grove (T7X, T7Y), Stony Plain (T7Z), Leduc (T9E), Beaumont (T4X), Fort Saskatchewan (T8L)",
+        "fsaCodes": ["T8N", "T8A", "T8H", "T7X", "T7Y", "T7Z", "T9E", "T4X", "T8L"]
+      },
+      "impact": "Contradicts strategy.json -> $.fsaDirectory (where T7Y = 'Spruce Grove South & Parkland County' and T7Z = 'Stony Plain') and Canada Post's Alberta FSA assignments, and leaves Stony Plain (T7Z) and Fort Saskatchewan (T8L) out of $.areaHubs[3].fsaCodes despite listing both in $.areaHubs[3].neighborhoods.",
+      "fixInstructions": "In website/src/data/site_copy.json (lines 646 and 656), update 'Stony Plain (T7Y)' to 'Spruce Grove (T7X, T7Y), Stony Plain (T7Z)' and include 'T7Y', 'T7Z', and 'T8L' in $.areaHubs[3].fsaCodes."
+    },
+    {
+      "id": "RT-P2-01",
+      "severity": "P2",
+      "category": "promo_token_interpolation",
+      "title": "landingPages '{PROMO}' token in site_copy.json requires short '$XX OFF' string rather than full strategy.json preset.badge",
+      "file": "website/src/data/site_copy.json",
+      "jsonPaths": [
+        "$.landingPages.moveOut.headline",
+        "$.landingPages.moveOut.primaryCta",
+        "$.landingPages.deepReset.headline",
+        "$.landingPages.deepReset.primaryCta",
+        "$.landingPages.petSafe.headline",
+        "$.landingPages.petSafe.primaryCta"
+      ],
+      "currentValue": "Templates like 'Claim {PROMO} Your Inspection-Ready Move-Out Clean in Edmonton' and 'Lock In My {PROMO} Move-Out Rate' paired with strategy.json preset.badge values like '$25 OFF Your First Clean' or '$50 OFF December Holiday Reset'.",
+      "expectedValue": "Interpolate '{PROMO}' using `$${promo.discountCad} OFF` (e.g., '$50 OFF') in headlines/CTAs, while rendering full `promo.badge` separately in the pill/badge UI element.",
+      "impact": "If AdFunnelLayout replaces '{PROMO}' with `promo.badge`, headlines render broken grammar such as 'Claim $25 OFF Your First Clean Your Inspection-Ready Move-Out Clean in Edmonton'.",
+      "fixInstructions": "Ensure the promo helper / AdFunnelLayout replaces `{PROMO}` strictly with `$${discountCad} OFF` (e.g., '$25 OFF', '$50 OFF', '$100 OFF') and displays `promo.badge` only inside the standalone promo badge component."
+    },
+    {
+      "id": "RT-P2-02",
+      "severity": "P2",
+      "category": "contact_and_gst_formatting",
+      "title": "Minor non-canonical phone punctuation and shortened GST note strings in strategy.json",
+      "file": "website/src/data/strategy.json",
+      "jsonPaths": [
+        "$.pricing.competitorComparison[4].levelup",
+        "$.pricing.competitorComparison[0].levelup",
+        "$.adFunnels['deep-reset'].trustPillars[3]"
+      ],
+      "currentValue": {
+        "$.pricing.competitorComparison[4].levelup": "Live open-slot tracker, direct SMS (+1 780-710-1503), $0 travel in Edmonton/St. Albert/Sherwood Park",
+        "$.pricing.competitorComparison[0].levelup": "Instant online CAD flat rate + $48/hr custom option (pre-tax + 5% AB GST)",
+        "$.adFunnels['deep-reset'].trustPillars[3]": "Transparent Pre-Tax Flat Rates + 5% AB GST"
+      },
+      "expectedValue": {
+        "$.pricing.competitorComparison[4].levelup": "Live open-slot tracker, direct SMS (+1 (780) 710-1503), $0 travel in Edmonton/St. Albert/Sherwood Park",
+        "$.pricing.competitorComparison[0].levelup": "Instant online CAD flat rate + $48/hr custom option (pre-tax + 5% AB GST where applicable)",
+        "$.adFunnels['deep-reset'].trustPillars[3]": "Transparent Pre-Tax Flat Rates (+ 5% AB GST where applicable)"
+      },
+      "impact": "Cosmetic string inconsistency against canonical '+1 (780) 710-1503' and '+ 5% AB GST where applicable' rules if rendered verbatim in UI comparison tables.",
+      "fixInstructions": "Normalize phone punctuation to '+1 (780) 710-1503' at line 176 and append 'where applicable' to the GST notes at lines 148 and 695 of website/src/data/strategy.json."
+    },
+    {
+      "id": "RT-P2-03",
+      "severity": "P2",
+      "category": "calculator_edge_case",
+      "title": "strategy.json edmontonMarketBenchmarks.mediansCad has no 'airbnb' key for QuoteBreakdown.competitorMedianCad",
+      "file": "website/src/data/strategy.json",
+      "jsonPaths": [
+        "$.pricing.edmontonMarketBenchmarks.mediansCad"
+      ],
+      "currentValue": "Keys present: 'regular', 'deep_clean', 'move_out' (no 'airbnb' key).",
+      "expectedValue": "Safe fallback in pricingEngine.ts when service === 'airbnb' (e.g., fallback to mediansCad.regular[`${bedrooms}bd`] or return competitorSavingsCad: 0) and use Math.round() on recurring discounts so 3-bed Regular bi-weekly ($215 * 0.90 = 193.5) matches areaHubs[1].sampleQuotes[0] ($194).",
+      "impact": "Without a null-safe guard, selecting 'airbnb' in InstantCalculator could throw a runtime TypeError reading `mediansCad[service][`${bedrooms}bd`]`, and unrounded float math could show $193.50 instead of $194.",
+      "fixInstructions": "In pricingEngine.ts, guard `mediansCad[service]` with fallback to `mediansCad.regular` for 'airbnb' (and `medianHourlyCad * hours * cleaners` for 'hourly'), and document rounding convention (`Math.round`)."
+    },
+    {
+      "id": "RT-P2-04",
+      "severity": "P2",
+      "category": "diy_inline_caution_and_seasonal_note",
+      "title": "Inline baking-soda aluminum/stone caution in guides[1] body paragraph and evergreen summer window note on moveout-condo",
+      "file": "website/src/data/site_copy.json",
+      "jsonPaths": [
+        "$.guides[1].sections[3].paragraphs[0]"
+      ],
+      "currentValue": "Instructs applying 'a gentle warm water + baking soda paste (or non-caustic botanical degreaser) to the cool porcelain-enamel cavity—staying well clear of exposed heating elements, gas igniters, and door gaskets', while bare-aluminum, surrounding stone/quartz, and spot-test warnings appear only in $.guides[1].surfaceSafetyWarning and $.guides[1].faqs[2].answer.",
+      "expectedValue": "Ensure GuideArticle template renders `guide.surfaceSafetyWarning` as a prominent callout box above sections, and optionally append 'bare aluminum, soft-metal trims, and surrounding stone counters (always spot-test first)' directly inside $.guides[1].sections[3].paragraphs[0].",
+      "impact": "Protects readers and AI search snippet extractors even when a single DIY body paragraph is quoted out of context.",
+      "fixInstructions": "Render `surfaceSafetyWarning` prominently on every `/guides/[slug]` page and optionally include bare-aluminum + spot-test mention inline at line 936 of website/src/data/site_copy.json."
+    }
+  ]
+}

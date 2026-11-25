@@ -1,0 +1,207 @@
+{
+  "gate": "Gate 2 — Final Post-Build Adversarial & Visual UX Audit",
+  "verdict": "PASS",
+  "checkedAt": "2026-11-25T00:50:30Z",
+  "auditor": "red-team-auditor",
+  "summary": {
+    "overview": "Production-ready PASS (0 P0, 0 P1, 5 non-blocking P2 polish/hardening notes). All Gate 1 P0 and P1 blockers were verified resolved in source and built dist/. Backend API endpoints enforce strict HTML escaping, constant-time webhook secret validation (401/403), strict admin ID whitelisting, mandatory unchecked CASL consent, honeypot rejection, photo mime/count/size caps, server-side quote recomputation, and Web Crypto SHA-256 Meta CAPI hashing. Static build passes every performance, SEO/GEO, secret-leak, and brand-compliance budget (9.40 KB gzip JS, 139.9 KB max image, 0 forbidden claims, 0 leaked secrets). All 4 live Chrome screenshots verified crisp typography, zero logo halo, pixel-accurate Room X-Ray pins, distraction-free /lp/move-out?promo=50 sync, and zero horizontal overflow on 390x844 mobile.",
+    "countsBySeverity": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 5,
+      "total": 5
+    },
+    "gate1RegressionVerification": {
+      "RT-P0-01_guideHeroImagesHyphenated1024w": "VERIFIED_FIXED",
+      "RT-P0-02_canonicalServiceRoutesAndRegularSlug": "VERIFIED_FIXED",
+      "RT-P0-03_all13RoomXRayCoordinatesSynced": "VERIFIED_FIXED",
+      "RT-P1-01_petSafeHeroVisualSlot": "VERIFIED_FIXED",
+      "RT-P1-02_surfaceSafetyWarningsInAreaHubsAndMoveOut": "VERIFIED_FIXED",
+      "RT-P1-03_stonyPlainT7ZFsaConsistency": "VERIFIED_FIXED"
+    }
+  },
+  "securityMatrix": {
+    "telegramHtmlXssEscaping": {
+      "status": "PASS",
+      "files": [
+        "website/src/lib/lead-pipeline.ts"
+      ],
+      "details": "escapeTelegramHtml escapes &, <, >, \", ' on every untrusted field (leadId, name, phone, email, postalCode, areaName, serviceTitle, frequency, addons, preferredDate, notes, promo.appliedCode, attribution) before sending parse_mode: 'HTML'. sendPhoto captions omit parse_mode (plain text)."
+    },
+    "telegramWebhookSecretValidation": {
+      "status": "PASS",
+      "files": [
+        "website/functions/api/telegram-callback.ts"
+      ],
+      "details": "Rejects unconfigured TELEGRAM_WEBHOOK_SECRET with 401, missing X-Telegram-Bot-Api-Secret-Token header with 401, and invalid token with 403 via constant-time XOR comparison (minor length-equality hardening noted in RT2-P2-02)."
+    },
+    "telegramAdminIdWhitelist": {
+      "status": "PASS",
+      "files": [
+        "website/functions/api/telegram-callback.ts",
+        "website/src/lib/lead-pipeline.ts"
+      ],
+      "details": "AUTHORIZED_TELEGRAM_ADMIN_IDS strictly locked to ['633982504', '332623386'] for both outbound lead alerts and inbound callback_query / /slots webhook commands; unauthorized senders receive HTTP 403."
+    },
+    "mandatoryUncheckedCaslConsent": {
+      "status": "PASS",
+      "files": [
+        "website/src/components/InstantCalculator.astro",
+        "website/src/lib/lead-pipeline.ts"
+      ],
+      "details": "Checkbox renders unchecked by default; client blocks submit with accessible role='alert' banner (verified live in Chrome); server independently enforces body.caslSmsConsent === true (HTTP 400 if false/missing)."
+    },
+    "honeypotAndAttachmentCaps": {
+      "status": "PASS",
+      "files": [
+        "website/functions/api/lead.ts",
+        "website/src/lib/lead-pipeline.ts",
+        "website/src/components/InstantCalculator.astro"
+      ],
+      "details": "Non-empty honeypot rejected with HTTP 400. Request Content-Length capped at 8,000,000 bytes; snapPhotos capped at <= 2 attachments, strict mime whitelist (image/jpeg, image/png, image/webp), max 2,500,000 base64 chars each; client Canvas downscales to <= 1024px JPEG <= 450,000 chars."
+    },
+    "serverSideQuoteRecalculation": {
+      "status": "PASS",
+      "files": [
+        "website/src/lib/lead-pipeline.ts",
+        "website/src/lib/pricing.ts"
+      ],
+      "details": "processLeadSubmission ignores any client-submitted totals and recomputes calculateQuote({ ...data.quoteInput, postalCode: data.postalCode }) strictly server-side, enforcing $95 CAD minimum floor and Move-Out free inclusions."
+    },
+    "metaCapiSha256Hashing": {
+      "status": "PASS",
+      "files": [
+        "website/src/lib/capi.ts"
+      ],
+      "details": "Uses Web Crypto crypto.subtle.digest('SHA-256') for normalized E.164 phone digits (ph), lowercased email (em), 3-char FSA (zp), country ('ca'), and external_id; forwards fbp/fbc/event_id for browser-server deduplication; skips cleanly when META_PIXEL_ID or META_CAPI_TOKEN is absent."
+    },
+    "clientDomXssHygiene": {
+      "status": "PASS",
+      "files": [
+        "website/src/components/InstantCalculator.astro",
+        "website/src/components/RoomXRay.astro",
+        "website/src/layouts/AdFunnelLayout.astro",
+        "website/src/components/SeoHead.astro"
+      ],
+      "details": "Client scripts use textContent exclusively (zero innerHTML sinks). SeoHead.astro escapes '</' as '<\\/' inside JSON-LD script tags to prevent script-tag breakout."
+    },
+    "secretLeakAndComplianceScan": {
+      "status": "PASS",
+      "files": [
+        "website/dist/**/*"
+      ],
+      "details": "Scanned all 73 built dist/ files against 9 real repo .env values + generic Telegram/Meta/Google/OpenAI token regexes (0 leaks) and all 11 lock forbidden-claim patterns (0 matches). All 4 guides, Area Hubs, and Move-Out service copy pass full surface-safety compliance."
+    },
+    "performanceAndSeoBudgets": {
+      "status": "PASS",
+      "metrics": {
+        "htmlRoutesBuilt": 19,
+        "allJsonLdValid": true,
+        "clientJsChunks": 3,
+        "clientJsRawBytes": 29463,
+        "clientJsGzipBytes": 9627,
+        "clientJsGzipLimitBytes": 20480,
+        "staticImagesCount": 44,
+        "maxStaticImageBytes": 143294,
+        "maxStaticImagePath": "website/dist/media/photos/holiday-living-fallback.jpg",
+        "maxStaticImageLimitBytes": 184320,
+        "rawPhotosInDist": false,
+        "lpPagesNoindexAndZeroNav": true,
+        "lpPagesExcludedFromSitemap": true,
+        "robotsAllowsAiCrawlers": true,
+        "llmsTxtBytes": 5629,
+        "mp4RequestsBeforeClickOnHome": 0
+      }
+    }
+  },
+  "visualInspection": {
+    "overallStatus": "PASS",
+    "browser": "Headless Chrome (Playwright channel: 'chrome') against http://127.0.0.1:4321 preview (server PID terminated cleanly after capture)",
+    "pageErrors": 0,
+    "brokenImages": 0,
+    "failedStaticRequests": 0,
+    "noteOnStaticPreviewSlots404": "Astro static preview does not execute Cloudflare Functions (/api/slots returns 404 locally and LiveSlotsBadge gracefully falls back to default 3 Edmonton slots open).",
+    "screenshots": [
+      {
+        "file": "C:\\Users\\progi\\.gemini\\antigravity\\brain\\24dc4dc6-9852-4d51-9376-6d2f355928ad\\desktop-hero-calc.png",
+        "viewport": "1440x900",
+        "status": "PASS",
+        "caption": "Desktop homepage hero, circular logo badge, and sunlit kitchen",
+        "notes": "Quiet-luxury palette (#FAF7F2 / #3B6B56 / #172A22) renders with strong WCAG AA contrast. Circular logo badge inside dark spruce ring has clean edge and zero halo. Hero kitchen image crisp and properly cropped. Calculator verified separately below fold (T6W $0 Travel badge, $285 pre-tax total, $135 free Move-Out bundle, $0.00 due today). Minor P2: seasonal banner CTA pills wrap onto 2 lines on desktop."
+      },
+      {
+        "file": "C:\\Users\\progi\\.gemini\\antigravity\\brain\\24dc4dc6-9852-4d51-9376-6d2f355928ad\\desktop-room-xray.png",
+        "viewport": "1440x900",
+        "status": "PASS",
+        "caption": "Interactive Kitchen X-Ray pins aligned with inspector card",
+        "notes": "All 7 numbered 44x44px pins land precisely on their rendered architectural targets: 1 Oven (51,59), 2 Hood (51,20), 3 Quartz Island (24,68), 4 Sink (89,53), 5 Upper Cabinets (64,18), 6 Baseboards (69,76), 7 Dishwasher Seals (73,54). Active pin #1 highlighted in eucalyptus with clear inspector panel on right."
+      },
+      {
+        "file": "C:\\Users\\progi\\.gemini\\antigravity\\brain\\24dc4dc6-9852-4d51-9376-6d2f355928ad\\desktop-lp-moveout.png",
+        "viewport": "1440x900",
+        "status": "PASS",
+        "caption": "Distraction-free Move-Out ad funnel synced to $50 OFF promo",
+        "notes": "Zero <nav> elements and zero header exit links (only #quote-calculator anchor). ?promo=50 cleanly syncs '$50 OFF SPECIAL OFFER' badge, 'Claim $50 OFF Your Inspection-Ready Move-Out Clean in Edmonton' headline, 'Lock In My $50 OFF Move-Out Rate' CTA, and calculator total ($285). Verified meta robots='noindex, follow'."
+      },
+      {
+        "file": "C:\\Users\\progi\\.gemini\\antigravity\\brain\\24dc4dc6-9852-4d51-9376-6d2f355928ad\\mobile-home-sticky.png",
+        "viewport": "390x844",
+        "status": "PASS",
+        "caption": "Mobile homepage zero overflow with 46px sticky bottom bar",
+        "notes": "Zero horizontal overflow (scrollWidth 390 === innerWidth 390). StickyMobileBar pinned cleanly at bottom with 178x46px 'Text Us' (pre-filled sms:+17807101503) and 178x46px 'Instant Price ->' buttons. Minor P2: compact header 'Instant Price' pill wraps to 2 lines and truncates 'LevelUp Clean...' at 390px."
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "RT2-P2-01",
+      "severity": "P2",
+      "category": "visual_polish",
+      "title": "Minor CTA pill line-wrapping in desktop seasonal banner and mobile 390px header brand truncation",
+      "file": "website/src/components/Header.astro",
+      "location": "Top seasonal banner pills & mobile sticky header row",
+      "impact": "Purely cosmetic: at 1440px, 'Claim Holiday Slot ->' and 'Gift a Clean' wrap onto two lines inside their pills; at 390px, the mobile header's 'Instant Price' pill wraps and causes 'LevelUp Clean...' to truncate with ellipsis despite StickyMobileBar already providing 'Instant Price ->' at the bottom.",
+      "fixInstructions": "Add `whitespace-nowrap shrink-0` to the seasonal banner CTA links and optionally hide the mobile header 'Instant Price' button (`hidden sm:inline-flex`) so 'LevelUp Cleaning' renders untruncated on 390px viewports."
+    },
+    {
+      "id": "RT2-P2-02",
+      "severity": "P2",
+      "category": "security_hardening",
+      "title": "Constant-time webhook secret check returns early on byte-length mismatch",
+      "file": "website/functions/api/telegram-callback.ts",
+      "location": "lines 53-67 (constantTimeStringsEqual)",
+      "impact": "Low practical risk over WAN (Cloudflare edge jitter masks nanosecond length differences), but hashing both strings with SHA-256 prior to fixed 32-byte XOR comparison eliminates theoretical length side-channel disclosure.",
+      "fixInstructions": "Optionally hash `a` and `b` via `crypto.subtle.digest('SHA-256', ...)` before running the constant-time 32-byte XOR loop."
+    },
+    {
+      "id": "RT2-P2-03",
+      "severity": "P2",
+      "category": "data_integrity",
+      "title": "Telegram lead card scope line renders unclamped bedroom/bathroom counts from quoteInput",
+      "file": "website/src/lib/lead-pipeline.ts",
+      "location": "line 295 (formatTelegramLeadMessage)",
+      "impact": "Zero XSS risk (numeric values only) and pricing is properly clamped 1..5 inside calculateQuote, but a crafted API payload with `bedrooms: 99` would display '99 Bed' in the Telegram admin card while quoting a 5-bedroom home.",
+      "fixInstructions": "Clamp `data.quoteInput.bedrooms` and `bathrooms` to `1..5` (matching `calculateQuote`) when formatting `scopeLine` in `formatTelegramLeadMessage`."
+    },
+    {
+      "id": "RT2-P2-04",
+      "severity": "P2",
+      "category": "brand_formatting",
+      "title": "CASL consent checkbox text formats phone as '+1 780-710-1503' instead of '+1 (780) 710-1503'",
+      "file": "website/src/components/InstantCalculator.astro",
+      "location": "line 597",
+      "impact": "Cosmetic formatting difference vs canonical display string '+1 (780) 710-1503'.",
+      "fixInstructions": "Replace `(+1 780-710-1503)` with `(+1 (780) 710-1503)` on line 597."
+    },
+    {
+      "id": "RT2-P2-05",
+      "severity": "P2",
+      "category": "deployment_readiness",
+      "title": "Placeholder LEVELUP_KV namespace IDs in wrangler.toml prior to Cloudflare production provisioning",
+      "file": "website/wrangler.toml",
+      "location": "lines 9-10",
+      "impact": "Expected pre-deployment placeholder; `/api/slots` safely falls back to 3 slots without KV, but production Telegram `/slots <N>` persistence requires real KV namespace IDs.",
+      "fixInstructions": "Before Cloudflare Pages deploy, run `wrangler kv namespace create LEVELUP_KV`, update `id` and `preview_id` in `website/wrangler.toml`, and set `TELEGRAM_BOT_TOKEN`, `TELEGRAM_WEBHOOK_SECRET`, `META_PIXEL_ID`, and `META_CAPI_TOKEN` via `wrangler pages secret put`."
+    }
+  ]
+}

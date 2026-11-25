@@ -1,0 +1,81 @@
+---
+import { DEFAULT_WEEKLY_SLOTS } from '../lib/slots';
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<div
+  data-live-slots
+  data-compact={compact ? 'true' : 'false'}
+  class:list={[
+    'inline-flex items-center gap-2 rounded-full border border-brass/45 bg-brass/15 text-spruce font-semibold',
+    compact ? 'px-3 py-1.5 text-xs' : 'px-3.5 py-2 text-xs sm:text-sm',
+  ]}
+>
+  <span class="relative flex h-2.5 w-2.5 shrink-0" aria-hidden="true">
+    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-eucalyptus opacity-65"></span>
+    <span data-slots-dot class="relative inline-flex h-2.5 w-2.5 rounded-full bg-eucalyptus"></span>
+  </span>
+  <span data-slots-text>
+    {compact
+      ? `${DEFAULT_WEEKLY_SLOTS} Edmonton slots open`
+      : `${DEFAULT_WEEKLY_SLOTS} open Edmonton dispatch slots left this week`}
+  </span>
+</div>
+
+<script>
+  async function refreshLiveSlots() {
+    const badges = document.querySelectorAll<HTMLElement>('[data-live-slots]');
+    if (!badges.length) return;
+
+    try {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 3500);
+      const res = await fetch('/api/slots', {
+        headers: { Accept: 'application/json' },
+        signal: controller.signal,
+      });
+      window.clearTimeout(timeout);
+      if (!res.ok) return;
+
+      const payload = (await res.json()) as {
+        slots?: number;
+        label?: string;
+        urgent?: boolean;
+      };
+      if (typeof payload.slots !== 'number') return;
+
+      badges.forEach((badge) => {
+        const isCompact = badge.dataset.compact === 'true';
+        const textEl = badge.querySelector<HTMLElement>('[data-slots-text]');
+        const dotEl = badge.querySelector<HTMLElement>('[data-slots-dot]');
+        if (!textEl) return;
+
+        if (payload.slots === 0) {
+          textEl.textContent = isCompact
+            ? 'Next week booking open'
+            : 'This week full — booking next week Edmonton slots';
+        } else if (isCompact) {
+          textEl.textContent = `${payload.slots} Edmonton slot${payload.slots === 1 ? '' : 's'} open`;
+        } else {
+          textEl.textContent =
+            payload.label ||
+            `${payload.slots} open Edmonton dispatch slot${payload.slots === 1 ? '' : 's'} left this week`;
+        }
+
+        if (dotEl && payload.urgent) {
+          dotEl.classList.remove('bg-eucalyptus');
+          dotEl.classList.add('bg-brass');
+        }
+      });
+    } catch {
+      // Static preview or offline fallback keeps SSR DEFAULT_WEEKLY_SLOTS cleanly
+    }
+  }
+
+  refreshLiveSlots();
+</script>

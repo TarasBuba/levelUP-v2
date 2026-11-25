@@ -1,0 +1,830 @@
+{
+  "version": "2026.11.23",
+  "pricing": {
+    "currency": "CAD",
+    "gstRate": 0.05,
+    "taxDisplayNote": "+ 5% AB GST where applicable",
+    "minimumFloorCad": 95,
+    "extraBathroomFeeCad": 25,
+    "hourly": {
+      "ratePerCleanerCad": 48,
+      "minHours": 3,
+      "maxHours": 10,
+      "minCleaners": 1,
+      "maxCleaners": 3
+    },
+    "packages": {
+      "regular": {
+        "title": "Recurring Eco-Maintenance",
+        "baseByBedrooms": {
+          "1": 130,
+          "2": 170,
+          "3": 215,
+          "4": 270,
+          "5": 325
+        },
+        "frequencyDiscountPct": {
+          "one_time": 0,
+          "monthly": 5,
+          "biweekly": 10,
+          "weekly": 15
+        }
+      },
+      "deep_clean": {
+        "title": "The LevelUp 50-Point Deep Reset",
+        "baseByBedrooms": {
+          "1": 210,
+          "2": 285,
+          "3": 350,
+          "4": 420,
+          "5": 495
+        },
+        "frequencyDiscountPct": {
+          "one_time": 0,
+          "monthly": 5,
+          "biweekly": 10,
+          "weekly": 15
+        }
+      },
+      "move_out": {
+        "title": "Move-Out / Move-In Inspection Clean",
+        "baseByBedrooms": {
+          "1": 235,
+          "2": 310,
+          "3": 395,
+          "4": 490,
+          "5": 575
+        },
+        "includedAddonsFree": [
+          "inside_oven",
+          "inside_fridge",
+          "inside_cabinets"
+        ],
+        "frequencyDiscountPct": {
+          "one_time": 0,
+          "monthly": 0,
+          "biweekly": 0,
+          "weekly": 0
+        }
+      },
+      "airbnb": {
+        "title": "Airbnb & Short-Term 5-Star Turnover",
+        "baseByBedrooms": {
+          "1": 120,
+          "2": 160,
+          "3": 220,
+          "4": 275,
+          "5": 330
+        },
+        "frequencyDiscountPct": {
+          "one_time": 0,
+          "monthly": 5,
+          "biweekly": 10,
+          "weekly": 15
+        }
+      }
+    },
+    "addons": {
+      "inside_oven": {
+        "label": "Inside Oven & Glass Degrease",
+        "priceCad": 45
+      },
+      "inside_fridge": {
+        "label": "Inside Fridge & Crisper Sanitize",
+        "priceCad": 45
+      },
+      "inside_cabinets": {
+        "label": "Inside Kitchen & Bath Cabinets",
+        "priceCad": 45
+      },
+      "interior_windows": {
+        "label": "Interior Windows, Tracks & Sills",
+        "priceCad": 50
+      },
+      "wall_spot_wash": {
+        "label": "Wall Scuff & Door Frame Detailing",
+        "priceCad": 45
+      },
+      "heavy_pet_hair": {
+        "label": "Heavy Pet Fur HEPA Extraction",
+        "priceCad": 35
+      },
+      "basement_suite": {
+        "label": "Finished Basement Level",
+        "priceCad": 65
+      }
+    },
+    "edmontonMarketBenchmarks": {
+      "companiesSurveyed": 30,
+      "dataPoints": 156,
+      "medianHourlyCad": 50,
+      "mediansCad": {
+        "regular": {
+          "1bd": 145,
+          "2bd": 189,
+          "3bd": 234,
+          "4bd": 292,
+          "5bd": 345
+        },
+        "deep_clean": {
+          "1bd": 229,
+          "2bd": 315,
+          "3bd": 380,
+          "4bd": 433,
+          "5bd": 510
+        },
+        "move_out": {
+          "1bd": 254,
+          "2bd": 325,
+          "3bd": 424,
+          "4bd": 525,
+          "5bd": 615
+        }
+      }
+    },
+    "competitorComparison": [
+      {
+        "feature": "Flat-Rate Transparency",
+        "levelup": "Instant online CAD flat rate + $48/hr custom option (pre-tax + 5% AB GST where applicable)",
+        "edmontonMedian": "$50/hr median; flat rates often require phone quote",
+        "franchiseChains": "In-home estimate required; variable team-hour billing",
+        "kijijiCleaners": "Cash hourly estimates that frequently run over time"
+      },
+      {
+        "feature": "Move-Out Oven + Fridge + Cabinets Included ($135 Value)",
+        "levelup": "Included FREE in every Move-Out package ($135 saved automatically)",
+        "edmontonMedian": "Billed extra ($35–$60 each; +$120 to +$165 total)",
+        "franchiseChains": "A-la-carte add-on fees per appliance and cupboard",
+        "kijijiCleaners": "Rarely included; extra hours billed on the spot"
+      },
+      {
+        "feature": "$0 Upfront + Photo-Verified Walkthrough",
+        "levelup": "$0 deposit; pay only after 50-point on-site sign-off or SMS photo report",
+        "edmontonMedian": "Credit card hold or 25%–50% deposit upfront",
+        "franchiseChains": "Card on file charged automatically before walkthrough",
+        "kijijiCleaners": "No formal checklist or photo verification"
+      },
+      {
+        "feature": "100% Pet-Safe Botanical Formulas",
+        "levelup": "Standard on every clean — eucalyptus botanicals, zero bleach or ammonia",
+        "edmontonMedian": "Often a $15–$25 eco upgrade or mixed conventional sprays",
+        "franchiseChains": "Commercial chemical concentrates unless eco add-on requested",
+        "kijijiCleaners": "Client supplies products or harsh grocery bleach used"
+      },
+      {
+        "feature": "Same-Week Edmonton Dispatch",
+        "levelup": "Live open-slot tracker, direct SMS (+1 (780) 710-1503), $0 travel in Edmonton/St. Albert/Sherwood Park",
+        "edmontonMedian": "3–7 day wait; outer suburbs often incur $20–$35 fees",
+        "franchiseChains": "Call-centre routing with 1–2 week peak waitlists",
+        "kijijiCleaners": "Unpredictable solo availability and last-minute cancellations"
+      },
+      {
+        "feature": "Official Landlord Inspection Receipt",
+        "levelup": "Itemized Alberta RTA-ready Move-Out receipt emailed immediately on completion",
+        "edmontonMedian": "Generic invoice; checklist breakdown rarely attached",
+        "franchiseChains": "Standard payment receipt without room-by-room walkthrough notes",
+        "kijijiCleaners": "Cash e-Transfer only — no formal receipt for landlords"
+      }
+    ]
+  },
+  "promoEngine": {
+    "defaultMode": "tiered",
+    "minimumOrderFloorCad": 95,
+    "urlParamNames": [
+      "promo",
+      "offer"
+    ],
+    "tiers": [
+      {
+        "minSubtotalCad": 0,
+        "discountCad": 25,
+        "badge": "$25 OFF First Clean"
+      },
+      {
+        "minSubtotalCad": 300,
+        "discountCad": 50,
+        "badge": "$50 OFF Large Home / Move-Out"
+      },
+      {
+        "minSubtotalCad": 480,
+        "discountCad": 75,
+        "badge": "$75 OFF Full Estate Reset"
+      }
+    ],
+    "presets": {
+      "25": {
+        "code": "25",
+        "discountCad": 25,
+        "badge": "$25 OFF Your First Clean",
+        "minSubtotalCad": 120
+      },
+      "50": {
+        "code": "50",
+        "discountCad": 50,
+        "badge": "$50 OFF Special Offer",
+        "minSubtotalCad": 200
+      },
+      "100": {
+        "code": "100",
+        "discountCad": 100,
+        "badge": "$100 OFF Executive / Recurring Bundle",
+        "minSubtotalCad": 260
+      },
+      "holiday50": {
+        "code": "holiday50",
+        "discountCad": 50,
+        "badge": "$50 OFF December Holiday Reset",
+        "minSubtotalCad": 220
+      }
+    }
+  },
+  "fsaDirectory": {
+    "T5A": {
+      "areaName": "Clareview, Kirkness & East Londonderry",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5B": {
+      "areaName": "Alberta Avenue, Eastwood & Beverly",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5C": {
+      "areaName": "Londonderry, Kildare, Delton & Glengarry",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5E": {
+      "areaName": "Griesbach, Rosslyn, Lauderdale & Killarney",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5G": {
+      "areaName": "Blatchford, Westwood, Prince Charles & Spruce Ave",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5H": {
+      "areaName": "Central McDougall, Queen Mary Park & McCauley",
+      "municipality": "Edmonton",
+      "zoneLabel": "Core Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5J": {
+      "areaName": "Downtown Edmonton & Ice District",
+      "municipality": "Edmonton",
+      "zoneLabel": "Core Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5K": {
+      "areaName": "Oliver / Wîhkwêntôwin & Downtown West",
+      "municipality": "Edmonton",
+      "zoneLabel": "Core Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5L": {
+      "areaName": "Calder, Woodcroft, Dovercourt & Sherbrooke",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5M": {
+      "areaName": "Westmount, Inglewood & Grovenor North",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5N": {
+      "areaName": "Glenora, Grovenor & Westmount",
+      "municipality": "Edmonton",
+      "zoneLabel": "Core Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5P": {
+      "areaName": "Crestwood North, Jasper Place & Britannia Youngstown",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5R": {
+      "areaName": "Crestwood, Laurier Heights, Parkview & Lynnwood",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5S": {
+      "areaName": "Mayfield, West Edmonton & Winterburn",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5T": {
+      "areaName": "Callingwood, Oleskiw, Aldergrove & La Perle",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5V": {
+      "areaName": "Mistatim & Northwest Edmonton",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5W": {
+      "areaName": "Highlands, Bellevue, Montrose & Rundle Heights",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5X": {
+      "areaName": "Castle Downs, Cumberland, Baturyn & Dunluce",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5Y": {
+      "areaName": "Cy Becker, Matt Berry, Hollick-Kenyon & Clareview North",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T5Z": {
+      "areaName": "Eaux Claires, Lago Lindo, Schonsee & Ozerna",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6A": {
+      "areaName": "Capilano, Forest Heights, Gold Bar & Ottewell",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6B": {
+      "areaName": "Strathearn, Kenilworth, Avonmore & Idylwylde",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6C": {
+      "areaName": "Bonnie Doon, Ritchie, Cloverdale & Mill Creek",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6E": {
+      "areaName": "Old Strathcona / Whyte Ave, Queen Alexandra & Allendale",
+      "municipality": "Edmonton",
+      "zoneLabel": "Core Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6G": {
+      "areaName": "Garneau, University of Alberta, Belgravia & McKernan",
+      "municipality": "Edmonton",
+      "zoneLabel": "Core Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6H": {
+      "areaName": "Malmo Plains, Lansdowne, Lendrum & Grandview Heights",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6J": {
+      "areaName": "Greenfield, Aspen Gardens, Ermineskin & Steinhauer",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6K": {
+      "areaName": "Mill Woods West, Meyokumin & Pollard Meadows",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6L": {
+      "areaName": "Mill Woods East, Kiniski Gardens, Weinlos & Daly Grove",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6M": {
+      "areaName": "The Hamptons, Glastonbury, Granville & Edgemont",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6N": {
+      "areaName": "South Edmonton Common & Parsons",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6P": {
+      "areaName": "Clover Bar & Southeast Edmonton",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6R": {
+      "areaName": "Riverbend, Terwillegar, Haddow & Magrath Heights",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6S": {
+      "areaName": "Northeast Edmonton & Horse Hill",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6T": {
+      "areaName": "The Meadows, Tamarack, Laurel & Silver Berry",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6V": {
+      "areaName": "Griesbach North, Carlton & Oxford",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6W": {
+      "areaName": "Windermere, Keswick, Ambleside & Heritage Valley",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T6X": {
+      "areaName": "Summerside, Ellerslie, Walker & Orchards",
+      "municipality": "Edmonton",
+      "zoneLabel": "Edmonton — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T8N": {
+      "areaName": "St. Albert (City-Wide)",
+      "municipality": "St. Albert",
+      "zoneLabel": "St. Albert — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T8A": {
+      "areaName": "Sherwood Park (Central & West)",
+      "municipality": "Sherwood Park",
+      "zoneLabel": "Sherwood Park — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T8H": {
+      "areaName": "Sherwood Park (Emerald Hills & East)",
+      "municipality": "Sherwood Park",
+      "zoneLabel": "Sherwood Park — $0 Travel",
+      "travelFeeCad": 0
+    },
+    "T8B": {
+      "areaName": "Strathcona County Rural Southwest",
+      "municipality": "Strathcona County",
+      "zoneLabel": "Greater Edmonton Ring — $15 Travel",
+      "travelFeeCad": 15
+    },
+    "T8C": {
+      "areaName": "Strathcona County Estates & South",
+      "municipality": "Strathcona County",
+      "zoneLabel": "Greater Edmonton Ring — $15 Travel",
+      "travelFeeCad": 15
+    },
+    "T8E": {
+      "areaName": "Ardrossan & Rural Strathcona County",
+      "municipality": "Strathcona County",
+      "zoneLabel": "Greater Edmonton Ring — $15 Travel",
+      "travelFeeCad": 15
+    },
+    "T8G": {
+      "areaName": "Rural Strathcona County North",
+      "municipality": "Strathcona County",
+      "zoneLabel": "Greater Edmonton Ring — $15 Travel",
+      "travelFeeCad": 15
+    },
+    "T7X": {
+      "areaName": "Spruce Grove",
+      "municipality": "Spruce Grove",
+      "zoneLabel": "Greater Edmonton Ring — $15 Travel",
+      "travelFeeCad": 15
+    },
+    "T7Y": {
+      "areaName": "Spruce Grove South & Parkland County",
+      "municipality": "Spruce Grove",
+      "zoneLabel": "Greater Edmonton Ring — $15 Travel",
+      "travelFeeCad": 15
+    },
+    "T7Z": {
+      "areaName": "Stony Plain",
+      "municipality": "Stony Plain",
+      "zoneLabel": "Greater Edmonton Ring — $15 Travel",
+      "travelFeeCad": 15
+    },
+    "T9E": {
+      "areaName": "Leduc & Nisku",
+      "municipality": "Leduc",
+      "zoneLabel": "Greater Edmonton Ring — $15 Travel",
+      "travelFeeCad": 15
+    },
+    "T4X": {
+      "areaName": "Beaumont",
+      "municipality": "Beaumont",
+      "zoneLabel": "Greater Edmonton Ring — $15 Travel",
+      "travelFeeCad": 15
+    },
+    "T8L": {
+      "areaName": "Fort Saskatchewan",
+      "municipality": "Fort Saskatchewan",
+      "zoneLabel": "Greater Edmonton Ring — $15 Travel",
+      "travelFeeCad": 15
+    },
+    "T9G": {
+      "areaName": "Devon",
+      "municipality": "Devon",
+      "zoneLabel": "Greater Edmonton Ring — $15 Travel",
+      "travelFeeCad": 15
+    }
+  },
+  "adFunnels": {
+    "move-out": {
+      "route": "/lp/move-out",
+      "noindex": true,
+      "layout": "AdFunnelLayout",
+      "adCreativeMatch": {
+        "campaignAngle": "Alberta RTA Move-Out Inspection Protection + $135 Free Appliance Bundle",
+        "headline": "Protect Your Edmonton Damage Deposit — Inside Oven, Fridge & Cabinets Included FREE",
+        "subheadline": "Flat-rate Move-Out cleaning built around Alberta RTA Section 19 inspection checklists. $0 upfront — pay only after our 50-point walkthrough sign-off or SMS photo report.",
+        "heroVisualSlot": "moveout_condo",
+        "supportedPromoParams": [
+          "?promo=25",
+          "?promo=50",
+          "?promo=100",
+          "?promo=holiday50"
+        ],
+        "defaultPromoPreset": "50"
+      },
+      "targetAudience": {
+        "geo": "Edmonton (T5*, T6*), St. Albert (T8N), Sherwood Park (T8A, T8H), plus 25 km Capital Region radius",
+        "segments": [
+          "Edmonton renters preparing for end-of-month Alberta RTA move-out inspection",
+          "Home sellers & buyers closing on condos in Oliver/Wîhkwêntôwin, Downtown, Old Strathcona, and Windermere",
+          "Edmonton landlords and property managers turning over units between tenancies"
+        ],
+        "painPoints": [
+          "Fear of $350–$600+ security deposit deductions under Alberta RTA for baked-on oven grease, fridge drawers, sticky cupboards, or hard-water shower scale",
+          "Competitors advertising low base rates then adding $135+ for inside oven, fridge, and cabinets",
+          "Tight possession timelines requiring lockbox access and photo proof before key handover"
+        ]
+      },
+      "defaultCalculatorState": {
+        "mode": "flat_rate",
+        "service": "move_out",
+        "bedrooms": 2,
+        "bathrooms": 2,
+        "frequency": "one_time",
+        "addons": [
+          "inside_oven",
+          "inside_fridge",
+          "inside_cabinets"
+        ]
+      },
+      "primaryObjectionKiller": {
+        "objection": "What if my landlord is picky or I already moved out and can't attend the inspection?",
+        "resolution": "$0 Upfront Deposit — pay only after your On-Site 50-Point Walkthrough Sign-Off (or timestamped SMS Photo-Verified Report for empty/lockbox homes), backed by an Official Itemized Move-Out Cleaning Receipt formatted for Edmonton landlords."
+      },
+      "trustPillars": [
+        "$0 Upfront Deposit — Pay Only After Completion (Interac e-Transfer or Card)",
+        "Inside Oven, Fridge & Cabinets Included FREE ($135 Value)",
+        "On-Site 50-Point Walkthrough Sign-Off or SMS Photo-Verified Report",
+        "Official Itemized Move-Out Cleaning Receipt for Edmonton Landlords"
+      ],
+      "metaCapiEvents": {
+        "ViewContent": {
+          "trigger": "Landing page mount & calculator interaction on /lp/move-out",
+          "deduplicationKey": "event_id",
+          "customData": {
+            "content_name": "Edmonton Move-Out Inspection Clean",
+            "content_category": "move_out",
+            "currency": "CAD",
+            "value": 310
+          }
+        },
+        "Lead": {
+          "trigger": "Server-side POST /api/lead with verified CASL SMS consent",
+          "deduplicationKey": "event_id",
+          "hashedUserData": [
+            "ph (SHA-256 E.164)",
+            "em (SHA-256 lowercase)",
+            "zp (SHA-256 FSA)",
+            "fbp",
+            "fbc"
+          ],
+          "customData": {
+            "content_name": "Move-Out Quote Lead",
+            "content_category": "move_out",
+            "currency": "CAD",
+            "valueSource": "quoteBreakdown.finalPreTaxCad"
+          }
+        },
+        "Purchase": {
+          "trigger": "Server-side offline conversion fired when admin clicks Telegram [💰 Paid] button",
+          "deduplicationKey": "leadId",
+          "actionSource": "system_generated",
+          "customData": {
+            "content_name": "Completed Move-Out Clean",
+            "content_category": "move_out",
+            "currency": "CAD",
+            "valueSource": "confirmedFinalCad"
+          }
+        }
+      }
+    },
+    "deep-reset": {
+      "route": "/lp/deep-reset",
+      "noindex": true,
+      "layout": "AdFunnelLayout",
+      "adCreativeMatch": {
+        "campaignAngle": "50-Point Winter & Holiday Deep Reset — Hard Water Scale, Road Salt & Furnace Dust",
+        "headline": "The 50-Point Edmonton Deep Reset — Walk Into a Calm, Holiday-Ready Home",
+        "subheadline": "We detail baseboards, matte-black fixtures, EPCOR hard-water glass, and winter road-salt entryways using 100% botanical formulas. Lock your flat rate in 45 seconds.",
+        "heroVisualSlot": "hero_kitchen",
+        "supportedPromoParams": [
+          "?promo=holiday50",
+          "?promo=50",
+          "?promo=25",
+          "?promo=100"
+        ],
+        "defaultPromoPreset": "holiday50"
+      },
+      "targetAudience": {
+        "geo": "Edmonton (Glenora, Crestwood, Riverbend, Terwillegar, Windermere, Summerside, Old Strathcona), St. Albert, Sherwood Park",
+        "segments": [
+          "Busy dual-income Edmonton homeowners preparing for December hosting or seasonal resets",
+          "Families tired of EPCOR hard-water spots on frameless glass showers and white road salt crust on mudroom floors",
+          "Gift-givers purchasing a weekend-saving deep reset for parents or partners"
+        ],
+        "painPoints": [
+          "Standard cleaners wipe center counters but skip baseboards, cabinet faces, shower tracks, and range hoods",
+          "Fear of harsh acidic sprays etching Calacatta quartz, natural stone, oak hardwood, or matte-black brass fixtures",
+          "Hidden hourly overages when a home needs a thorough first-time reset"
+        ]
+      },
+      "defaultCalculatorState": {
+        "mode": "flat_rate",
+        "service": "deep_clean",
+        "bedrooms": 3,
+        "bathrooms": 2,
+        "frequency": "one_time",
+        "addons": []
+      },
+      "primaryObjectionKiller": {
+        "objection": "How do I know a deep clean will actually hit the details without damaging my stone or fixtures?",
+        "resolution": "Every specialist follows our 50-Point Room X-Ray checklist using surface-safe, pH-balanced botanical formulas (zero vinegar/acids on stone, quartz, hardwood, or matte-black fixtures), verified live with you before you pay $1."
+      },
+      "trustPillars": [
+        "$0 Upfront Deposit — Pay Only After 50-Point Walkthrough Sign-Off",
+        "City of Edmonton Licensed & Background-Checked Local Specialists",
+        "Surface-Safe pH-Balanced Botanical Care for Quartz, Hardwood & Matte Fixtures",
+        "Transparent Pre-Tax Flat Rates (+ 5% AB GST where applicable)"
+      ],
+      "metaCapiEvents": {
+        "ViewContent": {
+          "trigger": "Landing page mount & calculator interaction on /lp/deep-reset",
+          "deduplicationKey": "event_id",
+          "customData": {
+            "content_name": "Edmonton 50-Point Deep Reset",
+            "content_category": "deep_clean",
+            "currency": "CAD",
+            "value": 350
+          }
+        },
+        "Lead": {
+          "trigger": "Server-side POST /api/lead with verified CASL SMS consent",
+          "deduplicationKey": "event_id",
+          "hashedUserData": [
+            "ph (SHA-256 E.164)",
+            "em (SHA-256 lowercase)",
+            "zp (SHA-256 FSA)",
+            "fbp",
+            "fbc"
+          ],
+          "customData": {
+            "content_name": "Deep Reset Quote Lead",
+            "content_category": "deep_clean",
+            "currency": "CAD",
+            "valueSource": "quoteBreakdown.finalPreTaxCad"
+          }
+        },
+        "Purchase": {
+          "trigger": "Server-side offline conversion fired when admin clicks Telegram [💰 Paid] button",
+          "deduplicationKey": "leadId",
+          "actionSource": "system_generated",
+          "customData": {
+            "content_name": "Completed Deep Reset Clean",
+            "content_category": "deep_clean",
+            "currency": "CAD",
+            "valueSource": "confirmedFinalCad"
+          }
+        }
+      }
+    },
+    "pet-safe": {
+      "route": "/lp/pet-safe",
+      "noindex": true,
+      "layout": "AdFunnelLayout",
+      "adCreativeMatch": {
+        "campaignAngle": "100% Pet-Safe & Kid-Safe Botanical Cleaning — Zero Bleach or Ammonia Fumes",
+        "headline": "A Spotless Edmonton Home Safe for Paws, Toddlers & Indoor Winter Air",
+        "subheadline": "When Edmonton windows stay sealed all winter, harsh fumes linger. We clean with 100% pet-safe eucalyptus botanicals and HEPA pet-fur extraction — at no eco upcharge.",
+        "heroVisualSlot": "pet_supervisors",
+        "supportedPromoParams": [
+          "?promo=25",
+          "?promo=50",
+          "?promo=100",
+          "?promo=holiday50"
+        ],
+        "defaultPromoPreset": "25"
+      },
+      "targetAudience": {
+        "geo": "Edmonton (Riverbend, Terwillegar, Windermere, Summerside, Glenora, Ritchie, Garneau), St. Albert, Sherwood Park",
+        "segments": [
+          "Edmonton dog and cat owners concerned about floor residues on paws and winter indoor air quality",
+          "Parents of infants and toddlers wanting zero bleach, zero ammonia, and zero synthetic fragrance residues",
+          "Homeowners looking for reliable bi-weekly or weekly recurring maintenance (10%–15% off)"
+        ],
+        "painPoints": [
+          "Traditional cleaners leave chemical smells trapped inside heated winter homes for days",
+          "Competitors charge $15–$25 extra just to bring eco-friendly products",
+          "Pet hair trapped along baseboards, sofa crevices, and carpeted stairs gets skipped in rushed visits"
+        ]
+      },
+      "defaultCalculatorState": {
+        "mode": "flat_rate",
+        "service": "regular",
+        "bedrooms": 3,
+        "bathrooms": 2,
+        "frequency": "biweekly",
+        "addons": [
+          "heavy_pet_hair"
+        ]
+      },
+      "primaryObjectionKiller": {
+        "objection": "Do plant-based cleaners actually remove grease, bathroom scale, and pet dander?",
+        "resolution": "Yes — we pair commercial-grade HEPA extraction, microfiber colour-coding, and concentrated botanical surfactants that cut kitchen grease and soap film cleanly without toxic fumes, backed by our live walkthrough before payment."
+      },
+      "trustPillars": [
+        "100% Pet-Safe & Kid-Safe Botanical Formulas Standard on Every Clean",
+        "Zero Bleach, Zero Ammonia, Zero Heavy Synthetic Fragrances",
+        "10% OFF Bi-Weekly & 15% OFF Weekly Recurring Plans",
+        "$0 Upfront Deposit + Real Edmonton Pet-Loving Local Specialists"
+      ],
+      "metaCapiEvents": {
+        "ViewContent": {
+          "trigger": "Landing page mount & calculator interaction on /lp/pet-safe",
+          "deduplicationKey": "event_id",
+          "customData": {
+            "content_name": "Edmonton Pet-Safe Botanical Clean",
+            "content_category": "regular",
+            "currency": "CAD",
+            "value": 215
+          }
+        },
+        "Lead": {
+          "trigger": "Server-side POST /api/lead with verified CASL SMS consent",
+          "deduplicationKey": "event_id",
+          "hashedUserData": [
+            "ph (SHA-256 E.164)",
+            "em (SHA-256 lowercase)",
+            "zp (SHA-256 FSA)",
+            "fbp",
+            "fbc"
+          ],
+          "customData": {
+            "content_name": "Pet-Safe Clean Quote Lead",
+            "content_category": "regular",
+            "currency": "CAD",
+            "valueSource": "quoteBreakdown.finalPreTaxCad"
+          }
+        },
+        "Purchase": {
+          "trigger": "Server-side offline conversion fired when admin clicks Telegram [💰 Paid] button",
+          "deduplicationKey": "leadId",
+          "actionSource": "system_generated",
+          "customData": {
+            "content_name": "Completed Pet-Safe Clean",
+            "content_category": "regular",
+            "currency": "CAD",
+            "valueSource": "confirmedFinalCad"
+          }
+        }
+      }
+    }
+  }
+}

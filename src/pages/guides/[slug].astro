@@ -1,0 +1,215 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+
+import siteCopy from '../../data/site_copy.json';
+import mediaManifest from '../../data/media_manifest.json';
+import type { GuideArticle, PageSeoConfig } from '../../types/contracts';
+
+export function getStaticPaths() {
+  return siteCopy.guides.map((guide) => ({
+    params: { slug: guide.slug },
+    props: { guide: guide as GuideArticle },
+  }));
+}
+
+interface Props {
+  guide: GuideArticle;
+}
+
+const { guide } = Astro.props;
+
+const photoBySlug: Record<string, typeof mediaManifest.photos.hero_kitchen> = {
+  'edmonton-winter-salt-floor-safety': mediaManifest.photos.winter_entryway,
+  'why-oven-self-clean-destroys-control-boards': mediaManifest.photos.hero_kitchen,
+  'edmonton-hard-water-matte-black-fixtures': mediaManifest.photos.xray_bathroom,
+  'alberta-move-out-inspection-checklist': mediaManifest.photos.moveout_condo,
+};
+
+const matchedPhoto = photoBySlug[guide.slug];
+
+const seoConfig: PageSeoConfig = {
+  title: guide.metaTitle,
+  description: guide.metaDescription,
+  canonicalPath: `/guides/${guide.slug}`,
+  ogImage: guide.heroImage,
+  preloadHeroImage: matchedPhoto ? matchedPhoto.variants['1024'].avif.path : guide.heroImage,
+  faqs: guide.faqs,
+  breadcrumbs: [
+    { name: 'Home', path: '/' },
+    { name: 'Edmonton Care Guides', path: '/guides' },
+    { name: guide.title, path: `/guides/${guide.slug}` },
+  ],
+};
+
+const relatedGuides = siteCopy.guides.filter((g) => g.slug !== guide.slug);
+---
+
+<MainLayout seoConfig={seoConfig} ctaHref="/#quote-calculator">
+  <article class="py-10 sm:py-16">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <!-- Breadcrumb -->
+      <nav aria-label="Breadcrumb" class="mb-6 flex flex-wrap items-center gap-2 text-xs font-semibold text-spruce/75">
+        <a href="/" class="inline-flex min-h-[44px] items-center hover:text-eucalyptus">Home</a>
+        <span aria-hidden="true">/</span>
+        <a href="/guides" class="inline-flex min-h-[44px] items-center hover:text-eucalyptus">Guides</a>
+        <span aria-hidden="true">/</span>
+        <span class="text-spruce truncate max-w-[240px] sm:max-w-none">{guide.category}</span>
+      </nav>
+
+      <!-- Header -->
+      <header class="space-y-4">
+        <div class="flex flex-wrap items-center gap-2.5 text-xs font-semibold text-spruce/75">
+          <span class="rounded-full border border-brass/50 bg-brass/18 px-3 py-1 text-spruce">
+            {guide.category}
+          </span>
+          <span>•</span>
+          <span>{guide.readTimeMinutes} minute read</span>
+          <span>•</span>
+          <time datetime={guide.publishedDate}>Published {guide.publishedDate}</time>
+        </div>
+
+        <h1 class="font-serif text-3xl sm:text-5xl font-semibold leading-tight text-spruce">
+          {guide.title}
+        </h1>
+
+        <p class="text-base sm:text-lg leading-relaxed text-spruce/85">
+          {guide.summary}
+        </p>
+      </header>
+
+      <!-- Hero Photo -->
+      <div class="mt-8 overflow-hidden rounded-3xl border border-mist/35 bg-card shadow-md">
+        {matchedPhoto ? (
+          <picture>
+            <source type="image/avif" srcset={matchedPhoto.srcset.avif} sizes="(min-width: 896px) 896px, 100vw" />
+            <source type="image/webp" srcset={matchedPhoto.srcset.webp} sizes="(min-width: 896px) 896px, 100vw" />
+            <img
+              src={matchedPhoto.fallback.path}
+              alt={matchedPhoto.alt}
+              width={matchedPhoto.variants['1440'].width}
+              height={matchedPhoto.variants['1440'].height}
+              fetchpriority="high"
+              class="w-full object-cover max-h-[480px]"
+            />
+          </picture>
+        ) : (
+          <img
+            src={guide.heroImage}
+            alt={guide.title}
+            width="1024"
+            height="675"
+            fetchpriority="high"
+            class="w-full object-cover max-h-[480px]"
+          />
+        )}
+      </div>
+
+      <!-- MANDATORY PROMINENT SURFACE SAFETY WARNING ABOVE SECTIONS -->
+      <aside
+        role="note"
+        aria-label="Mandatory Surface Chemistry Safety Warning"
+        class="mt-8 rounded-2xl border-2 border-brass bg-brass/18 p-5 sm:p-6 shadow-2xs"
+      >
+        <div class="flex items-start gap-3.5">
+          <span
+            class="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-spruce font-mono text-sm font-bold text-linen"
+            aria-hidden="true"
+          >
+            !
+          </span>
+          <div class="space-y-1">
+            <p class="text-xs font-bold uppercase tracking-wider text-spruce">
+              Mandatory Surface &amp; Finish Safety Protocol
+            </p>
+            <p class="text-sm sm:text-base font-medium leading-relaxed text-spruce">
+              {guide.surfaceSafetyWarning}
+            </p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Guide Sections -->
+      <div class="mt-10 space-y-10">
+        {guide.sections.map((sec) => (
+          <section class="space-y-4">
+            <h2 class="font-serif text-2xl sm:text-3xl font-semibold text-spruce">
+              {sec.heading}
+            </h2>
+            {sec.paragraphs.map((para) => (
+              <p class="text-base leading-relaxed text-spruce/85">{para}</p>
+            ))}
+            {sec.bullets && sec.bullets.length > 0 && (
+              <ul class="mt-3 space-y-2.5 rounded-2xl border border-mist/35 bg-card p-5 text-sm sm:text-base text-spruce">
+                {sec.bullets.map((bullet) => (
+                  <li class="flex items-start gap-3">
+                    <span class="mt-0.5 text-eucalyptus font-bold" aria-hidden="true">✓</span>
+                    <span>{bullet}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        ))}
+      </div>
+
+      <!-- Contextual Conversion Card -->
+      <div class="mt-12 rounded-3xl border border-spruce/20 bg-spruce p-6 sm:p-8 text-linen flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <div class="space-y-1.5 max-w-xl">
+          <p class="text-xs font-semibold uppercase tracking-wider text-brass">
+            Edmonton Botanical Specialists • $0 Upfront Deposit
+          </p>
+          <h2 class="font-serif text-2xl font-semibold text-linen">
+            Book Surface-Safe Cleaning in Under 45 Seconds
+          </h2>
+          <p class="text-xs sm:text-sm text-linen/85">
+            Move-Out cleans from $235 (oven, fridge &amp; cabinets included free) and 50-Point Deep Resets from $210 CAD pre-tax (+ 5% AB GST where applicable).
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-2.5 shrink-0">
+          <a
+            href="/#quote-calculator"
+            class="inline-flex min-h-[46px] items-center justify-center rounded-full bg-eucalyptus px-5 py-2.5 text-xs sm:text-sm font-semibold text-linen transition hover:bg-eucalyptus-hover"
+          >
+            Instant Quote →
+          </a>
+          <a
+            href="/move-out-cleaning-edmonton"
+            class="inline-flex min-h-[46px] items-center justify-center rounded-full border border-mist/45 px-4 py-2.5 text-xs sm:text-sm font-semibold text-linen hover:bg-linen/10"
+          >
+            Move-Out Scope
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <FaqAccordion
+    eyebrow="GUIDE FAQS"
+    title="Common Edmonton Surface & Inspection Questions"
+    faqs={guide.faqs}
+  />
+
+  <!-- Related Guides -->
+  <section class="py-12 border-t border-mist/25 bg-card/50">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h2 class="font-serif text-2xl font-semibold text-spruce">More Edmonton Care Guides</h2>
+      <div class="mt-5 grid gap-5 md:grid-cols-3">
+        {relatedGuides.map((rel) => (
+          <a
+            href={`/guides/${rel.slug}`}
+            class="flex flex-col justify-between rounded-2xl border border-mist/35 bg-linen p-5 transition hover:border-eucalyptus"
+          >
+            <div>
+              <span class="text-[11px] font-semibold uppercase tracking-wider text-eucalyptus">
+                {rel.category}
+              </span>
+              <h3 class="mt-2 font-serif text-lg font-semibold text-spruce">{rel.title}</h3>
+            </div>
+            <span class="mt-4 text-xs font-semibold text-eucalyptus">Read Guide →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</MainLayout>

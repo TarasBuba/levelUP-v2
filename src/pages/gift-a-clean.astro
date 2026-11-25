@@ -1,0 +1,237 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import TrustProtocol from '../components/TrustProtocol.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
+
+import siteContext from '../data/site_context_lock.json';
+import siteCopy from '../data/site_copy.json';
+import mediaManifest from '../data/media_manifest.json';
+import type { PageSeoConfig } from '../types/contracts';
+
+const gift = siteCopy.giftPage;
+const photo = mediaManifest.photos.holiday_living;
+const { brand } = siteContext;
+
+const enrichedTiers = gift.tiers.map((tier, idx) => {
+  const featured = idx === 1;
+  const smsBody =
+    'Hi LevelUp Cleaning! I would like to purchase the $' +
+    tier.amountCad +
+    ' CAD "' +
+    tier.title +
+    '" Gift Certificate.';
+  const smsHref = 'sms:' + brand.phoneE164 + '?&body=' + encodeURIComponent(smsBody);
+  const mailSubject = 'Gift a Clean Certificate Order ($' + tier.amountCad + ' CAD)';
+  const mailBody =
+    'Hi LevelUp Cleaning,\n\nI would like to order a $' +
+    tier.amountCad +
+    ' CAD "' +
+    tier.title +
+    '" digital gift certificate.\nRecipient Name:\nPersonal Holiday Note:\n';
+  const mailHref =
+    'mailto:' +
+    brand.email +
+    '?subject=' +
+    encodeURIComponent(mailSubject) +
+    '&body=' +
+    encodeURIComponent(mailBody);
+  return { ...tier, featured, smsHref, mailHref };
+});
+
+const seoConfig: PageSeoConfig = {
+  title: gift.metaTitle,
+  description: gift.metaDescription,
+  canonicalPath: '/gift-a-clean',
+  ogImage: photo.variants['1024'].webp.path,
+  preloadHeroImage: photo.variants['1024'].avif.path,
+  serviceSchema: {
+    name: 'LevelUp Cleaning Edmonton Gift Certificates',
+    description: gift.metaDescription,
+    lowPriceCad: 150,
+    highPriceCad: 350,
+  },
+  faqs: gift.faqs,
+  breadcrumbs: [
+    { name: 'Home', path: '/' },
+    { name: 'Gift a Clean', path: '/gift-a-clean' },
+  ],
+};
+---
+
+<MainLayout seoConfig={seoConfig} ctaHref="#gift-tiers">
+  <section class="surface-quiet-luxury border-b border-mist/25 py-10 sm:py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-10 lg:grid-cols-12 lg:items-center">
+        <div class="lg:col-span-7 space-y-5">
+          <span class="inline-flex items-center gap-2 rounded-full border border-brass/55 bg-brass/18 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-spruce">
+            <span class="h-1.5 w-1.5 rounded-full bg-brass" aria-hidden="true"></span>
+            Same-Day Digital Gift Certificates • Zero Expiry
+          </span>
+
+          <h1 class="font-serif text-4xl sm:text-5xl font-semibold leading-tight text-spruce">
+            {gift.h1}
+          </h1>
+
+          <p class="text-base sm:text-lg leading-relaxed text-spruce/85">
+            {gift.subtitle}
+          </p>
+
+          <p class="rounded-2xl border border-mist/35 bg-card p-4 text-xs sm:text-sm leading-relaxed text-spruce/85">
+            {gift.holidayBannerNote}
+          </p>
+
+          <div class="flex flex-wrap items-center gap-3 pt-1">
+            <a
+              href="#gift-tiers"
+              class="inline-flex min-h-[48px] items-center justify-center rounded-full bg-eucalyptus px-6 py-3 text-sm font-semibold text-linen shadow-xs transition hover:bg-eucalyptus-hover"
+            >
+              Choose Gift Amount ($150–$350) →
+            </a>
+            <a
+              href={`sms:${brand.phoneE164}?&body=${encodeURIComponent("Hi LevelUp Cleaning! I'd like to order a digital Gift a Clean certificate for Edmonton.")}`}
+              class="inline-flex min-h-[48px] items-center justify-center rounded-full border border-spruce/30 bg-card px-5 py-3 text-sm font-semibold text-spruce transition hover:border-eucalyptus"
+            >
+              Text {brand.phoneDisplay}
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <div class="overflow-hidden rounded-3xl border border-mist/35 bg-card shadow-lg">
+            <picture>
+              <source type="image/avif" srcset={photo.srcset.avif} sizes="(min-width: 1024px) 42vw, 100vw" />
+              <source type="image/webp" srcset={photo.srcset.webp} sizes="(min-width: 1024px) 42vw, 100vw" />
+              <img
+                src={photo.fallback.path}
+                alt={photo.alt}
+                width="1440"
+                height="1080"
+                fetchpriority="high"
+                class="aspect-[4/3] w-full object-cover"
+              />
+            </picture>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gift Certificate Tiers -->
+  <section id="gift-tiers" class="py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto">
+        <span class="text-xs font-bold uppercase tracking-wider text-eucalyptus">
+          Instant Printable &amp; Email Delivery
+        </span>
+        <h2 class="mt-2 font-serif text-3xl sm:text-4xl font-semibold text-spruce">
+          Select Your Digital Gift Certificate
+        </h2>
+        <p class="mt-2 text-sm text-spruce/80">
+          Paid gift certificate dollar value never expires in Alberta.
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-6 lg:grid-cols-3">
+        {enrichedTiers.map((tier) => (
+          <article
+            class={
+              tier.featured
+                ? 'flex flex-col justify-between rounded-3xl border border-eucalyptus bg-spruce p-6 sm:p-8 text-linen shadow-xl'
+                : 'flex flex-col justify-between rounded-3xl border border-mist/40 bg-card p-6 sm:p-8 text-spruce shadow-sm'
+            }
+          >
+            <div class="space-y-4">
+              <span
+                class={
+                  tier.featured
+                    ? 'inline-block rounded-full border border-brass/60 bg-brass/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-linen'
+                    : 'inline-block rounded-full border border-brass/45 bg-brass/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-spruce'
+                }
+              >
+                {tier.badge}
+              </span>
+
+              <div>
+                <h3 class={tier.featured ? 'font-serif text-2xl font-semibold text-linen' : 'font-serif text-2xl font-semibold text-spruce'}>
+                  {tier.title}
+                </h3>
+                <p class="mt-2 flex items-baseline gap-1.5">
+                  <span class="font-serif text-5xl font-semibold">${tier.amountCad}</span>
+                  <span class={tier.featured ? 'text-xs font-semibold text-linen/80' : 'text-xs font-semibold text-spruce/75'}>
+                    CAD certificate credit
+                  </span>
+                </p>
+              </div>
+
+              <p class={tier.featured ? 'text-sm leading-relaxed text-linen/85' : 'text-sm leading-relaxed text-spruce/80'}>
+                {tier.bestFor}
+              </p>
+
+              <ul class="space-y-2.5 border-t border-current/15 pt-4 text-xs sm:text-sm">
+                {tier.highlights.map((hl) => (
+                  <li class="flex items-start gap-2.5">
+                    <span class={tier.featured ? 'font-bold mt-0.5 text-brass' : 'font-bold mt-0.5 text-eucalyptus'} aria-hidden="true">
+                      ✓
+                    </span>
+                    <span>{hl}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="mt-7 space-y-2.5 pt-2">
+              <a
+                href={tier.smsHref}
+                class={
+                  tier.featured
+                    ? 'inline-flex min-h-[48px] w-full items-center justify-center rounded-full bg-eucalyptus px-5 py-3 text-sm font-semibold text-linen transition hover:bg-eucalyptus-hover'
+                    : 'inline-flex min-h-[48px] w-full items-center justify-center rounded-full bg-spruce px-5 py-3 text-sm font-semibold text-linen transition hover:bg-eucalyptus'
+                }
+              >
+                Order ${tier.amountCad} Certificate via SMS →
+              </a>
+              <a
+                href={tier.mailHref}
+                class={
+                  tier.featured
+                    ? 'inline-flex min-h-[44px] w-full items-center justify-center rounded-full border border-linen/30 px-4 py-2 text-xs font-semibold text-linen transition hover:bg-linen/10'
+                    : 'inline-flex min-h-[44px] w-full items-center justify-center rounded-full border border-spruce/25 px-4 py-2 text-xs font-semibold text-spruce transition hover:border-eucalyptus'
+                }
+              >
+                Or Order by Email ({brand.email})
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="py-14 sm:py-18 border-t border-mist/25 bg-card/55">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h2 class="font-serif text-2xl sm:text-3xl font-semibold text-spruce">
+        How Digital Delivery &amp; Redemption Work
+      </h2>
+      <div class="mt-6 grid gap-6 md:grid-cols-3">
+        {gift.howItWorks.map((step) => (
+          <div class="rounded-3xl border border-mist/35 bg-linen p-6 space-y-2">
+            <span class="font-mono text-xs font-bold uppercase tracking-widest text-eucalyptus">
+              Step {step.step}
+            </span>
+            <h3 class="font-serif text-xl font-semibold text-spruce">{step.title}</h3>
+            <p class="text-sm leading-relaxed text-spruce/80">{step.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <TrustProtocol showComparison={false} includeModal={false} />
+
+  <FaqAccordion
+    eyebrow="GIFT CERTIFICATE FAQS"
+    title="Alberta Gift Card & Redemption Details"
+    faqs={gift.faqs}
+  />
+</MainLayout>

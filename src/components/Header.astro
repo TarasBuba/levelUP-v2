@@ -1,0 +1,276 @@
+---
+import siteContext from '../data/site_context_lock.json';
+import siteCopy from '../data/site_copy.json';
+
+const { brand } = siteContext;
+const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const hasLocalCalculator =
+  pathname === '/' ||
+  pathname === '/move-out-cleaning-edmonton' ||
+  pathname === '/deep-cleaning-edmonton' ||
+  pathname === '/recurring-cleaning-edmonton' ||
+  pathname === '/airbnb-cleaning-edmonton' ||
+  pathname.startsWith('/areas/');
+
+const quoteHref = hasLocalCalculator ? '#quote-calculator' : '/#quote-calculator';
+
+const serviceLinks = [
+  {
+    label: 'Move-Out / Move-In Inspection Clean',
+    sub: 'Oven, Fridge & Cabinets Included Free • From $235',
+    href: '/move-out-cleaning-edmonton',
+  },
+  {
+    label: 'The 50-Point Deep Reset',
+    sub: 'Baseboards, Hard-Water Glass & Salt Reset • From $210',
+    href: '/deep-cleaning-edmonton',
+  },
+  {
+    label: 'Recurring Eco-Maintenance',
+    sub: 'Save up to 15% Weekly / 10% Bi-Weekly • From $130',
+    href: '/recurring-cleaning-edmonton',
+  },
+  {
+    label: 'Airbnb & Short-Term 5-Star Turnover',
+    sub: 'Photo-Verified Same-Day Staging • From $120',
+    href: '/airbnb-cleaning-edmonton',
+  },
+];
+
+const areaLinks = siteCopy.areaHubs.map((hub) => ({
+  label: hub.title.split('(')[0].trim(),
+  sub: hub.fsaCodes.slice(0, 4).join(', '),
+  href: `/areas/${hub.slug}`,
+}));
+---
+
+<header class="sticky top-0 z-40 border-b border-mist/25 bg-linen/95 backdrop-blur-md">
+  <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6 lg:px-8">
+    <a
+      href="/"
+      class="group flex min-h-[48px] items-center gap-3 rounded-xl pr-2 min-w-0"
+      aria-label="LevelUp Cleaning Edmonton Home"
+    >
+      <span class="h-11 w-11 shrink-0 rounded-full bg-spruce p-0.5 ring-1 ring-spruce/20 shadow-xs transition group-hover:ring-eucalyptus">
+        <img
+          src="/media/logo-badge.webp"
+          alt="LevelUp Cleaning emblem"
+          width="44"
+          height="44"
+          class="h-full w-full rounded-full object-cover"
+        />
+      </span>
+      <span class="min-w-0">
+        <span class="block font-serif text-lg font-semibold leading-tight text-spruce truncate">
+          {brand.companyName}
+        </span>
+        <span class="block text-[11px] font-semibold tracking-wider uppercase text-spruce/75 truncate">
+          {brand.badgeLabel}
+        </span>
+      </span>
+    </a>
+
+    <!-- Desktop Navigation -->
+    <nav aria-label="Primary Navigation" class="hidden lg:flex items-center gap-1">
+      <details class="relative" data-nav-dropdown>
+        <summary class="inline-flex min-h-[44px] cursor-pointer items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-semibold text-spruce transition hover:bg-card">
+          <span>Services</span>
+          <svg class="h-4 w-4 text-spruce/70" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+          </svg>
+        </summary>
+        <div class="absolute left-0 mt-2 w-92 rounded-2xl border border-mist/35 bg-linen p-2.5 shadow-xl">
+          {serviceLinks.map((item) => (
+            <a
+              href={item.href}
+              class="block min-h-[48px] rounded-xl px-3.5 py-2.5 transition hover:bg-card"
+            >
+              <span class="block text-sm font-semibold text-spruce">{item.label}</span>
+              <span class="block text-xs text-spruce/75 mt-0.5">{item.sub}</span>
+            </a>
+          ))}
+        </div>
+      </details>
+
+      <details class="relative" data-nav-dropdown>
+        <summary class="inline-flex min-h-[44px] cursor-pointer items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-semibold text-spruce transition hover:bg-card">
+          <span>Edmonton Areas</span>
+          <svg class="h-4 w-4 text-spruce/70" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+          </svg>
+        </summary>
+        <div class="absolute left-0 mt-2 w-84 rounded-2xl border border-mist/35 bg-linen p-2.5 shadow-xl">
+          {areaLinks.map((area) => (
+            <a
+              href={area.href}
+              class="block min-h-[48px] rounded-xl px-3.5 py-2.5 transition hover:bg-card"
+            >
+              <span class="block text-sm font-semibold text-spruce">{area.label}</span>
+              <span class="block text-xs text-spruce/75 mt-0.5">FSAs: {area.sub}</span>
+            </a>
+          ))}
+        </div>
+      </details>
+
+      <a
+        href="/guides"
+        class="inline-flex min-h-[44px] items-center rounded-full px-3.5 py-2 text-sm font-semibold text-spruce transition hover:bg-card"
+      >
+        Surface &amp; Move-Out Guides
+      </a>
+      <a
+        href="/gift-a-clean"
+        class="inline-flex min-h-[44px] items-center rounded-full px-3.5 py-2 text-sm font-semibold text-spruce transition hover:bg-card"
+      >
+        Gift a Clean
+      </a>
+    </nav>
+
+    <!-- Desktop Right Actions -->
+    <div class="hidden lg:flex items-center gap-2.5 shrink-0">
+      <a
+        href={`tel:${brand.phoneE164}`}
+        class="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-mist/40 bg-card px-4 py-2 text-xs font-semibold text-spruce transition hover:border-eucalyptus"
+      >
+        <span>{brand.phoneDisplay}</span>
+      </a>
+      <a
+        href={quoteHref}
+        class="inline-flex min-h-[44px] items-center justify-center rounded-full bg-eucalyptus px-5 py-2.5 text-sm font-semibold text-linen shadow-xs transition hover:bg-eucalyptus-hover"
+      >
+        Get Instant Price
+      </a>
+    </div>
+
+    <!-- Mobile Actions -->
+    <div class="flex items-center gap-2 lg:hidden">
+      <a
+        href={quoteHref}
+        class="hidden sm:inline-flex whitespace-nowrap min-h-[44px] items-center justify-center rounded-full bg-eucalyptus px-3.5 py-2 text-xs font-semibold text-linen shadow-xs transition hover:bg-eucalyptus-hover"
+      >
+        Instant Price
+      </a>
+      <button
+        type="button"
+        data-mobile-menu-toggle
+        aria-expanded="false"
+        aria-controls="mobile-nav-drawer"
+        aria-label="Open navigation menu"
+        class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-mist/40 bg-card text-spruce transition hover:border-eucalyptus"
+      >
+        <svg data-icon-open class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+        <svg data-icon-close class="hidden h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Drawer -->
+  <div
+    id="mobile-nav-drawer"
+    hidden
+    class="border-t border-mist/25 bg-linen px-4 py-4 shadow-lg lg:hidden"
+  >
+    <div class="mx-auto max-w-7xl space-y-4">
+      <div>
+        <p class="px-2 text-xs font-semibold tracking-wider uppercase text-spruce/70">Cleaning Packages</p>
+        <div class="mt-1 grid gap-1">
+          {serviceLinks.map((item) => (
+            <a
+              href={item.href}
+              class="flex min-h-[48px] flex-col justify-center rounded-xl px-3 py-2 transition hover:bg-card"
+            >
+              <span class="text-sm font-semibold text-spruce">{item.label}</span>
+              <span class="text-xs text-spruce/75">{item.sub}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div class="border-t border-mist/25 pt-3">
+        <p class="px-2 text-xs font-semibold tracking-wider uppercase text-spruce/70">Edmonton &amp; Metro Hubs</p>
+        <div class="mt-1 grid sm:grid-cols-2 gap-1">
+          {areaLinks.map((area) => (
+            <a
+              href={area.href}
+              class="flex min-h-[44px] items-center justify-between rounded-xl px-3 py-2 text-sm font-semibold text-spruce transition hover:bg-card"
+            >
+              <span>{area.label}</span>
+              <span class="text-xs font-normal text-spruce/70">{area.sub}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div class="border-t border-mist/25 pt-3 grid grid-cols-2 gap-2">
+        <a
+          href="/guides"
+          class="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-mist/35 bg-card px-3 py-2 text-xs font-semibold text-spruce"
+        >
+          Edmonton Guides
+        </a>
+        <a
+          href="/gift-a-clean"
+          class="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-brass/45 bg-brass/15 px-3 py-2 text-xs font-semibold text-spruce"
+        >
+          Gift a Clean
+        </a>
+      </div>
+
+      <div class="border-t border-mist/25 pt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-spruce/80">
+        <a href={`tel:${brand.phoneE164}`} class="inline-flex min-h-[44px] items-center font-semibold text-spruce">
+          Call {brand.phoneDisplay}
+        </a>
+        <a href={`sms:${brand.phoneE164}`} class="inline-flex min-h-[44px] items-center font-semibold text-eucalyptus">
+          Text {brand.phoneDisplay}
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const dropdowns = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-nav-dropdown]'));
+  document.addEventListener('click', (event) => {
+    const target = event.target as Node | null;
+    dropdowns.forEach((dd) => {
+      if (dd.open && target && !dd.contains(target)) {
+        dd.open = false;
+      }
+    });
+  });
+
+  dropdowns.forEach((dd) => {
+    dd.addEventListener('toggle', () => {
+      if (dd.open) {
+        dropdowns.forEach((other) => {
+          if (other !== dd) other.open = false;
+        });
+      }
+    });
+  });
+
+  const menuBtn = document.querySelector<HTMLButtonElement>('[data-mobile-menu-toggle]');
+  const drawer = document.getElementById('mobile-nav-drawer');
+  if (menuBtn && drawer) {
+    const openIcon = menuBtn.querySelector('[data-icon-open]');
+    const closeIcon = menuBtn.querySelector('[data-icon-close]');
+    const closeMenu = () => {
+      drawer.hidden = true;
+      menuBtn.setAttribute('aria-expanded', 'false');
+      openIcon?.classList.remove('hidden');
+      closeIcon?.classList.add('hidden');
+    };
+    menuBtn.addEventListener('click', () => {
+      const willOpen = drawer.hidden;
+      drawer.hidden = !willOpen;
+      menuBtn.setAttribute('aria-expanded', String(willOpen));
+      openIcon?.classList.toggle('hidden', willOpen);
+      closeIcon?.classList.toggle('hidden', !willOpen);
+    });
+    drawer.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+  }
+</script>

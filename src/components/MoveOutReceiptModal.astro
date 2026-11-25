@@ -1,0 +1,181 @@
+---
+import siteContext from '../data/site_context_lock.json';
+
+interface Props {
+  showTrigger?: boolean;
+  triggerLabel?: string;
+}
+
+const {
+  showTrigger = false,
+  triggerLabel = 'Preview Sample Landlord Receipt',
+} = Astro.props;
+
+const { brand } = siteContext;
+---
+
+{showTrigger && (
+  <button
+    type="button"
+    data-open-receipt-modal
+    class="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-spruce/25 bg-linen px-4 py-2 text-xs sm:text-sm font-semibold text-spruce shadow-2xs transition hover:border-eucalyptus hover:bg-card cursor-pointer"
+  >
+    <svg class="h-4 w-4 text-eucalyptus shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+    </svg>
+    <span>{triggerLabel}</span>
+  </button>
+)}
+
+<dialog
+  id="landlord-receipt-modal"
+  closedby="any"
+  aria-labelledby="receipt-modal-title"
+  class="m-auto w-[calc(100%-1.5rem)] max-w-2xl rounded-3xl border border-mist/40 bg-linen p-0 text-spruce shadow-2xl"
+>
+  <div class="p-5 sm:p-8">
+    <div class="flex items-start justify-between gap-4 border-b border-mist/30 pb-4">
+      <div>
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-brass/50 bg-brass/15 px-3 py-1 text-[11px] font-semibold tracking-wider uppercase text-spruce">
+          Alberta RTA Inspection Ready
+        </span>
+        <h1 id="receipt-modal-title" class="mt-2 font-serif text-xl sm:text-2xl font-semibold text-spruce">
+          Official Itemized Move-Out Cleaning Receipt
+        </h1>
+        <p class="mt-1 text-xs sm:text-sm text-spruce/80">
+          Formatted for Edmonton landlords, condo property managers, and side-by-side RTA walkthrough reports.
+        </p>
+      </div>
+      <form method="dialog">
+        <button
+          type="submit"
+          value="close"
+          autofocus
+          aria-label="Close sample receipt modal"
+          class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-mist/40 bg-card text-spruce transition hover:border-eucalyptus cursor-pointer"
+        >
+          ✕
+        </button>
+      </form>
+    </div>
+
+    <!-- Simulated Official PDF Document Card -->
+    <div class="mt-5 rounded-2xl border border-spruce/15 bg-card/80 p-4 sm:p-6 text-xs sm:text-sm space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-mist/25 pb-3">
+        <div>
+          <p class="font-serif text-base font-semibold text-spruce">{brand.legalName}</p>
+          <p class="text-xs text-spruce/75">{brand.badgeLabel} • City of Edmonton Licensed</p>
+          <p class="text-xs text-spruce/75">{brand.phoneDisplay} • {brand.email}</p>
+        </div>
+        <div class="text-left sm:text-right">
+          <p class="font-mono text-xs font-semibold text-spruce">RECEIPT #LUP-YEG-2026-0842</p>
+          <p class="text-xs text-eucalyptus font-semibold">STATUS: PAID POST-WALKTHROUGH</p>
+        </div>
+      </div>
+
+      <div class="grid gap-2 sm:grid-cols-2 text-xs text-spruce/85">
+        <div>
+          <span class="font-semibold text-spruce">Service Address:</span> Suite 1408, Oliver / Wîhkwêntôwin, Edmonton, AB (T5K)
+        </div>
+        <div>
+          <span class="font-semibold text-spruce">Verification:</span> 50-Point Sign-Off + Timestamped Photo Log
+        </div>
+      </div>
+
+      <div class="space-y-2 border-y border-mist/25 py-3">
+        <div class="flex items-start justify-between gap-3">
+          <span>2-Bedroom / 2-Bath Move-Out Inspection Package (50-Point Checklist)</span>
+          <span class="font-semibold shrink-0">$310.00 CAD</span>
+        </div>
+        <div class="flex items-start justify-between gap-3 text-spruce/85">
+          <span>✓ Inside Oven Cavity, Racks &amp; Inner Viewing Glass Degreased</span>
+          <span class="font-semibold text-eucalyptus shrink-0">Included ($0.00)</span>
+        </div>
+        <div class="flex items-start justify-between gap-3 text-spruce/85">
+          <span>✓ Inside Refrigerator, Freezer Shelves, Crispers &amp; Door Gaskets</span>
+          <span class="font-semibold text-eucalyptus shrink-0">Included ($0.00)</span>
+        </div>
+        <div class="flex items-start justify-between gap-3 text-spruce/85">
+          <span>✓ Inside All Kitchen &amp; Bathroom Cabinets, Drawers &amp; Closets</span>
+          <span class="font-semibold text-eucalyptus shrink-0">Included ($0.00)</span>
+        </div>
+        <div class="flex items-start justify-between gap-3 text-spruce/85">
+          <span>✓ Shower Glass, Fixtures, Grout, Baseboards &amp; HEPA/Mopped Floors</span>
+          <span class="font-semibold text-eucalyptus shrink-0">Verified ✓</span>
+        </div>
+        <div class="flex items-start justify-between gap-3 text-spruce/85">
+          <span>✓ Edmonton Core Travel Zone (T5K)</span>
+          <span class="font-semibold shrink-0">$0.00 CAD</span>
+        </div>
+      </div>
+
+      <div class="space-y-1 text-right text-xs sm:text-sm">
+        <p class="text-spruce/80">Pre-Tax Subtotal: <span class="font-semibold text-spruce">$310.00 CAD</span></p>
+        <p class="text-spruce/80">5% Alberta GST: <span class="font-semibold text-spruce">$15.50 CAD</span></p>
+        <p class="text-sm sm:text-base font-bold text-spruce">Total Settled After Walkthrough: $325.50 CAD</p>
+      </div>
+    </div>
+
+    <div class="mt-5 flex flex-wrap items-center justify-between gap-3">
+      <p class="text-xs text-spruce/75">
+        Emailed as an official itemized PDF immediately upon walkthrough completion.
+      </p>
+      <div class="flex items-center gap-2">
+        <form method="dialog">
+          <button
+            type="submit"
+            value="close"
+            class="inline-flex min-h-[44px] items-center justify-center rounded-full border border-mist/40 bg-card px-4 py-2 text-xs sm:text-sm font-semibold text-spruce transition hover:border-eucalyptus cursor-pointer"
+          >
+            Close Preview
+          </button>
+        </form>
+        <a
+          href="#quote-calculator"
+          data-close-receipt-on-click
+          class="inline-flex min-h-[44px] items-center justify-center rounded-full bg-eucalyptus px-5 py-2 text-xs sm:text-sm font-semibold text-linen transition hover:bg-eucalyptus-hover"
+        >
+          Quote My Move-Out →
+        </a>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const receiptDialog = document.getElementById('landlord-receipt-modal') as HTMLDialogElement | null;
+  if (receiptDialog) {
+    document.querySelectorAll<HTMLElement>('[data-open-receipt-modal]').forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        if (!receiptDialog.open) {
+          receiptDialog.showModal();
+        }
+      });
+    });
+
+    receiptDialog.querySelectorAll<HTMLElement>('[data-close-receipt-on-click]').forEach((el) => {
+      el.addEventListener('click', () => receiptDialog.close());
+    });
+
+    receiptDialog.addEventListener('close', () => {
+      receiptDialog.returnValue = '';
+    });
+
+    // Progressive light-dismiss fallback for browsers without native dialog.closedBy (e.g. Safari)
+    if (!('closedBy' in HTMLDialogElement.prototype)) {
+      const isOutside = (e: PointerEvent, d: HTMLDialogElement) => {
+        const r = d.getBoundingClientRect();
+        return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+      };
+      let pressedOutside = false;
+      receiptDialog.addEventListener('pointerdown', (e) => {
+        pressedOutside = isOutside(e, receiptDialog);
+      });
+      receiptDialog.addEventListener('pointerup', (e) => {
+        if (pressedOutside && isOutside(e, receiptDialog)) {
+          receiptDialog.close();
+        }
+      });
+    }
+  }
+</script>

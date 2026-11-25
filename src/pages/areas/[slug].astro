@@ -1,0 +1,227 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import LiveSlotsBadge from '../../components/LiveSlotsBadge.astro';
+import InstantCalculator from '../../components/InstantCalculator.astro';
+import TrustProtocol from '../../components/TrustProtocol.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+
+import siteCopy from '../../data/site_copy.json';
+import mediaManifest from '../../data/media_manifest.json';
+import type { AreaHubData, PageSeoConfig } from '../../types/contracts';
+
+export function getStaticPaths() {
+  return siteCopy.areaHubs.map((hub) => ({
+    params: { slug: hub.slug },
+    props: { hub: hub as AreaHubData },
+  }));
+}
+
+interface Props {
+  hub: AreaHubData;
+}
+
+const { hub } = Astro.props;
+
+const photoBySlug: Record<string, typeof mediaManifest.photos.hero_kitchen> = {
+  'central-edmonton-condos': mediaManifest.photos.moveout_condo,
+  'southwest-edmonton-homes': mediaManifest.photos.hero_kitchen,
+  'west-mature-edmonton': mediaManifest.photos.xray_bathroom,
+  'st-albert-sherwood-park': mediaManifest.photos.holiday_living,
+};
+
+const heroPhoto = photoBySlug[hub.slug] || mediaManifest.photos.hero_kitchen;
+const lowPrice = Math.min(...hub.sampleQuotes.map((q) => q.priceCad));
+const highPrice = Math.max(...hub.sampleQuotes.map((q) => q.priceCad));
+
+const seoConfig: PageSeoConfig = {
+  title: hub.metaTitle,
+  description: hub.metaDescription,
+  canonicalPath: `/areas/${hub.slug}`,
+  ogImage: heroPhoto.variants['1024'].webp.path,
+  preloadHeroImage: heroPhoto.variants['1024'].avif.path,
+  serviceSchema: {
+    name: hub.title,
+    description: hub.metaDescription,
+    lowPriceCad: lowPrice,
+    highPriceCad: highPrice,
+  },
+  faqs: hub.faqs,
+  breadcrumbs: [
+    { name: 'Home', path: '/' },
+    { name: hub.title.split('(')[0].trim(), path: `/areas/${hub.slug}` },
+  ],
+};
+
+const defaultBeds = hub.slug === 'central-edmonton-condos' ? 2 : 3;
+const defaultFreq = hub.popularPackage === 'regular' ? 'biweekly' : 'one_time';
+const otherHubs = siteCopy.areaHubs.filter((h) => h.slug !== hub.slug);
+---
+
+<MainLayout seoConfig={seoConfig} ctaHref="#quote-calculator">
+  <!-- Area Hub Hero -->
+  <section class="surface-quiet-luxury border-b border-mist/25 py-10 sm:py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-10 lg:grid-cols-12 lg:items-center">
+        <div class="lg:col-span-7 space-y-5">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="inline-flex items-center rounded-full border border-eucalyptus/40 bg-eucalyptus/12 px-3.5 py-1 font-mono text-xs font-semibold text-spruce">
+              FSAs: {hub.fsaCodes.join(' • ')}
+            </span>
+            <LiveSlotsBadge compact />
+          </div>
+
+          <h1 class="font-serif text-3xl sm:text-5xl font-semibold leading-tight text-spruce">
+            {hub.title}
+          </h1>
+
+          <div class="flex flex-wrap gap-2">
+            {hub.neighborhoods.map((hood) => (
+              <span class="rounded-full border border-mist/35 bg-card px-3 py-1 text-xs font-medium text-spruce">
+                {hood}
+              </span>
+            ))}
+          </div>
+
+          <p class="text-sm sm:text-base leading-relaxed text-spruce/85">
+            {hub.housingProfile}
+          </p>
+
+          <div class="flex flex-wrap items-center gap-3 pt-1">
+            <a
+              href="#quote-calculator"
+              class="inline-flex min-h-[48px] items-center justify-center rounded-full bg-eucalyptus px-6 py-3 text-sm font-semibold text-linen shadow-xs transition hover:bg-eucalyptus-hover"
+            >
+              Check My Postal Code &amp; Rate →
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <div class="overflow-hidden rounded-3xl border border-mist/35 bg-card shadow-lg">
+            <picture>
+              <source type="image/avif" srcset={heroPhoto.srcset.avif} sizes="(min-width: 1024px) 42vw, 100vw" />
+              <source type="image/webp" srcset={heroPhoto.srcset.webp} sizes="(min-width: 1024px) 42vw, 100vw" />
+              <img
+                src={heroPhoto.fallback.path}
+                alt={heroPhoto.alt}
+                width={heroPhoto.variants['1440'].width}
+                height={heroPhoto.variants['1440'].height}
+                fetchpriority="high"
+                class="w-full object-cover"
+              />
+            </picture>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Local Access Notes, Pain Points & Sample Pre-Tax CAD Quotes -->
+  <section class="py-14 sm:py-18 border-b border-mist/25 bg-card/55">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
+      <div class="grid gap-8 lg:grid-cols-12">
+        <div class="lg:col-span-6 rounded-3xl border border-mist/35 bg-linen p-6 sm:p-8 space-y-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-eucalyptus">
+            Parking, Access &amp; Travel Zone Protocol
+          </span>
+          <h2 class="font-serif text-2xl font-semibold text-spruce">
+            Arrival &amp; Key Handoff Details
+          </h2>
+          <p class="text-sm sm:text-base leading-relaxed text-spruce/85">
+            {hub.parkingAndAccessNotes}
+          </p>
+        </div>
+
+        <div class="lg:col-span-6 rounded-3xl border border-mist/35 bg-linen p-6 sm:p-8 space-y-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-eucalyptus">
+            Neighbourhood Surface Priorities
+          </span>
+          <h2 class="font-serif text-2xl font-semibold text-spruce">
+            Local Home Challenges We Solve
+          </h2>
+          <ul class="space-y-2.5 text-sm text-spruce/85">
+            {hub.localPainPoints.map((pt) => (
+              <li class="flex items-start gap-2.5">
+                <span class="mt-0.5 text-eucalyptus font-bold" aria-hidden="true">✓</span>
+                <span>{pt}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <!-- Sample Flat-Rate Benchmarks -->
+      <div>
+        <div class="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+          <h2 class="font-serif text-2xl sm:text-3xl font-semibold text-spruce">
+            Sample Pre-Tax CAD Packages in This Area
+          </h2>
+          <span class="text-xs font-semibold text-spruce/75">
+            + 5% AB GST where applicable • $0 Upfront Deposit
+          </span>
+        </div>
+
+        <div class="mt-6 grid gap-5 md:grid-cols-3">
+          {hub.sampleQuotes.map((sq) => (
+            <article class="flex flex-col justify-between rounded-3xl border border-mist/35 bg-linen p-6 shadow-2xs">
+              <div>
+                <h3 class="font-serif text-lg font-semibold text-spruce">{sq.label}</h3>
+                <p class="mt-3 font-serif text-4xl font-semibold text-eucalyptus">
+                  ${sq.priceCad}{' '}
+                  <span class="font-sans text-xs font-semibold text-spruce/75">CAD pre-tax</span>
+                </p>
+                <p class="mt-3 text-xs sm:text-sm leading-relaxed text-spruce/80">
+                  {sq.includes}
+                </p>
+              </div>
+              <a
+                href="#quote-calculator"
+                class="mt-5 inline-flex min-h-[44px] items-center justify-center rounded-full border border-spruce/25 bg-card px-4 py-2 text-xs font-semibold text-spruce transition hover:border-eucalyptus hover:bg-eucalyptus hover:text-linen"
+              >
+                Customize This Quote →
+              </a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Area-Tailored Instant Calculator -->
+  <InstantCalculator
+    defaultService={hub.popularPackage}
+    defaultBedrooms={defaultBeds}
+    defaultBathrooms={2}
+    defaultFrequency={defaultFreq}
+  />
+
+  <TrustProtocol showComparison={false} includeModal={true} />
+
+  <FaqAccordion
+    eyebrow="LOCAL NEIGHBOURHOOD FAQS"
+    title={`Questions From ${hub.title.split('(')[0].trim()} Clients`}
+    faqs={hub.faqs}
+  />
+
+  <!-- Cross-links to other Greater Edmonton hubs -->
+  <section class="py-12 border-t border-mist/25 bg-card/45">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h2 class="font-serif text-xl font-semibold text-spruce">
+        Other Greater Edmonton Dispatch Hubs
+      </h2>
+      <div class="mt-4 grid gap-4 sm:grid-cols-3">
+        {otherHubs.map((other) => (
+          <a
+            href={`/areas/${other.slug}`}
+            class="flex min-h-[60px] flex-col justify-center rounded-2xl border border-mist/35 bg-linen p-4 transition hover:border-eucalyptus"
+          >
+            <span class="text-sm font-semibold text-spruce">{other.title}</span>
+            <span class="mt-1 font-mono text-xs text-eucalyptus">
+              {other.fsaCodes.slice(0, 4).join(' • ')}
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</MainLayout>

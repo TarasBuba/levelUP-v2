@@ -1,0 +1,152 @@
+---
+import AdFunnelLayout from '../../layouts/AdFunnelLayout.astro';
+import LiveSlotsBadge from '../../components/LiveSlotsBadge.astro';
+import InstantCalculator from '../../components/InstantCalculator.astro';
+import RoomXRay from '../../components/RoomXRay.astro';
+import ChecklistTabs from '../../components/ChecklistTabs.astro';
+import TrustProtocol from '../../components/TrustProtocol.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+
+import siteCopy from '../../data/site_copy.json';
+import strategy from '../../data/strategy.json';
+import mediaManifest from '../../data/media_manifest.json';
+import { getHeadlinePromo } from '../../lib/promo';
+import type { PageSeoConfig } from '../../types/contracts';
+
+const lp = siteCopy.landingPages.deepReset;
+const funnel = strategy.adFunnels['deep-reset'];
+const defaultCode = funnel.adCreativeMatch.defaultPromoPreset;
+const defaultPromo = getHeadlinePromo(null, defaultCode);
+const shortPromo = `$${defaultPromo.discountCad} OFF`;
+
+const headlineRendered = lp.headline.replace(/\{PROMO\}/g, shortPromo);
+const ctaRendered = lp.primaryCta.replace(/\{PROMO\}/g, shortPromo);
+
+const photo = mediaManifest.photos.hero_kitchen;
+const deepSvc = siteCopy.services.deep_clean;
+
+const seoConfig: PageSeoConfig = {
+  title: lp.metaTitle,
+  description: lp.metaDescription,
+  canonicalPath: '/lp/deep-reset',
+  noindex: true,
+  ogImage: photo.variants['1024'].webp.path,
+  preloadHeroImage: photo.variants['1024'].avif.path,
+};
+---
+
+<AdFunnelLayout seoConfig={seoConfig} defaultPromoCode={defaultCode}>
+  <section class="surface-quiet-luxury border-b border-mist/25 py-8 sm:py-14">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-8 lg:grid-cols-12 lg:items-center">
+        <div class="lg:col-span-7 space-y-5">
+          <div class="flex flex-wrap items-center gap-2">
+            <span
+              data-promo-badge
+              class="inline-flex items-center rounded-full border border-brass/55 bg-brass/20 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-spruce"
+            >
+              {defaultPromo.badge}
+            </span>
+            <LiveSlotsBadge compact />
+          </div>
+
+          <p class="text-xs font-bold uppercase tracking-wider text-eucalyptus">
+            {lp.eyebrow}
+          </p>
+
+          <h1
+            data-promo-template={lp.headline}
+            class="font-serif text-3xl sm:text-5xl font-semibold leading-tight text-spruce"
+          >
+            {headlineRendered}
+          </h1>
+
+          <p class="text-base sm:text-lg leading-relaxed text-spruce/85">
+            {lp.subheadline}
+          </p>
+
+          <ul class="space-y-2.5 text-sm text-spruce/90">
+            {lp.bulletPoints.map((pt) => (
+              <li class="flex items-start gap-2.5">
+                <span class="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-eucalyptus text-xs font-bold text-linen" aria-hidden="true">
+                  ✓
+                </span>
+                <span>{pt}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="flex flex-col sm:flex-row sm:items-center gap-3 pt-1">
+            <a
+              href="#quote-calculator"
+              data-promo-template={lp.primaryCta}
+              class="inline-flex min-h-[52px] items-center justify-center rounded-full bg-eucalyptus px-7 py-3.5 text-sm sm:text-base font-semibold text-linen shadow-sm transition hover:bg-eucalyptus-hover"
+            >
+              {ctaRendered}
+            </a>
+            <a
+              href="#room-xray"
+              class="inline-flex min-h-[52px] items-center justify-center rounded-full border border-spruce/30 bg-card px-5 py-3.5 text-xs sm:text-sm font-semibold text-spruce transition hover:border-eucalyptus"
+            >
+              Inspect 50-Point Room X-Ray
+            </a>
+          </div>
+
+          <div class="space-y-1 text-xs text-spruce/75">
+            <p class="font-semibold text-spruce">{lp.taxNote}</p>
+            <p>{lp.urgencyNote}</p>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <div class="overflow-hidden rounded-3xl border border-mist/35 bg-card shadow-xl">
+            <picture>
+              <source type="image/avif" srcset={photo.srcset.avif} sizes="(min-width: 1024px) 42vw, 100vw" />
+              <source type="image/webp" srcset={photo.srcset.webp} sizes="(min-width: 1024px) 42vw, 100vw" />
+              <img
+                src={photo.fallback.path}
+                alt={photo.alt}
+                width="1440"
+                height="810"
+                fetchpriority="high"
+                class="aspect-video w-full object-cover"
+              />
+            </picture>
+            <div class="bg-spruce px-5 py-4 text-xs text-linen space-y-1">
+              <p class="font-semibold text-brass">{funnel.primaryObjectionKiller.objection}</p>
+              <p class="text-linen/85 leading-relaxed">{funnel.primaryObjectionKiller.resolution}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Instant Calculator Pre-Loaded for 50-Point Deep Reset -->
+  <div class="bg-card/45 border-b border-mist/25">
+    <InstantCalculator
+      defaultService="deep_clean"
+      defaultBedrooms={3}
+      defaultBathrooms={2}
+      defaultFrequency="one_time"
+      defaultPromoCode={defaultCode}
+    />
+  </div>
+
+  <RoomXRay />
+
+  <ChecklistTabs
+    eyebrow="50-POINT DEEP RESET CHECKLIST"
+    title="Baseboards, Trim, Hard-Water Glass & Finish-Safe Care"
+    checklistByRoom={deepSvc.checklistByRoom}
+    whatIsExcluded={deepSvc.whatIsExcluded}
+  />
+
+  <TrustProtocol showComparison={false} includeModal={true} />
+
+  <FaqAccordion
+    eyebrow="DEEP RESET FAQS"
+    title="Surface Safety & Booking Questions"
+    faqs={deepSvc.faqs}
+  />
+</AdFunnelLayout>
