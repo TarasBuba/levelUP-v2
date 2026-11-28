@@ -119,11 +119,6 @@ function buildAddonsBreakdown(
   return { addonsDetail, addonsTotalCad, includedFreeSavingsCad };
 }
 
-/**
- * Computes a complete pre-tax CAD quote breakdown for either flat-rate packages
- * or custom hourly cleaning, enforcing Move-Out free appliance inclusions ($135 value),
- * FSA travel zones, recurring savings, promo resolution, and the $95 CAD minimum floor.
- */
 export function calculateQuote(input: QuoteInput): QuoteBreakdown {
   const isHourly = input.mode === 'hourly' || input.service === 'hourly';
   const frequency = normalizeFrequency(input.frequency);
@@ -236,9 +231,6 @@ export function calculateQuote(input: QuoteInput): QuoteBreakdown {
   };
 }
 
-/**
- * Builds a 1-tap pre-filled SMS URI (`sms:+17807101503?&body=...`) for mobile & desktop clients.
- */
 export function buildSmsPrefillHref(
   quote: QuoteBreakdown,
   postalCode?: string,

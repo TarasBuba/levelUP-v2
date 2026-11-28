@@ -1,0 +1,174 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import ChecklistTabs from '../components/ChecklistTabs.astro';
+import RoomXRay from '../components/RoomXRay.astro';
+import MoveOutReceiptModal from '../components/MoveOutReceiptModal.astro';
+import TrustProtocol from '../components/TrustProtocol.astro';
+
+import siteCopy from '../data/site_copy.json';
+import mediaManifest from '../data/media_manifest.json';
+import type { PageSeoConfig } from '../types/contracts';
+
+const heroPhoto = mediaManifest.photos.xray_bathroom;
+const servicesList = [
+  {
+    key: 'move_out',
+    shortLabel: 'Move-Out (50-Pt + Appliances)',
+    eyebrow: 'ALBERTA RTA MOVE-OUT INSPECTION SCOPE',
+    title: 'Move-Out / Move-In Cleaning Checklist',
+    subtitle: 'Inside Oven, Inside Fridge & Inside Cabinets included FREE ($135 value) plus itemized landlord receipt.',
+    svc: siteCopy.services.move_out,
+  },
+  {
+    key: 'deep_clean',
+    shortLabel: '50-Point Deep Reset',
+    eyebrow: 'TOP-TO-BOTTOM RESTORATION SCOPE',
+    title: '50-Point Deep Reset Checklist',
+    subtitle: 'Hand-wiped baseboards, cabinet fronts, winter road-salt grit removal & EPCOR hard-water glass care.',
+    svc: siteCopy.services.deep_clean,
+  },
+  {
+    key: 'regular',
+    shortLabel: 'Recurring Eco-Maintenance',
+    eyebrow: 'WEEKLY / BI-WEEKLY / MONTHLY SCOPE',
+    title: 'Recurring Eco-Maintenance Checklist',
+    subtitle: 'Consistent, bleach-free botanical maintenance for calm Edmonton weekends.',
+    svc: siteCopy.services.regular,
+  },
+  {
+    key: 'airbnb',
+    shortLabel: 'Airbnb 5-Star Turnover',
+    eyebrow: 'SUPERHOST SAME-DAY STAGING SCOPE',
+    title: 'Airbnb & Short-Term Turnover Checklist',
+    subtitle: 'Hotel-crisp linen staging, restock checks & timestamped SMS ready photos before 3 PM check-in.',
+    svc: siteCopy.services.airbnb,
+  },
+];
+
+const allSchemaItems = [
+  ...siteCopy.services.move_out.checklistByRoom.kitchen,
+  ...siteCopy.services.move_out.checklistByRoom.bathrooms,
+  ...siteCopy.services.move_out.checklistByRoom.bedroomsAndLiving,
+];
+
+const seoConfig: PageSeoConfig = {
+  title: '50-Point House & Move-Out Cleaning Checklist Edmonton | LevelUp Cleaning',
+  description:
+    'Interactive room-by-room 50-point cleaning checklist for Edmonton Move-Out, Deep Clean, Recurring Eco-Maintenance, and Airbnb Turnovers. Inspect every surface plus our Alberta RTA Landlord Receipt.',
+  canonicalPath: '/checklist',
+  ogImage: heroPhoto.variants['1024'].webp.path,
+  preloadHeroImage: heroPhoto.variants['1024'].avif.path,
+  checklistItemListSchema: {
+    name: 'LevelUp Cleaning Edmonton 50-Point Move-Out & Deep Cleaning Checklist',
+    items: allSchemaItems,
+  },
+  breadcrumbs: [
+    { name: 'Home', path: '/' },
+    { name: '50-Point Cleaning Checklist', path: '/checklist' },
+  ],
+};
+---
+
+<MainLayout seoConfig={seoConfig} ctaHref="/#quote-calculator">
+  <section class="surface-quiet-luxury border-b border-mist/25 py-12 sm:py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl space-y-4">
+        <span class="inline-flex items-center gap-2 rounded-full border border-brass/50 bg-brass/18 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-spruce">
+          Zero-Guesswork 50-Point Transparency
+        </span>
+        <h1 class="font-serif text-4xl sm:text-5xl font-semibold leading-tight text-spruce">
+          Interactive Edmonton Cleaning Checklist
+        </h1>
+        <p class="text-base sm:text-lg leading-relaxed text-spruce/85">
+          Switch between Move-Out, 50-Point Deep Reset, Recurring Eco-Maintenance, and Airbnb Turnover scopes—then inspect our Surface X-Ray and official Alberta RTA Landlord Receipt.
+        </p>
+
+        <div class="flex flex-wrap items-center gap-3 pt-1">
+          <a
+            href="/#quote-calculator"
+            class="inline-flex min-h-[48px] items-center justify-center rounded-full bg-eucalyptus px-6 py-3 text-sm font-semibold text-linen shadow-xs transition hover:bg-eucalyptus-hover"
+          >
+            Get Instant Flat-Rate Price →
+          </a>
+          <MoveOutReceiptModal showTrigger={true} triggerLabel="Preview Alberta RTA Landlord Receipt" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pt-10 pb-4 bg-card/45 border-b border-mist/25" data-package-checklist-switcher>
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <p class="text-xs font-bold uppercase tracking-wider text-spruce/75 mb-3">
+        Choose Cleaning Package Scope
+      </p>
+      <div
+        role="tablist"
+        aria-label="Select cleaning package checklist"
+        class="flex flex-wrap gap-2"
+      >
+        {servicesList.map((entry, idx) => (
+          <button
+            type="button"
+            role="tab"
+            aria-selected={idx === 0 ? 'true' : 'false'}
+            data-pkg-tab={entry.key}
+            class:list={[
+              'inline-flex min-h-[46px] items-center rounded-full px-4.5 py-2.5 text-xs sm:text-sm font-semibold transition cursor-pointer',
+              idx === 0
+                ? 'bg-spruce text-linen shadow-xs'
+                : 'border border-mist/40 bg-linen text-spruce hover:border-eucalyptus',
+            ]}
+          >
+            {entry.shortLabel}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="mt-2">
+      {servicesList.map((entry, idx) => (
+        <div data-pkg-panel={entry.key} hidden={idx !== 0}>
+          <ChecklistTabs
+            eyebrow={entry.eyebrow}
+            title={entry.title}
+            subtitle={entry.subtitle}
+            checklistByRoom={entry.svc.checklistByRoom}
+            whatIsExcluded={entry.svc.whatIsExcluded}
+          />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <RoomXRay />
+
+  <TrustProtocol showComparison={false} includeModal={false} />
+</MainLayout>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-package-checklist-switcher]').forEach((root) => {
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-pkg-tab]'));
+    const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-pkg-panel]'));
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const key = tab.dataset.pkgTab;
+        if (!key) return;
+        tabs.forEach((btn) => {
+          const active = btn.dataset.pkgTab === key;
+          btn.setAttribute('aria-selected', String(active));
+          btn.classList.toggle('bg-spruce', active);
+          btn.classList.toggle('text-linen', active);
+          btn.classList.toggle('shadow-xs', active);
+          btn.classList.toggle('border', !active);
+          btn.classList.toggle('border-mist/40', !active);
+          btn.classList.toggle('bg-linen', !active);
+          btn.classList.toggle('text-spruce', !active);
+        });
+        panels.forEach((panel) => {
+          panel.hidden = panel.dataset.pkgPanel !== key;
+        });
+      });
+    });
+  });
+</script>

@@ -10,6 +10,7 @@ export interface PagesFunctionContext<Env = LeadPipelineEnv> {
   env: Env;
   params?: Record<string, string | string[]>;
   waitUntil?: (promise: Promise<unknown>) => void;
+  fetchImpl?: typeof fetch;
 }
 
 const CORS_HEADERS: Record<string, string> = {
@@ -18,7 +19,10 @@ const CORS_HEADERS: Record<string, string> = {
   'Access-Control-Allow-Headers': 'Content-Type',
 };
 
-function jsonResponse(payload: LeadSubmissionResult | Record<string, unknown>, status: number): Response {
+function jsonResponse(
+  payload: LeadSubmissionResult | Record<string, unknown>,
+  status: number,
+): Response {
   return new Response(JSON.stringify(payload), {
     status,
     headers: {
@@ -114,10 +118,15 @@ export async function onRequestPost(
     clientIpAddress,
     clientUserAgent,
     eventSourceUrl: referer,
+    fetchImpl: context.fetchImpl,
   });
 
   if (!result.ok) {
-    return jsonResponse(result, 400);
+    const isSlotConflict = Boolean(
+      result.error &&
+        (result.error.includes('already booked') || result.error.includes('just booked')),
+    );
+    return jsonResponse(result, isSlotConflict ? 409 : 400);
   }
 
   return jsonResponse(result, 200);

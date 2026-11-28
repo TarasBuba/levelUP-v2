@@ -12,17 +12,11 @@ export interface HeadlinePromoPreset extends PromoPreset {
   shortLabel: string;
 }
 
-/**
- * Formats a short headline/CTA token string (e.g. "$50 OFF") for `{PROMO}` interpolation.
- */
 export function formatShortPromoLabel(discountCad: number): string {
   const cleanAmount = Number.isFinite(discountCad) ? Math.max(0, Math.round(discountCad)) : 0;
   return `$${cleanAmount} OFF`;
 }
 
-/**
- * Replaces `{PROMO}` placeholders in landing page headlines and CTAs with "$XX OFF".
- */
 export function interpolatePromoToken(template: string, discountCad: number): string {
   return String(template ?? '').replace(/\{PROMO\}/g, formatShortPromoLabel(discountCad));
 }
@@ -54,13 +48,6 @@ function lookupPreset(code?: string | null): PromoPreset | undefined {
     : undefined;
 }
 
-/**
- * Resolves the active promo discount for a given pre-discount subtotal.
- * Checks URL query `'25' | '50' | '100' | 'holiday50'` (case-insensitive) against
- * `strategy.json -> promoEngine.presets`; if subtotal qualifies (`>= minSubtotalCad`),
- * returns the URL override (`isUrlOverride: true`), otherwise falls back to the highest
- * qualifying tier in `promoEngine.tiers` (`isUrlOverride: false`).
- */
 export function resolvePromo(
   subtotalBeforeDiscountsCad: number,
   promoQuery?: string | null,
@@ -100,9 +87,6 @@ export function resolvePromo(
   };
 }
 
-/**
- * Resolves preset metadata for SSR and client-side `{PROMO}` display on `/lp/*` funnels.
- */
 export function getHeadlinePromo(
   promoQuery?: string | null,
   fallbackCode: string = '25',

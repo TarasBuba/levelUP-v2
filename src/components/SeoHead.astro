@@ -19,6 +19,22 @@ const jsonLdPayload = JSON.stringify(buildJsonLdGraph(config)).replace(
   /<\//g,
   '<\\/',
 );
+
+const envMap = import.meta.env as Record<string, string | undefined>;
+const metaPixelId = (envMap.PUBLIC_META_PIXEL_ID ?? '').trim();
+const googleAdsId = (envMap.PUBLIC_GOOGLE_ADS_ID ?? '').trim();
+const googleAdsLeadLabel = (envMap.PUBLIC_GOOGLE_ADS_LEAD_LABEL ?? '').trim();
+const hasAdTracking = Boolean(metaPixelId || googleAdsId);
+
+const trackingConfigJson = JSON.stringify({
+  metaPixelId: metaPixelId || undefined,
+  googleAdsId: googleAdsId || undefined,
+  googleAdsLeadLabel: googleAdsLeadLabel || undefined,
+}).replace(/<\//g, '<\\/');
+
+const trackingBootstrapScript = hasAdTracking
+  ? `(function(w,d){var c=${trackingConfigJson};w.__LEVELUP_TRACKING=c;if(c.metaPixelId){if(!w.fbq){var n=w.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!w._fbq)w._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];var fs=d.createElement('script');fs.async=!0;fs.src='https://connect.facebook.net/en_US/fbevents.js';d.head.appendChild(fs)}w.fbq('init',c.metaPixelId);w.fbq('track','PageView')}if(c.googleAdsId){w.dataLayer=w.dataLayer||[];w.gtag=w.gtag||function(){w.dataLayer.push(arguments)};w.gtag('js',new Date());w.gtag('config',c.googleAdsId);var gs=d.createElement('script');gs.async=!0;gs.src='https://www.googletagmanager.com/gtag/js?id='+encodeURIComponent(c.googleAdsId);d.head.appendChild(gs)}})(window,document);`
+  : '';
 ---
 
 <meta charset="utf-8" />
@@ -32,7 +48,6 @@ const jsonLdPayload = JSON.stringify(buildJsonLdGraph(config)).replace(
 <meta name="geo.region" content="CA-AB" />
 <meta name="geo.placename" content="Edmonton" />
 
-<!-- OpenGraph -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="LevelUp Cleaning" />
 <meta property="og:locale" content="en_CA" />
@@ -42,7 +57,6 @@ const jsonLdPayload = JSON.stringify(buildJsonLdGraph(config)).replace(
 <meta property="og:image" content={ogImageUrl} />
 <meta property="og:image:alt" content={config.title} />
 
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={config.title} />
 <meta name="twitter:description" content={config.description} />
@@ -60,3 +74,5 @@ const jsonLdPayload = JSON.stringify(buildJsonLdGraph(config)).replace(
 }
 
 <script is:inline type="application/ld+json" set:html={jsonLdPayload} />
+
+{hasAdTracking && <script is:inline set:html={trackingBootstrapScript} />}

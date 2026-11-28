@@ -3,6 +3,7 @@ import MainLayout from '../layouts/MainLayout.astro';
 import LiveSlotsBadge from '../components/LiveSlotsBadge.astro';
 import ChecklistTabs from '../components/ChecklistTabs.astro';
 import InstantCalculator from '../components/InstantCalculator.astro';
+import B2BPartnerForm from '../components/B2BPartnerForm.astro';
 import TrustProtocol from '../components/TrustProtocol.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
 
@@ -68,6 +69,12 @@ const seoConfig: PageSeoConfig = {
             >
               Quote My Short-Term Rental →
             </a>
+            <a
+              href="#partner-inquiry"
+              class="inline-flex min-h-[48px] items-center justify-center rounded-full border border-spruce/30 bg-card px-5 py-3 text-sm font-semibold text-spruce transition hover:border-eucalyptus"
+            >
+              VIP Host / Realtor Partner Desk
+            </a>
           </div>
         </div>
 
@@ -130,6 +137,8 @@ const seoConfig: PageSeoConfig = {
       defaultFrequency="weekly"
     />
   </div>
+
+  <B2BPartnerForm />
 
   <TrustProtocol showComparison={false} includeModal={true} />
 

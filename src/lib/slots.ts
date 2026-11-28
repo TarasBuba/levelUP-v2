@@ -11,10 +11,6 @@ export interface SlotsStatus {
   urgent: boolean;
 }
 
-/**
- * Safely parses an unknown KV or input value into an integer clamped to `0..9`,
- * falling back to `DEFAULT_WEEKLY_SLOTS` (`3`) when missing or non-numeric.
- */
 export function parseSlotsValue(raw: unknown): number {
   if (typeof raw === 'number') {
     if (!Number.isFinite(raw)) {
@@ -38,9 +34,6 @@ export function parseSlotsValue(raw: unknown): number {
   return DEFAULT_WEEKLY_SLOTS;
 }
 
-/**
- * Formats weekly open-slot availability badge data for Greater Edmonton dispatch.
- */
 export function getSlotsStatus(raw: unknown): SlotsStatus {
   const slots = parseSlotsValue(raw);
 

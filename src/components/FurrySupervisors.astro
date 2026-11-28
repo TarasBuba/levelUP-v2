@@ -83,7 +83,6 @@ const selectedSingle = singleVideoId ? mediaManifest.videos[singleVideoId] : nul
   <section class="py-16 sm:py-22 bg-spruce text-linen">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="grid gap-10 lg:grid-cols-12 lg:items-center">
-        <!-- Editorial Story & Safety Guardrail -->
         <div class="lg:col-span-5 space-y-5">
           <span class="inline-flex items-center gap-2 rounded-full border border-brass/55 bg-brass/15 px-3.5 py-1 text-xs font-semibold tracking-wider uppercase text-linen">
             <span class="h-1.5 w-1.5 rounded-full bg-brass" aria-hidden="true"></span>
@@ -116,7 +115,6 @@ const selectedSingle = singleVideoId ? mediaManifest.videos[singleVideoId] : nul
           </div>
         </div>
 
-        <!-- 3 Real Edmonton Video Facade Cards (Zero eager MP4 network download) -->
         <div class="lg:col-span-7">
           <div class="grid gap-4 sm:grid-cols-3">
             {allVideos.map((vid) => (
@@ -201,7 +199,6 @@ const selectedSingle = singleVideoId ? mediaManifest.videos[singleVideoId] : nul
     if (!playBtn || !posterWrap || !videoEl || !mp4Src) return;
 
     playBtn.addEventListener('click', () => {
-      // Pause any other playing facade videos
       document.querySelectorAll<HTMLVideoElement>('[data-facade-video]').forEach((other) => {
         if (other !== videoEl && !other.paused) {
           other.pause();
@@ -214,7 +211,7 @@ const selectedSingle = singleVideoId ? mediaManifest.videos[singleVideoId] : nul
       posterWrap.hidden = true;
       videoEl.hidden = false;
       videoEl.play().catch(() => {
-        // Controls remain visible if browser autoplay policy requires direct video tap
+        return;
       });
     });
   });

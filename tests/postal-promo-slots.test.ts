@@ -80,7 +80,7 @@ describe('postal.ts — Greater Edmonton FSA & postal code validation', () => {
   it('handles empty, whitespace, nullish, malformed, and unsupported FSAs', () => {
     expect(isSupportedFsa('')).toBe(false);
     expect(isSupportedFsa(undefined as unknown as string)).toBe(false);
-    expect(isSupportedFsa('T6W 1A2')).toBe(false); // 6-char is not 3-char FSA-only
+    expect(isSupportedFsa('T6W 1A2')).toBe(false);
     expect(isSupportedFsa('T2P')).toBe(false);
     expect(isSupportedFsa('T6Z')).toBe(false);
 
@@ -160,18 +160,15 @@ describe('promo.ts — URL overrides, tiered promos, and token interpolation', (
   });
 
   it('falls back to tiered promos when subtotal is below URL preset minSubtotalCad', () => {
-    // '100' requires minSubtotalCad: 260; at 220 it falls back to tier_25
     const fallbackFrom100 = resolvePromo(220, '100');
     expect(fallbackFrom100.isUrlOverride).toBe(false);
     expect(fallbackFrom100.appliedCode).toBe('tier_25');
     expect(fallbackFrom100.discountCad).toBe(25);
 
-    // 'holiday50' requires 220; at 180 falls back to tier_25
     const fallbackFromHoliday = resolvePromo(180, 'holiday50');
     expect(fallbackFromHoliday.isUrlOverride).toBe(false);
     expect(fallbackFromHoliday.appliedCode).toBe('tier_25');
 
-    // '25' preset requires 120; at 100 falls back to tier_25
     const fallbackFrom25 = resolvePromo(100, '25');
     expect(fallbackFrom25.isUrlOverride).toBe(false);
     expect(fallbackFrom25.appliedCode).toBe('tier_25');

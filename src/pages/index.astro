@@ -2,6 +2,7 @@
 import MainLayout from '../layouts/MainLayout.astro';
 import LiveSlotsBadge from '../components/LiveSlotsBadge.astro';
 import InstantCalculator from '../components/InstantCalculator.astro';
+import ChecklistTabs from '../components/ChecklistTabs.astro';
 import RoomXRay from '../components/RoomXRay.astro';
 import FurrySupervisors from '../components/FurrySupervisors.astro';
 import TrustProtocol from '../components/TrustProtocol.astro';
@@ -13,6 +14,7 @@ import mediaManifest from '../data/media_manifest.json';
 import type { PageSeoConfig } from '../types/contracts';
 
 const { hero, walkthroughSteps, whyEdmontonCards, faqs } = siteCopy.home;
+const moveOutSvc = siteCopy.services.move_out;
 const heroPhoto = mediaManifest.photos.hero_kitchen;
 const moveOutPhoto = mediaManifest.photos.moveout_condo;
 const winterPhoto = mediaManifest.photos.winter_entryway;
@@ -60,7 +62,6 @@ const serviceCards = [
 ---
 
 <MainLayout seoConfig={seoConfig} ctaHref="#quote-calculator">
-  <!-- Architectural Hero -->
   <section class="surface-quiet-luxury relative overflow-hidden border-b border-mist/25 pt-8 pb-14 sm:pt-12 sm:pb-20">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="grid gap-10 lg:grid-cols-12 lg:items-center">
@@ -81,19 +82,50 @@ const serviceCards = [
             {hero.subtitle}
           </p>
 
-          <div class="flex flex-col sm:flex-row sm:items-center gap-3 pt-1">
-            <a
-              href="#quote-calculator"
-              class="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-eucalyptus px-7 py-3.5 text-sm sm:text-base font-semibold text-linen shadow-sm transition hover:bg-eucalyptus-hover"
-            >
-              <span>{hero.primaryCta}</span>
-              <span aria-hidden="true">→</span>
-            </a>
+          <form
+            data-hero-postal-form
+            novalidate
+            class="rounded-2xl border border-mist/45 bg-card p-2 shadow-xs"
+          >
+            <label for="hero-postal-input" class="sr-only">
+              Enter your Edmonton postal code to see price and open dates
+            </label>
+            <div class="flex flex-col sm:flex-row gap-2">
+              <input
+                id="hero-postal-input"
+                type="text"
+                inputmode="text"
+                maxlength="7"
+                autocomplete="postal-code"
+                placeholder="Enter postal code (e.g. T5K, T6W, T8N)"
+                data-hero-postal
+                class="min-h-[48px] flex-1 rounded-xl border border-mist/35 bg-linen px-4 py-2.5 text-sm sm:text-base font-semibold uppercase tracking-wider text-spruce placeholder:font-normal placeholder:normal-case placeholder:tracking-normal placeholder:text-spruce/50 focus:border-eucalyptus"
+              />
+              <button
+                type="submit"
+                class="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-eucalyptus px-5 py-3 text-sm font-semibold text-linen shadow-xs transition hover:bg-eucalyptus-hover whitespace-nowrap cursor-pointer"
+              >
+                <span>See Price &amp; Open Dates</span>
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
+            <p data-hero-postal-note class="px-2 pt-1.5 text-[11px] font-medium text-spruce/75">
+              $0 travel across all Edmonton (T5*/T6*), St. Albert (T8N) &amp; core Sherwood Park (T8A/T8H).
+            </p>
+          </form>
+
+          <div class="flex flex-wrap items-center gap-3">
             <a
               href={`sms:${siteContext.brand.phoneE164}?&body=${encodeURIComponent("Hi LevelUp Cleaning! I'd like an instant quote for my Edmonton home.")}`}
-              class="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full border border-spruce/30 bg-card px-6 py-3.5 text-sm sm:text-base font-semibold text-spruce transition hover:border-eucalyptus"
+              class="inline-flex min-h-[46px] items-center justify-center gap-2 rounded-full border border-spruce/30 bg-card px-5 py-2.5 text-sm font-semibold text-spruce transition hover:border-eucalyptus"
             >
               <span>{hero.secondaryCta}</span>
+            </a>
+            <a
+              href="/pricing"
+              class="inline-flex min-h-[46px] items-center justify-center rounded-full px-4 py-2.5 text-sm font-semibold text-eucalyptus underline decoration-eucalyptus/45 underline-offset-4 hover:text-eucalyptus-hover"
+            >
+              View Full Pre-Tax CAD Rates →
             </a>
           </div>
 
@@ -112,7 +144,6 @@ const serviceCards = [
           </div>
         </div>
 
-        <!-- LCP Hero Architectural Picture -->
         <div class="lg:col-span-6">
           <div class="relative overflow-hidden rounded-3xl border border-mist/35 bg-card shadow-xl">
             <picture>
@@ -155,7 +186,6 @@ const serviceCards = [
     </div>
   </section>
 
-  <!-- 4 Core Edmonton Packages -->
   <section class="py-16 sm:py-20">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -168,7 +198,7 @@ const serviceCards = [
           </h2>
         </div>
         <p class="text-xs sm:text-sm text-spruce/75">
-          Or choose <a href="#quote-calculator" class="font-semibold text-eucalyptus underline">Hourly Custom Clean ($48/hr)</a> in the calculator below.
+          Compare all packages on our <a href="/pricing" class="font-semibold text-eucalyptus underline">Pricing page</a> or choose <a href="#quote-calculator" class="font-semibold text-eucalyptus underline">Hourly Custom Clean ($48/hr)</a>.
         </p>
       </div>
 
@@ -226,7 +256,6 @@ const serviceCards = [
     </div>
   </section>
 
-  <!-- Hybrid Instant Calculator -->
   <div class="border-y border-mist/25 bg-card/45">
     <InstantCalculator
       defaultService="move_out"
@@ -236,11 +265,55 @@ const serviceCards = [
     />
   </div>
 
-  <!-- Interactive Room X-Ray -->
   <RoomXRay />
 
-  <!-- Why Edmonton Homes Choose LevelUp + 4-Step Walkthrough -->
-  <section class="py-16 sm:py-20 border-t border-mist/25 bg-card/55">
+  <div class="border-t border-mist/25 bg-linen">
+    <ChecklistTabs
+      eyebrow="50-POINT MOVE-OUT & DEEP RESET TRANSPARENCY"
+      title="Exact Room-by-Room Scope — Oven, Fridge & Cabinets Included"
+      subtitle="Inspect every task covered in our Alberta RTA Move-Out Clean, or explore all 4 service checklists on our dedicated Checklist page."
+      checklistByRoom={moveOutSvc.checklistByRoom}
+      whatIsExcluded={moveOutSvc.whatIsExcluded}
+    />
+    <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8 flex justify-end">
+      <a
+        href="/checklist"
+        class="inline-flex min-h-[44px] items-center text-sm font-semibold text-eucalyptus underline decoration-eucalyptus/50 underline-offset-4 hover:text-eucalyptus-hover"
+      >
+        Compare All 4 Package Checklists →
+      </a>
+    </div>
+  </div>
+
+  <section class="py-12 sm:py-14 bg-spruce text-linen border-y border-mist/25">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div class="max-w-2xl space-y-2.5">
+          <span class="inline-flex items-center gap-2 rounded-full border border-brass/55 bg-brass/18 px-3 py-1 text-[11px] font-semibold tracking-wider uppercase text-linen">
+            <span class="h-1.5 w-1.5 rounded-full bg-brass" aria-hidden="true"></span>
+            VIP Commercial &amp; Portfolio Desk
+          </span>
+          <h2 class="font-serif text-2xl sm:text-3xl font-semibold text-linen">
+            Airbnb Superhosts, Realtors &amp; Property Managers
+          </h2>
+          <p class="text-sm sm:text-base leading-relaxed text-linen/85">
+            Priority 11:00 AM – 3:00 PM same-day turnovers, lockbox/concierge coordination, timestamped SMS photo reports, and recurring volume savings up to 15% across Greater Edmonton.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3 shrink-0">
+          <a
+            href="/airbnb-cleaning-edmonton#partner-inquiry"
+            class="inline-flex min-h-[48px] items-center justify-center rounded-full bg-eucalyptus px-6 py-3 text-sm font-semibold text-linen shadow-xs transition hover:bg-eucalyptus-hover"
+          >
+            Request VIP Partner Rates →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 sm:py-20 border-b border-mist/25 bg-card/55">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-16">
       <div>
         <div class="max-w-3xl">
@@ -270,7 +343,6 @@ const serviceCards = [
         </div>
       </div>
 
-      <!-- 4-Step Walkthrough Flow -->
       <div>
         <h3 class="font-serif text-2xl sm:text-3xl font-semibold text-spruce">
           How Your Calm, $0-Upfront Visit Works
@@ -290,13 +362,10 @@ const serviceCards = [
     </div>
   </section>
 
-  <!-- Furry Supervisors Video Facades -->
   <FurrySupervisors />
 
-  <!-- Risk-Reversal Protocol & 30-Company Comparison Matrix -->
   <TrustProtocol showComparison={true} includeModal={true} />
 
-  <!-- Local Neighborhood Hubs & Surface Safety Guides -->
   <section class="py-16 sm:py-20 border-b border-mist/25">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-14">
       <div>
@@ -382,6 +451,21 @@ const serviceCards = [
     </div>
   </section>
 
-  <!-- FAQs -->
   <FaqAccordion faqs={faqs} />
 </MainLayout>
+
+<script>
+  const heroForm = document.querySelector<HTMLFormElement>('[data-hero-postal-form]');
+  if (heroForm) {
+    const input = heroForm.querySelector<HTMLInputElement>('[data-hero-postal]');
+    heroForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const postalCode = (input?.value || '').trim().toUpperCase();
+      window.dispatchEvent(
+        new CustomEvent('levelup:hero-postal', {
+          detail: { postalCode },
+        }),
+      );
+    });
+  }
+</script>

@@ -1,20 +1,22 @@
 import type { APIRoute } from 'astro';
 import { INDEXABLE_ROUTES, buildCanonicalUrl } from '../lib/seo';
 
-const SITEMAP_LASTMOD = '2026-11-24';
+const SITEMAP_LASTMOD = '2026-11-27';
 
-const SERVICE_PATHS = new Set<string>([
+const SERVICE_AND_COMMERCIAL_PATHS = new Set<string>([
   '/move-out-cleaning-edmonton',
   '/deep-cleaning-edmonton',
   '/recurring-cleaning-edmonton',
   '/airbnb-cleaning-edmonton',
+  '/pricing',
+  '/checklist',
 ]);
 
 function getRoutePriority(route: string): string {
   if (route === '/') {
     return '1.0';
   }
-  if (SERVICE_PATHS.has(route)) {
+  if (SERVICE_AND_COMMERCIAL_PATHS.has(route)) {
     return '0.9';
   }
   if (route.startsWith('/areas/') || route === '/gift-a-clean') {

@@ -102,17 +102,74 @@ export interface AttributionData {
   eventId?: string;
 }
 
+export type SlotWindow = 'morning' | 'afternoon' | 'full_day';
+
+export type SlotState = 'available' | 'pending' | 'booked';
+
+export type LeadType = 'residential_quote' | 'b2b_partner' | 'gift_certificate';
+
+export interface CalendarSlotInfo {
+  window: 'morning' | 'afternoon';
+  label: string;
+  timeRange: string;
+  state: SlotState;
+  leadId?: string;
+}
+
+export interface CalendarDaySchedule {
+  date: string;
+  dayLabel: string;
+  weekdayShort: string;
+  isWeekend: boolean;
+  morning: CalendarSlotInfo;
+  afternoon: CalendarSlotInfo;
+  availableWindows: number;
+  fullDayAvailable: boolean;
+  statusSummary: 'available' | 'one_left' | 'pending' | 'booked';
+}
+
+export interface CalendarSchedulePayload {
+  timezone: string;
+  generatedAt: string;
+  storageBackend: 'upstash' | 'blob' | 'kv' | 'memory';
+  weeklyOpenSlots: number;
+  days: CalendarDaySchedule[];
+}
+
+export interface PreferredSlotSelection {
+  date: string;
+  window: SlotWindow;
+}
+
+export interface B2BPartnerDetails {
+  companyOrRole: 'realtor' | 'property_manager' | 'airbnb_host' | 'developer';
+  propertiesCount: number;
+  preferredTurnoverWindow: string;
+  monthlyFrequency: string;
+}
+
+export interface GiftCertificateDetails {
+  amountCad: number;
+  recipientName: string;
+  personalMessage?: string;
+  deliveryMethod: 'email' | 'sms' | 'printable_pdf';
+}
+
 export interface LeadSubmissionPayload {
+  leadType?: LeadType;
   name: string;
   phone: string;
   email?: string;
   postalCode: string;
   preferredDate?: string;
+  preferredSlot?: PreferredSlotSelection;
   hasPets?: boolean;
   notes?: string;
   caslSmsConsent: boolean;
   honeypot?: string;
   quoteInput: QuoteInput;
+  b2bDetails?: B2BPartnerDetails;
+  giftDetails?: GiftCertificateDetails;
   snapPhotos?: SnapPhotoAttachment[];
   attribution?: AttributionData;
 }
@@ -125,6 +182,10 @@ export interface LeadSubmissionResult {
   smsPrefillHref: string;
   telegramDispatched: boolean;
   capiDispatched: boolean;
+  slotReserved?: boolean;
+  ledgerSaved?: boolean;
+  sheetsDispatched?: boolean;
+  confirmationEmailSent?: boolean;
   mode: 'live' | 'demo';
   error?: string;
 }
@@ -156,6 +217,20 @@ export interface PageSeoConfig {
     description: string;
     lowPriceCad: number;
     highPriceCad: number;
+  };
+  offerCatalogSchema?: {
+    name: string;
+    description: string;
+    items: Array<{
+      name: string;
+      description: string;
+      priceCad: number;
+      urlPath: string;
+    }>;
+  };
+  checklistItemListSchema?: {
+    name: string;
+    items: string[];
   };
   faqs?: FaqItem[];
   breadcrumbs?: Array<{ name: string; path: string }>;

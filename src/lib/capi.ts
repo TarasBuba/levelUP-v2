@@ -73,9 +73,6 @@ export interface CapiDispatchResult {
   reason?: string;
 }
 
-/**
- * Computes lowercase SHA-256 hex digest using standard Web Crypto (`crypto.subtle.digest`).
- */
 export async function sha256Hex(value: string): Promise<string> {
   const encoded = new TextEncoder().encode(String(value ?? ''));
   const digestBuffer = await globalThis.crypto.subtle.digest('SHA-256', encoded);
@@ -83,10 +80,6 @@ export async function sha256Hex(value: string): Promise<string> {
   return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
 }
 
-/**
- * Normalizes North American / Edmonton phone numbers into E.164 digits without `+`
- * (e.g. `(780) 710-1503` -> `17807101503`, `+1 780-710-1503` -> `17807101503`).
- */
 export function normalizePhoneDigits(phone: string): string {
   const rawDigits = String(phone ?? '').replace(/\D+/g, '');
   if (!rawDigits) {
@@ -101,10 +94,6 @@ export function normalizePhoneDigits(phone: string): string {
   return strippedIntlPrefix;
 }
 
-/**
- * Builds a Meta Conversions API v21.0 payload for `Lead`, `Purchase`, or `ViewContent`
- * with SHA-256 hashed PII (`ph`, `em`, `zp`) and unhashed click/browser identifiers (`fbp`, `fbc`).
- */
 export async function buildCapiEventPayload(input: CapiEventInput): Promise<MetaCapiPayload> {
   const eventTime =
     typeof input.eventTime === 'number' && Number.isFinite(input.eventTime)
@@ -197,10 +186,6 @@ export async function buildCapiEventPayload(input: CapiEventInput): Promise<Meta
   return payload;
 }
 
-/**
- * Dispatches an event payload to Meta Conversions API, skipping cleanly when
- * `META_PIXEL_ID` or `META_CAPI_TOKEN` is unconfigured.
- */
 export async function dispatchMetaCapiEvent(
   payload: MetaCapiPayload,
   env?: CapiEnv,

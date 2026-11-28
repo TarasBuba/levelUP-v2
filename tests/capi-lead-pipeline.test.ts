@@ -1,10 +1,15 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   buildCapiEventPayload,
   dispatchMetaCapiEvent,
   normalizePhoneDigits,
   sha256Hex,
 } from '../src/lib/capi';
+import {
+  getCalendarSchedule,
+  resetMemoryCalendarStore,
+  setSlotStateAdmin,
+} from '../src/lib/calendar-store';
 import {
   AUTHORIZED_TELEGRAM_ADMIN_IDS,
   escapeTelegramHtml,
@@ -72,7 +77,6 @@ describe('capi.ts — Meta Conversions API hashing, normalization, and dispatch'
     expect(item.user_data.client_ip_address).toBe('203.0.113.10');
     expect(item.user_data.client_user_agent).toBe('Mozilla/5.0 Test');
 
-    // Purchase defaults to system_generated; explicit fbc takes precedence; edge blank inputs skipped
     const purchasePayload = await buildCapiEventPayload({
       eventName: 'Purchase',
       value: -50,
@@ -133,7 +137,7 @@ describe('capi.ts — Meta Conversions API hashing, normalization, and dispatch'
   });
 });
 
-describe('lead-pipeline.ts — Validation, HTML escaping, Telegram & CAPI orchestration', () => {
+describe('lead-pipeline.ts — Validation, HTML escaping, B2B/Gift cards, Slots, Signed Buttons & CAPI', () => {
   const validBase = {
     name: 'Olena Kovalenko',
     phone: '(780) 710-1503',
@@ -163,6 +167,10 @@ describe('lead-pipeline.ts — Validation, HTML escaping, Telegram & CAPI orches
     },
   };
 
+  beforeEach(() => {
+    resetMemoryCalendarStore();
+  });
+
   it('escapes HTML entities safely for Telegram parse_mode=HTML', () => {
     expect(escapeTelegramHtml(`<script>alert("x" & 'y')</script>`)).toBe(
       '&lt;script&gt;alert(&quot;x&quot; &amp; &#39;y&#39;)&lt;/script&gt;',
@@ -170,7 +178,7 @@ describe('lead-pipeline.ts — Validation, HTML escaping, Telegram & CAPI orches
     expect(escapeTelegramHtml(null as unknown as string)).toBe('');
   });
 
-  it('rejects every invalid lead payload branch with clear errors', () => {
+  it('rejects every invalid residential, B2B, gift, slot, and photo payload branch', () => {
     expect(validateLeadPayload(null).valid).toBe(false);
     expect(validateLeadPayload([]).valid).toBe(false);
     expect(validateLeadPayload('str').valid).toBe(false);
@@ -178,6 +186,11 @@ describe('lead-pipeline.ts — Validation, HTML escaping, Telegram & CAPI orches
     expect(validateLeadPayload({ ...validBase, honeypot: 'https://spam.example' })).toEqual({
       valid: false,
       error: 'Automated submission rejected.',
+    });
+
+    expect(validateLeadPayload({ ...validBase, leadType: 'invalid_type' })).toEqual({
+      valid: false,
+      error: 'Unsupported lead type.',
     });
 
     expect(validateLeadPayload({ ...validBase, name: '   ' })).toEqual({
@@ -213,9 +226,92 @@ describe('lead-pipeline.ts — Validation, HTML escaping, Telegram & CAPI orches
     });
     expect(validateLeadPayload({ ...validBase, postalCode: 'T2P 1J9' }).valid).toBe(false);
 
+    expect(
+      validateLeadPayload({
+        leadType: 'b2b_partner',
+        name: 'Alex',
+        phone: '7807101503',
+        postalCode: 'T2P 1J9',
+        caslSmsConsent: true,
+        b2bDetails: { companyOrRole: 'realtor', propertiesCount: 2 },
+      }).valid,
+    ).toBe(false);
+
     expect(validateLeadPayload({ ...validBase, caslSmsConsent: false })).toEqual({
       valid: false,
       error: 'Explicit CASL SMS consent is required before submitting your quote request.',
+    });
+
+    expect(
+      validateLeadPayload({
+        leadType: 'b2b_partner',
+        name: 'Alex',
+        phone: '7807101503',
+        caslSmsConsent: true,
+      }),
+    ).toEqual({
+      valid: false,
+      error: 'B2B partner details are required.',
+    });
+    expect(
+      validateLeadPayload({
+        leadType: 'b2b_partner',
+        name: 'Alex',
+        phone: '7807101503',
+        caslSmsConsent: true,
+        b2bDetails: { companyOrRole: 'broker', propertiesCount: 2 },
+      }),
+    ).toEqual({
+      valid: false,
+      error: 'Please select a valid B2B partner role.',
+    });
+    expect(
+      validateLeadPayload({
+        leadType: 'b2b_partner',
+        name: 'Alex',
+        phone: '7807101503',
+        caslSmsConsent: true,
+        b2bDetails: { companyOrRole: 'realtor', propertiesCount: 0 },
+      }),
+    ).toEqual({
+      valid: false,
+      error: 'Please provide at least 1 managed property or unit.',
+    });
+
+    expect(
+      validateLeadPayload({
+        leadType: 'gift_certificate',
+        name: 'Buyer',
+        phone: '7807101503',
+        caslSmsConsent: true,
+      }),
+    ).toEqual({
+      valid: false,
+      error: 'Gift certificate details are required.',
+    });
+    expect(
+      validateLeadPayload({
+        leadType: 'gift_certificate',
+        name: 'Buyer',
+        phone: '7807101503',
+        caslSmsConsent: true,
+        giftDetails: { amountCad: 25, recipientName: 'Sarah' },
+      }),
+    ).toEqual({
+      valid: false,
+      error: 'Gift certificate amount must be between $50 and $5,000 CAD.',
+    });
+    expect(
+      validateLeadPayload({
+        leadType: 'gift_certificate',
+        name: 'Buyer',
+        phone: '7807101503',
+        caslSmsConsent: true,
+        giftDetails: { amountCad: 250, recipientName: '   ' },
+      }),
+    ).toEqual({
+      valid: false,
+      error: 'Gift recipient name is required.',
     });
 
     expect(validateLeadPayload({ ...validBase, quoteInput: null })).toEqual({
@@ -244,7 +340,29 @@ describe('lead-pipeline.ts — Validation, HTML escaping, Telegram & CAPI orches
       error: 'Add-ons list must be an array.',
     });
 
-    // Snap & Lock photo validations
+    expect(validateLeadPayload({ ...validBase, preferredSlot: 'tomorrow' })).toEqual({
+      valid: false,
+      error: 'Preferred slot must be a valid date and time window.',
+    });
+    expect(
+      validateLeadPayload({
+        ...validBase,
+        preferredSlot: { date: 'bad-date', window: 'morning' },
+      }),
+    ).toEqual({
+      valid: false,
+      error: 'Preferred slot must specify a valid YYYY-MM-DD date and time window.',
+    });
+    expect(
+      validateLeadPayload({
+        ...validBase,
+        preferredSlot: { date: '2026-12-05', window: 'night' },
+      }),
+    ).toEqual({
+      valid: false,
+      error: 'Preferred slot must specify a valid YYYY-MM-DD date and time window.',
+    });
+
     expect(validateLeadPayload({ ...validBase, snapPhotos: 'bad' })).toEqual({
       valid: false,
       error: 'Snap & Lock photos must be provided as an array.',
@@ -286,9 +404,10 @@ describe('lead-pipeline.ts — Validation, HTML escaping, Telegram & CAPI orches
     });
   });
 
-  it('formats Telegram HTML messages for both flat-rate and hourly quotes', () => {
+  it('formats Telegram HTML cards for residential (with slots), hourly, B2B partner roles, and gift orders', () => {
     const validated = validateLeadPayload({
       ...validBase,
+      preferredSlot: { date: '2026-12-05', window: 'morning' },
       snapPhotos: [{ filename: '', mimeType: 'image/webp', base64Data: 'QUJDRA==' }],
     });
     expect(validated.valid).toBe(true);
@@ -304,11 +423,27 @@ describe('lead-pipeline.ts — Validation, HTML escaping, Telegram & CAPI orches
     const html = formatTelegramLeadMessage('LU-TEST01', validated.data, quote, postal);
     expect(html).toContain('#LU-TEST01');
     expect(html).toContain('&lt;Calacatta&gt; &quot;quartz&quot;');
+    expect(html).toContain('Preferred Slot:</b> 2026-12-05 — Morning');
     expect(html).toContain('Recurring Savings (15%)');
     expect(html).toContain('Snap &amp; Lock Photos:');
     expect(html).toContain('path=/lp/move-out | src=instagram | cmp=yeg_moveout_nov2026');
 
-    // Minimal hourly message
+    const afternoonHtml = formatTelegramLeadMessage(
+      'LU-AFT',
+      { ...validated.data, preferredSlot: { date: '2026-12-06', window: 'afternoon' } },
+      quote,
+      postal,
+    );
+    expect(afternoonHtml).toContain('Afternoon (1:30 PM – 5:30 PM)');
+
+    const fullDayHtml = formatTelegramLeadMessage(
+      'LU-FULL',
+      { ...validated.data, preferredSlot: { date: '2026-12-07', window: 'full_day' } },
+      quote,
+      postal,
+    );
+    expect(fullDayHtml).toContain('Full Day (8:30 AM – 4:30 PM)');
+
     const minValidated = validateLeadPayload({
       name: 'Sam',
       phone: '7807101503',
@@ -328,15 +463,89 @@ describe('lead-pipeline.ts — Validation, HTML escaping, Telegram & CAPI orches
     );
     expect(hourlyHtml).toContain('8 cleaner-hours @ $48/hr');
     expect(hourlyHtml).toContain('Add-Ons:</b> None');
+
+    for (const [role, expectedLabel] of [
+      ['realtor', 'Realtor / Listing Agent'],
+      ['property_manager', 'Property Manager'],
+      ['airbnb_host', 'Airbnb / Short-Term Rental Host'],
+      ['developer', 'Builder / Developer'],
+    ] as const) {
+      const b2bValid = validateLeadPayload({
+        leadType: 'b2b_partner',
+        name: 'Alex Chen',
+        phone: '7807101503',
+        email: 'alex@brokerage.ca',
+        postalCode: 'T5J',
+        notes: '3 downtown suites',
+        caslSmsConsent: true,
+        b2bDetails: {
+          companyOrRole: role,
+          propertiesCount: 4,
+          preferredTurnoverWindow: '11am–3pm',
+          monthlyFrequency: 'Weekly',
+        },
+        attribution: {
+          landingPath: '/airbnb-cleaning-edmonton',
+          utmSource: 'linkedin',
+          utmCampaign: 'yeg_b2b',
+        },
+      });
+      expect(b2bValid.valid).toBe(true);
+      if (!b2bValid.valid) return;
+      const b2bMsg = formatTelegramLeadMessage(
+        'LU-B2B',
+        b2bValid.data,
+        calculateQuote(b2bValid.data.quoteInput),
+        lookupPostalCode('T5J'),
+      );
+      expect(b2bMsg).toContain('VIP B2B PARTNER LEAD');
+      expect(b2bMsg).toContain(expectedLabel);
+      expect(b2bMsg).toContain('alex@brokerage.ca');
+      expect(b2bMsg).toContain('3 downtown suites');
+      expect(b2bMsg).toContain('src=linkedin');
+    }
+
+    const giftValid = validateLeadPayload({
+      leadType: 'gift_certificate',
+      name: 'Taylor',
+      phone: '7807101503',
+      email: 'taylor@example.ca',
+      notes: 'Deliver by Friday',
+      caslSmsConsent: true,
+      giftDetails: {
+        amountCad: 350,
+        recipientName: 'Sarah & Mark',
+        personalMessage: 'Happy Holidays!',
+        deliveryMethod: 'invalid_falls_back_to_email',
+      },
+      attribution: {
+        landingPath: '/gift-a-clean',
+        utmSource: 'google',
+        utmCampaign: 'holiday_gift',
+      },
+    });
+    expect(giftValid.valid).toBe(true);
+    if (!giftValid.valid) return;
+    expect(giftValid.data.giftDetails?.deliveryMethod).toBe('email');
+    const giftMsg = formatTelegramLeadMessage(
+      'LU-GIFT',
+      giftValid.data,
+      calculateQuote(giftValid.data.quoteInput),
+      lookupPostalCode('T5J'),
+    );
+    expect(giftMsg).toContain('GIFT CERTIFICATE ORDER');
+    expect(giftMsg).toContain('$350 CAD');
+    expect(giftMsg).toContain('Sarah &amp; Mark');
+    expect(giftMsg).toContain('Happy Holidays!');
+    expect(giftMsg).toContain('Deliver by Friday');
+    expect(giftMsg).toContain('src=google');
   });
 
-  it('processes lead submission in demo mode, live dual-admin Telegram + CAPI mode, and partial failure recovery', async () => {
-    // Validation failure in processLeadSubmission
+  it('processes lead submissions with slot reservation, conflict rejection, HMAC-signed URL buttons, ledger, sheets, email & CAPI', async () => {
     const invalidRes = await processLeadSubmission({ name: '' }, { TELEGRAM_BOT_TOKEN: 'bot-tok' });
     expect(invalidRes.ok).toBe(false);
     expect(invalidRes.mode).toBe('live');
 
-    // Clean demo mode (no secrets)
     const demoFetch = vi.fn();
     const demoRes = await processLeadSubmission(validBase, undefined, {
       fetchImpl: demoFetch as unknown as typeof fetch,
@@ -345,20 +554,39 @@ describe('lead-pipeline.ts — Validation, HTML escaping, Telegram & CAPI orches
     expect(demoRes.mode).toBe('demo');
     expect(demoRes.telegramDispatched).toBe(false);
     expect(demoRes.capiDispatched).toBe(false);
-    expect(demoRes.finalPreTaxCad).toBe(335); // Move-out 2bd ($310) + 2nd bath ($25) + windows ($50) - $50 promo = $335
+    expect(demoRes.finalPreTaxCad).toBe(335);
     expect(demoFetch).not.toHaveBeenCalled();
 
-    // Live mode: dispatches sendMessage + sendPhoto to BOTH 633982504 & 332623386 + Meta CAPI Lead
+    const giftRes = await processLeadSubmission(
+      {
+        leadType: 'gift_certificate',
+        name: 'Morgan',
+        phone: '7807101503',
+        caslSmsConsent: true,
+        giftDetails: {
+          amountCad: 250,
+          recipientName: 'Chris',
+          deliveryMethod: 'printable_pdf',
+        },
+      },
+      undefined,
+      { fetchImpl: demoFetch as unknown as typeof fetch },
+    );
+    expect(giftRes.ok).toBe(true);
+    expect(giftRes.finalPreTaxCad).toBe(250);
+
+    const openDate = (await getCalendarSchedule()).days[3].date;
     const calls: Array<{ url: string; init?: RequestInit }> = [];
     const liveFetch = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
       calls.push({ url: String(url), init });
       return new Response('{"ok":true}', { status: 200 });
     });
 
-    const liveRes = await processLeadSubmission(
+    const signedRes = await processLeadSubmission(
       {
         ...validBase,
-        attribution: { landingPath: 'lp/move-out' }, // without leading slash
+        preferredSlot: { date: openDate, window: 'morning' },
+        attribution: { landingPath: 'lp/move-out' },
         snapPhotos: [
           {
             filename: 'oven.jpg',
@@ -369,25 +597,36 @@ describe('lead-pipeline.ts — Validation, HTML escaping, Telegram & CAPI orches
       },
       {
         TELEGRAM_BOT_TOKEN: '123456:TEST_TOKEN',
+        TELEGRAM_WEBHOOK_SECRET: 'whsec_test_signing_key',
         META_PIXEL_ID: 'px999',
         META_CAPI_TOKEN: 'capi_tok',
+        GOOGLE_SHEETS_WEBHOOK_URL: 'https://script.google.com/macros/s/demo/exec',
+        RESEND_API_KEY: 're_test_key',
+        LEVELUP_KV: {
+          get: vi.fn(async () => null),
+          put: vi.fn(async () => {}),
+        },
       },
       {
         clientIpAddress: '198.51.100.5',
         clientUserAgent: 'PlaywrightTest/1.0',
+        eventSourceUrl: 'https://levelupcleaning.ca/lp/move-out',
         fetchImpl: liveFetch as unknown as typeof fetch,
       },
     );
 
-    expect(liveRes.ok).toBe(true);
-    expect(liveRes.mode).toBe('live');
-    expect(liveRes.telegramDispatched).toBe(true);
-    expect(liveRes.capiDispatched).toBe(true);
+    expect(signedRes.ok).toBe(true);
+    expect(signedRes.mode).toBe('live');
+    expect(signedRes.slotReserved).toBe(true);
+    expect(signedRes.ledgerSaved).toBe(true);
+    expect(signedRes.sheetsDispatched).toBe(true);
+    expect(signedRes.confirmationEmailSent).toBe(true);
+    expect(signedRes.telegramDispatched).toBe(true);
+    expect(signedRes.capiDispatched).toBe(true);
 
     const msgCalls = calls.filter((c) => c.url.endsWith('/sendMessage'));
     const photoCalls = calls.filter((c) => c.url.endsWith('/sendPhoto'));
     const capiCalls = calls.filter((c) => c.url.includes('graph.facebook.com'));
-
     expect(msgCalls).toHaveLength(2);
     expect(photoCalls).toHaveLength(2);
     expect(capiCalls).toHaveLength(1);
@@ -395,10 +634,31 @@ describe('lead-pipeline.ts — Validation, HTML escaping, Telegram & CAPI orches
     const sentAdminIds = msgCalls.map((c) => JSON.parse(String(c.init?.body)).chat_id);
     expect(sentAdminIds).toEqual([...AUTHORIZED_TELEGRAM_ADMIN_IDS]);
 
-    // Partial failure recovery: 1st admin throws, 2nd admin succeeds, sendPhoto throws
+    const keyboard = JSON.parse(String(msgCalls[0].init?.body)).reply_markup.inline_keyboard;
+    expect(keyboard).toHaveLength(2);
+    expect(keyboard[0][0].url).toContain('https://levelupcleaning.ca/api/admin-action?token=');
+    expect(keyboard[0][1].url).toContain('https://levelupcleaning.ca/api/admin-action?token=');
+    expect(keyboard[1][0].url).toContain('https://levelupcleaning.ca/api/admin-action?token=');
+    expect(keyboard[1][1].url).toContain('https://levelupcleaning.ca/api/admin-action?token=');
+
+    await setSlotStateAdmin(openDate, 'morning', 'booked', 'LU-LOCKED');
+    const conflictRes = await processLeadSubmission(
+      {
+        ...validBase,
+        preferredSlot: { date: openDate, window: 'morning' },
+      },
+      undefined,
+      { fetchImpl: liveFetch as unknown as typeof fetch },
+    );
+    expect(conflictRes.ok).toBe(false);
+    expect(conflictRes.slotReserved).toBe(false);
+    expect(conflictRes.error).toContain('just booked');
+
     let msgAttempt = 0;
-    const flakyFetch = vi.fn(async (url: string | URL | Request) => {
+    const fallbackCalls: Array<{ url: string; init?: RequestInit }> = [];
+    const flakyFetch = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
       const u = String(url);
+      fallbackCalls.push({ url: u, init });
       if (u.endsWith('/sendMessage')) {
         msgAttempt += 1;
         if (msgAttempt === 1) throw new Error('Timeout on first admin');
@@ -417,9 +677,22 @@ describe('lead-pipeline.ts — Validation, HTML escaping, Telegram & CAPI orches
         snapPhotos: [{ filename: 'bath.png', mimeType: 'image/png', base64Data: 'QUJD' }],
       },
       { TELEGRAM_BOT_TOKEN: '123456:TEST_TOKEN' },
-      { fetchImpl: flakyFetch as unknown as typeof fetch },
+      {
+        eventSourceUrl: 'http://localhost:4321/',
+        fetchImpl: flakyFetch as unknown as typeof fetch,
+      },
     );
     expect(recovered.ok).toBe(true);
     expect(recovered.telegramDispatched).toBe(true);
+    const cbKeyboard = JSON.parse(String(fallbackCalls[1].init?.body)).reply_markup.inline_keyboard;
+    expect(cbKeyboard[0][0].callback_data).toMatch(/^paid:LU-/);
+
+    const badOriginFetch = vi.fn(async () => new Response('{"ok":true}', { status: 200 }));
+    const badOriginRes = await processLeadSubmission(
+      { ...validBase, attribution: undefined },
+      { TELEGRAM_BOT_TOKEN: '123456:TEST_TOKEN', ADMIN_ACTION_SECRET: 'alt_admin_sec' },
+      { eventSourceUrl: 'not-a-valid-url', fetchImpl: badOriginFetch as unknown as typeof fetch },
+    );
+    expect(badOriginRes.ok).toBe(true);
   });
 });

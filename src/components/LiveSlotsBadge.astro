@@ -28,6 +28,32 @@ const { compact = false } = Astro.props;
 </div>
 
 <script>
+  function applySlotsToBadges(slots: number, label?: string, urgent?: boolean) {
+    document.querySelectorAll<HTMLElement>('[data-live-slots]').forEach((badge) => {
+      const isCompact = badge.dataset.compact === 'true';
+      const textEl = badge.querySelector<HTMLElement>('[data-slots-text]');
+      const dotEl = badge.querySelector<HTMLElement>('[data-slots-dot]');
+      if (!textEl) return;
+
+      if (slots === 0) {
+        textEl.textContent = isCompact
+          ? 'Next week booking open'
+          : 'This week full — booking next week Edmonton slots';
+      } else if (isCompact) {
+        textEl.textContent = `${slots} Edmonton slot${slots === 1 ? '' : 's'} open`;
+      } else {
+        textEl.textContent =
+          label || `${slots} open Edmonton dispatch slot${slots === 1 ? '' : 's'} left this week`;
+      }
+
+      if (dotEl) {
+        const isUrgent = Boolean(urgent ?? slots <= 3);
+        dotEl.classList.toggle('bg-brass', isUrgent);
+        dotEl.classList.toggle('bg-eucalyptus', !isUrgent);
+      }
+    });
+  }
+
   async function refreshLiveSlots() {
     const badges = document.querySelectorAll<HTMLElement>('[data-live-slots]');
     if (!badges.length) return;
@@ -48,34 +74,17 @@ const { compact = false } = Astro.props;
         urgent?: boolean;
       };
       if (typeof payload.slots !== 'number') return;
-
-      badges.forEach((badge) => {
-        const isCompact = badge.dataset.compact === 'true';
-        const textEl = badge.querySelector<HTMLElement>('[data-slots-text]');
-        const dotEl = badge.querySelector<HTMLElement>('[data-slots-dot]');
-        if (!textEl) return;
-
-        if (payload.slots === 0) {
-          textEl.textContent = isCompact
-            ? 'Next week booking open'
-            : 'This week full — booking next week Edmonton slots';
-        } else if (isCompact) {
-          textEl.textContent = `${payload.slots} Edmonton slot${payload.slots === 1 ? '' : 's'} open`;
-        } else {
-          textEl.textContent =
-            payload.label ||
-            `${payload.slots} open Edmonton dispatch slot${payload.slots === 1 ? '' : 's'} left this week`;
-        }
-
-        if (dotEl && payload.urgent) {
-          dotEl.classList.remove('bg-eucalyptus');
-          dotEl.classList.add('bg-brass');
-        }
-      });
+      applySlotsToBadges(payload.slots, payload.label, payload.urgent);
     } catch {
-      // Static preview or offline fallback keeps SSR DEFAULT_WEEKLY_SLOTS cleanly
+      return;
     }
   }
+
+  window.addEventListener('levelup:slots-sync', ((ev: CustomEvent<{ weeklyOpenSlots?: number }>) => {
+    if (typeof ev.detail?.weeklyOpenSlots === 'number') {
+      applySlotsToBadges(ev.detail.weeklyOpenSlots);
+    }
+  }) as EventListener);
 
   refreshLiveSlots();
 </script>

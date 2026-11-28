@@ -1,11 +1,4 @@
 #!/usr/bin/env node
-/**
- * LevelUp Cleaning — Media Processing Pipeline
- * Processes:
- *   1. Master circular logo badge with 4x SSAA alpha mask (WebP, PNG, favicon.png)
- *   2. 5 photorealistic architectural photos into responsive AVIF/WebP (640w, 1024w, 1440w) + fallback.jpg
- *   3. 3 real client videos -> faststart 720x1280 MP4 (<4.5 MB) + AVIF/WebP posters (540x960, <30 KB)
- */
 
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -65,9 +58,6 @@ function ensureDir(dir) {
   fs.mkdirSync(dir, { recursive: true });
 }
 
-/**
- * 1. Extract circular badge from data/branding/final_chosen_logo.jpg with 4x SSAA smooth alpha mask
- */
 async function processLogo() {
   const srcPath = path.join(REPO_ROOT, 'data', 'branding', 'final_chosen_logo.jpg');
   if (!fs.existsSync(srcPath)) {
@@ -78,7 +68,6 @@ async function processLogo() {
   const { data, info } = await sharp(srcPath).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const { width, height } = info;
 
-  // Detect exact bounding box of the outer sage-green ring (excluding warm linen background)
   let minX = width;
   let maxX = 0;
   let minY = height;
@@ -98,14 +87,12 @@ async function processLogo() {
     }
   }
 
-  // Hug the exact outer edge of the sage-green ring so dark backgrounds show ZERO pale halo
   const pad = 0;
   const left = Math.max(0, minX - pad);
   const top = Math.max(0, minY - pad);
   const cropW = Math.min(width - left, maxX - minX + 1 + pad * 2);
   const cropH = Math.min(height - top, maxY - minY + 1 + pad * 2);
 
-  // Extract the exact ring box and normalize to a 1024x1024 working canvas (4x SSAA for 256px final)
   const ssaaSize = 1024;
   const croppedSquare = await sharp(srcPath)
     .extract({ left, top, width: cropW, height: cropH })
@@ -114,10 +101,9 @@ async function processLogo() {
     .raw()
     .toBuffer();
 
-  // Apply smooth 4x-supersampled circular alpha mask inset ~3px into outer AA edge (eliminates cream fringe)
   const half = ssaaSize / 2;
   const radius = half - 5.5;
-  const feather = 2.0; // 2px feather at 4x resolution => 0.5px razor-smooth AA at 256px
+  const feather = 2.0;
   for (let y = 0; y < ssaaSize; y++) {
     for (let x = 0; x < ssaaSize; x++) {
       const dx = x + 0.5 - half;
@@ -182,9 +168,6 @@ function findRawPhoto(id) {
   return null;
 }
 
-/**
- * Encode image buffer with adaptive quality to guarantee size cap while preserving crispness
- */
 async function writeUnderBudget(pipelineFactory, outPath, format, startQuality, minQuality, maxBytes) {
   let q = startQuality;
   while (q >= minQuality) {
@@ -206,9 +189,6 @@ async function writeUnderBudget(pipelineFactory, outPath, format, startQuality, 
   throw new Error(`Failed encoding ${outPath}`);
 }
 
-/**
- * 2. Optimize architectural photos into responsive AVIF, WebP (640w, 1024w, 1440w) + fallback.jpg
- */
 async function processPhotos() {
   ensureDir(PHOTOS_OUT_DIR);
   const report = [];
@@ -224,7 +204,6 @@ async function processPhotos() {
     const srcW = meta.width;
     const srcH = meta.height;
 
-    // Center-crop to exact target aspect ratio if needed
     let cropW = srcW;
     let cropH = srcH;
     const srcRatio = srcW / srcH;
@@ -281,7 +260,6 @@ async function processPhotos() {
       };
     }
 
-    // Compressed 1200w fallback.jpg (also great for OG tags)
     const fbW = 1200;
     const fbH = Math.round(fbW / spec.targetRatio);
     const fbName = `${spec.slug}-fallback.jpg`;
@@ -316,9 +294,6 @@ async function processPhotos() {
   return report;
 }
 
-/**
- * 3. Process 3 real client videos into faststart 720x1280 MP4 (< 4.5 MB) + AVIF/WebP posters (540x960, < 30 KB)
- */
 async function processVideos() {
   ensureDir(VIDEOS_OUT_DIR);
   const report = [];
@@ -333,7 +308,6 @@ async function processVideos() {
     const posterAvifPath = path.join(VIDEOS_OUT_DIR, `${spec.slug}-poster.avif`);
     const posterWebpPath = path.join(VIDEOS_OUT_DIR, `${spec.slug}-poster.webp`);
 
-    // Probe source duration & audio stream
     const probeJson = JSON.parse(
       execFileSync(
         'ffprobe',
@@ -344,7 +318,6 @@ async function processVideos() {
     const hasAudio = probeJson.streams.some((s) => s.codec_type === 'audio');
     const durationSec = Number.parseFloat(probeJson.format.duration || '0');
 
-    // Transcode web-optimized 720x1280 faststart MP4; bump CRF slightly if needed to stay strictly < 4.5 MB
     let crf = 26;
     while (crf <= 32) {
       const args = [
@@ -384,7 +357,6 @@ async function processVideos() {
       crf += 2;
     }
 
-    // Extract clean representative frame for 540x960 poster
     execFileSync(
       'ffmpeg',
       [

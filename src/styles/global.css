@@ -55,7 +55,6 @@
   }
 }
 
-/* Chrome / Baseline native modal scroll containment without root scrollbar layout shift */
 dialog:modal {
   overscroll-behavior: contain;
 }
@@ -67,7 +66,6 @@ dialog::backdrop {
   overscroll-behavior: contain;
 }
 
-/* Subtle architectural linen surface utility */
 .surface-quiet-luxury {
   background-image: radial-gradient(circle at 18% 12%, rgba(114, 158, 138, 0.09), transparent 48%),
     radial-gradient(circle at 85% 0%, rgba(184, 147, 82, 0.08), transparent 42%);

@@ -6,6 +6,7 @@ const { brand } = siteContext;
 const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const hasLocalCalculator =
   pathname === '/' ||
+  pathname === '/pricing' ||
   pathname === '/move-out-cleaning-edmonton' ||
   pathname === '/deep-cleaning-edmonton' ||
   pathname === '/recurring-cleaning-edmonton' ||
@@ -70,10 +71,9 @@ const areaLinks = siteCopy.areaHubs.map((hub) => ({
       </span>
     </a>
 
-    <!-- Desktop Navigation -->
-    <nav aria-label="Primary Navigation" class="hidden lg:flex items-center gap-1">
+    <nav aria-label="Primary Navigation" class="hidden lg:flex items-center gap-0.5">
       <details class="relative" data-nav-dropdown>
-        <summary class="inline-flex min-h-[44px] cursor-pointer items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-semibold text-spruce transition hover:bg-card">
+        <summary class="inline-flex min-h-[44px] cursor-pointer items-center gap-1.5 rounded-full px-3 py-2 text-sm font-semibold text-spruce transition hover:bg-card whitespace-nowrap">
           <span>Services</span>
           <svg class="h-4 w-4 text-spruce/70" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
@@ -92,8 +92,28 @@ const areaLinks = siteCopy.areaHubs.map((hub) => ({
         </div>
       </details>
 
+      <a
+        href="/pricing"
+        class:list={[
+          'inline-flex min-h-[44px] items-center rounded-full px-3 py-2 text-sm font-semibold transition hover:bg-card whitespace-nowrap',
+          pathname === '/pricing' ? 'bg-card text-eucalyptus' : 'text-spruce',
+        ]}
+      >
+        Pricing
+      </a>
+
+      <a
+        href="/checklist"
+        class:list={[
+          'inline-flex min-h-[44px] items-center rounded-full px-3 py-2 text-sm font-semibold transition hover:bg-card whitespace-nowrap',
+          pathname === '/checklist' ? 'bg-card text-eucalyptus' : 'text-spruce',
+        ]}
+      >
+        Checklist
+      </a>
+
       <details class="relative" data-nav-dropdown>
-        <summary class="inline-flex min-h-[44px] cursor-pointer items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-semibold text-spruce transition hover:bg-card">
+        <summary class="inline-flex min-h-[44px] cursor-pointer items-center gap-1.5 rounded-full px-3 py-2 text-sm font-semibold text-spruce transition hover:bg-card whitespace-nowrap">
           <span>Edmonton Areas</span>
           <svg class="h-4 w-4 text-spruce/70" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
@@ -114,35 +134,40 @@ const areaLinks = siteCopy.areaHubs.map((hub) => ({
 
       <a
         href="/guides"
-        class="inline-flex min-h-[44px] items-center rounded-full px-3.5 py-2 text-sm font-semibold text-spruce transition hover:bg-card"
+        class:list={[
+          'inline-flex min-h-[44px] items-center rounded-full px-3 py-2 text-sm font-semibold transition hover:bg-card whitespace-nowrap',
+          pathname.startsWith('/guides') ? 'bg-card text-eucalyptus' : 'text-spruce',
+        ]}
       >
-        Surface &amp; Move-Out Guides
+        Guides
       </a>
+
       <a
         href="/gift-a-clean"
-        class="inline-flex min-h-[44px] items-center rounded-full px-3.5 py-2 text-sm font-semibold text-spruce transition hover:bg-card"
+        class:list={[
+          'inline-flex min-h-[44px] items-center rounded-full px-3 py-2 text-sm font-semibold transition hover:bg-card whitespace-nowrap',
+          pathname === '/gift-a-clean' ? 'bg-card text-eucalyptus' : 'text-spruce',
+        ]}
       >
         Gift a Clean
       </a>
     </nav>
 
-    <!-- Desktop Right Actions -->
-    <div class="hidden lg:flex items-center gap-2.5 shrink-0">
+    <div class="hidden lg:flex items-center gap-2 shrink-0">
       <a
         href={`tel:${brand.phoneE164}`}
-        class="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-mist/40 bg-card px-4 py-2 text-xs font-semibold text-spruce transition hover:border-eucalyptus"
+        class="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-mist/40 bg-card px-3.5 py-2 text-xs font-semibold text-spruce transition hover:border-eucalyptus whitespace-nowrap"
       >
         <span>{brand.phoneDisplay}</span>
       </a>
       <a
         href={quoteHref}
-        class="inline-flex min-h-[44px] items-center justify-center rounded-full bg-eucalyptus px-5 py-2.5 text-sm font-semibold text-linen shadow-xs transition hover:bg-eucalyptus-hover"
+        class="inline-flex min-h-[44px] items-center justify-center rounded-full bg-eucalyptus px-4.5 py-2.5 text-sm font-semibold text-linen shadow-xs transition hover:bg-eucalyptus-hover whitespace-nowrap"
       >
         Get Instant Price
       </a>
     </div>
 
-    <!-- Mobile Actions -->
     <div class="flex items-center gap-2 lg:hidden">
       <a
         href={quoteHref}
@@ -156,7 +181,7 @@ const areaLinks = siteCopy.areaHubs.map((hub) => ({
         aria-expanded="false"
         aria-controls="mobile-nav-drawer"
         aria-label="Open navigation menu"
-        class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-mist/40 bg-card text-spruce transition hover:border-eucalyptus"
+        class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-mist/40 bg-card text-spruce transition hover:border-eucalyptus cursor-pointer"
       >
         <svg data-icon-open class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16" />
@@ -168,14 +193,28 @@ const areaLinks = siteCopy.areaHubs.map((hub) => ({
     </div>
   </div>
 
-  <!-- Mobile Drawer -->
   <div
     id="mobile-nav-drawer"
     hidden
     class="border-t border-mist/25 bg-linen px-4 py-4 shadow-lg lg:hidden"
   >
     <div class="mx-auto max-w-7xl space-y-4">
-      <div>
+      <div class="grid grid-cols-2 gap-2">
+        <a
+          href="/pricing"
+          class="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-eucalyptus/40 bg-eucalyptus/10 px-3 py-2 text-xs font-semibold text-spruce"
+        >
+          Transparent Pricing
+        </a>
+        <a
+          href="/checklist"
+          class="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-mist/35 bg-card px-3 py-2 text-xs font-semibold text-spruce"
+        >
+          50-Point Checklist
+        </a>
+      </div>
+
+      <div class="border-t border-mist/25 pt-3">
         <p class="px-2 text-xs font-semibold tracking-wider uppercase text-spruce/70">Cleaning Packages</p>
         <div class="mt-1 grid gap-1">
           {serviceLinks.map((item) => (

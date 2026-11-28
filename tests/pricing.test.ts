@@ -24,17 +24,16 @@ describe('pricing.ts — Hybrid flat-rate & hourly quote engine', () => {
       service: 'deep_clean',
       bedrooms: 4,
       bathrooms: 3,
-      postalCode: 'T8L', // Fort Saskatchewan +$15
+      postalCode: 'T8L',
     });
     expect(deep4.basePriceCad).toBe(420);
-    expect(deep4.extraBathroomFeeCad).toBe(50); // 2 extra * $25
+    expect(deep4.extraBathroomFeeCad).toBe(50);
     expect(deep4.travelFeeCad).toBe(15);
     expect(deep4.subtotalBeforeDiscountsCad).toBe(485);
-    expect(deep4.promo.discountCad).toBe(75); // >= 480 tier
+    expect(deep4.promo.discountCad).toBe(75);
     expect(deep4.finalPreTaxCad).toBe(410);
     expect(deep4.estimatedGstCad).toBe(20.5);
 
-    // Clamping out-of-range bedrooms/bathrooms and unknown service fallback
     const clampedLow = calculateQuote({
       mode: 'flat_rate',
       service: 'unknown_pkg' as ServiceId,
@@ -52,10 +51,10 @@ describe('pricing.ts — Hybrid flat-rate & hourly quote engine', () => {
       service: 'move_out',
       bedrooms: 12,
       bathrooms: 9,
-      postalCode: 'T2P', // Unsupported -> $0 travel
+      postalCode: 'T2P',
     });
-    expect(clampedHigh.basePriceCad).toBe(575); // 5bd Move-Out
-    expect(clampedHigh.extraBathroomFeeCad).toBe(100); // (5 - 1) * $25
+    expect(clampedHigh.basePriceCad).toBe(575);
+    expect(clampedHigh.extraBathroomFeeCad).toBe(100);
     expect(clampedHigh.travelFeeCad).toBe(0);
   });
 
@@ -81,15 +80,14 @@ describe('pricing.ts — Hybrid flat-rate & hourly quote engine', () => {
         'inside_fridge',
         'inside_cabinets',
         'interior_windows',
-        'inside_oven', // duplicate
+        'inside_oven',
         'not_an_addon' as never,
       ],
     });
     expect(explicitWithWindows.includedFreeSavingsCad).toBe(135);
-    expect(explicitWithWindows.addonsTotalCad).toBe(50); // only interior_windows charged
+    expect(explicitWithWindows.addonsTotalCad).toBe(50);
     expect(explicitWithWindows.addonsDetail).toHaveLength(4);
 
-    // Move-Out ignores recurring discounts (0% even if weekly passed)
     const moveOutWeekly = calculateQuote({
       mode: 'flat_rate',
       service: 'move_out',
@@ -105,27 +103,26 @@ describe('pricing.ts — Hybrid flat-rate & hourly quote engine', () => {
     const hourlyDefault = calculateQuote({
       mode: 'hourly',
       service: 'hourly',
-      hours: 1, // clamps to 3
-      cleaners: 0, // clamps to 1
+      hours: 1,
+      cleaners: 0,
     });
     expect(hourlyDefault.mode).toBe('hourly');
-    expect(hourlyDefault.basePriceCad).toBe(144); // 3 * 1 * $48
-    expect(hourlyDefault.competitorMedianCad).toBe(150); // 3 * 1 * $50
+    expect(hourlyDefault.basePriceCad).toBe(144);
+    expect(hourlyDefault.competitorMedianCad).toBe(150);
 
     const hourlyMax = calculateQuote({
-      mode: 'flat_rate', // service='hourly' still activates hourly mode
+      mode: 'flat_rate',
       service: 'hourly',
-      hours: 25, // clamps to 10
-      cleaners: 8, // clamps to 3
+      hours: 25,
+      cleaners: 8,
       frequency: 'biweekly',
     });
     expect(hourlyMax.mode).toBe('hourly');
-    expect(hourlyMax.basePriceCad).toBe(1440); // 10 * 3 * $48
+    expect(hourlyMax.basePriceCad).toBe(1440);
     expect(hourlyMax.frequencyDiscountPct).toBe(10);
     expect(hourlyMax.frequencyDiscountCad).toBe(144);
     expect(hourlyMax.competitorMedianCad).toBe(1500);
 
-    // Airbnb safely falls back to regular medians in edmontonMarketBenchmarks
     const airbnb2 = calculateQuote({
       mode: 'flat_rate',
       service: 'airbnb',
@@ -134,9 +131,8 @@ describe('pricing.ts — Hybrid flat-rate & hourly quote engine', () => {
       addons: ['heavy_pet_hair', 'basement_suite'],
     });
     expect(airbnb2.basePriceCad).toBe(160);
-    expect(airbnb2.addonsTotalCad).toBe(100); // 35 + 65
+    expect(airbnb2.addonsTotalCad).toBe(100);
     expect(airbnb2.competitorMedianCad).toBe(189);
-    // With $100 addons -> subtotal 260 - 25 = 235 > 189 -> competitorSavingsCad clamps to 0
     expect(airbnb2.competitorSavingsCad).toBe(0);
   });
 
@@ -144,25 +140,22 @@ describe('pricing.ts — Hybrid flat-rate & hourly quote engine', () => {
     const baseInput = {
       mode: 'flat_rate' as const,
       service: 'regular' as const,
-      bedrooms: 3, // $215
+      bedrooms: 3,
       bathrooms: 1,
     };
 
     const weekly = calculateQuote({ ...baseInput, frequency: 'weekly' });
     expect(weekly.frequencyDiscountPct).toBe(15);
-    expect(weekly.frequencyDiscountCad).toBe(32); // round(215 * 0.15)
+    expect(weekly.frequencyDiscountCad).toBe(32);
 
     const biweekly = calculateQuote({ ...baseInput, frequency: 'biweekly' });
     expect(biweekly.frequencyDiscountPct).toBe(10);
-    expect(biweekly.frequencyDiscountCad).toBe(22); // round(215 * 0.10)
+    expect(biweekly.frequencyDiscountCad).toBe(22);
 
     const monthly = calculateQuote({ ...baseInput, frequency: 'monthly' });
     expect(monthly.frequencyDiscountPct).toBe(5);
-    expect(monthly.frequencyDiscountCad).toBe(11); // round(215 * 0.05)
+    expect(monthly.frequencyDiscountCad).toBe(11);
 
-    // Minimum floor $95 clamping test:
-    // Airbnb 1bd ($120), weekly 15% (-$18 => $102 after frequency).
-    // Tier promo wants $25 off, which would drop to $77, so promo clamps to $7 and final is $95!
     const floorClamped = calculateQuote({
       mode: 'flat_rate',
       service: 'airbnb',

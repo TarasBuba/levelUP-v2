@@ -22,11 +22,6 @@ function createForbiddenRule(
   });
 }
 
-/**
- * Compiled forbidden-claim rule descriptors aligned 1:1 with
- * `data/site_context_lock.json -> guardrails.forbiddenPatterns`.
- * Each entry is a real RegExp instance augmented with `{ id, label, pattern }`.
- */
 export const FORBIDDEN_CLAIM_PATTERNS: readonly ForbiddenClaimRule[] = [
   createForbiddenRule('two_million_numeric', '$2,000,000', /\$2,000,000(?!\d)/i),
   createForbiddenRule('two_million_short', '$2M', /\$2\s*M\b/i),
@@ -53,10 +48,6 @@ export const FORBIDDEN_CLAIM_PATTERNS: readonly ForbiddenClaimRule[] = [
   createForbiddenRule('placeholder_phone', '555-LVL1', /555-LVL1/i),
 ];
 
-/**
- * Scans input text for any prohibited brand, coverage, redo-guarantee, or
- * placeholder-contact claims. Returns matched rule labels (`[]` when clean).
- */
 export function scanForbiddenClaims(text: string): string[] {
   if (!text) {
     return [];
@@ -86,14 +77,6 @@ const PROHIBITED_SURFACE_CHECKS: ReadonlyArray<{
   { name: 'matte-black fixtures', regex: /\bmatte[- ]black\b/i },
 ];
 
-/**
- * Validates that any text mentioning DIY/acid/alkaline cleaning chemistry
- * (`vinegar`, `citric acid`, `baking soda`, `descal*`) explicitly states:
- * 1. Safe ONLY on sealed ceramic/porcelain and chrome scope;
- * 2. Explicit prohibition (NEVER / do not) against marble, stone, quartz,
- *    hardwood, unsealed grout, and matte-black surfaces;
- * 3. Mandatory spot-test instruction.
- */
 export function validateSurfaceSafetyCompliance(
   text: string,
 ): SurfaceSafetyValidationResult {

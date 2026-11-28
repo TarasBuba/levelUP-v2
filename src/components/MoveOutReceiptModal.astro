@@ -59,7 +59,6 @@ const { brand } = siteContext;
       </form>
     </div>
 
-    <!-- Simulated Official PDF Document Card -->
     <div class="mt-5 rounded-2xl border border-spruce/15 bg-card/80 p-4 sm:p-6 text-xs sm:text-sm space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2 border-b border-mist/25 pb-3">
         <div>
@@ -161,7 +160,6 @@ const { brand } = siteContext;
       receiptDialog.returnValue = '';
     });
 
-    // Progressive light-dismiss fallback for browsers without native dialog.closedBy (e.g. Safari)
     if (!('closedBy' in HTMLDialogElement.prototype)) {
       const isOutside = (e: PointerEvent, d: HTMLDialogElement) => {
         const r = d.getBoundingClientRect();

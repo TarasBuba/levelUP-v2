@@ -2,9 +2,11 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
+import { scanCommentsInProject } from './strip-comments.mjs';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
-const distDir = resolve(__dirname, '../dist');
+const websiteRoot = resolve(__dirname, '..');
+const distDir = resolve(websiteRoot, 'dist');
 
 const EXPECTED_INDEXABLE_ROUTES = [
   '/',
@@ -12,6 +14,8 @@ const EXPECTED_INDEXABLE_ROUTES = [
   '/deep-cleaning-edmonton',
   '/recurring-cleaning-edmonton',
   '/airbnb-cleaning-edmonton',
+  '/pricing',
+  '/checklist',
   '/areas/central-edmonton-condos',
   '/areas/southwest-edmonton-homes',
   '/areas/west-mature-edmonton',
@@ -26,8 +30,9 @@ const EXPECTED_INDEXABLE_ROUTES = [
 ];
 
 const EXPECTED_LP_ROUTES = ['/lp/move-out', '/lp/deep-reset', '/lp/pet-safe'];
-
-const ALL_EXPECTED_ROUTES = [...EXPECTED_INDEXABLE_ROUTES, ...EXPECTED_LP_ROUTES];
+const EXPECTED_ADMIN_ROUTES = ['/admin/calendar'];
+const EXPECTED_NOINDEX_ROUTES = [...EXPECTED_LP_ROUTES, ...EXPECTED_ADMIN_ROUTES];
+const ALL_EXPECTED_ROUTES = [...EXPECTED_INDEXABLE_ROUTES, ...EXPECTED_NOINDEX_ROUTES];
 
 const FORBIDDEN_CLAIM_RULES = [
   { label: '$2,000,000', regex: /\$2,000,000(?!\d)/i },
@@ -46,13 +51,16 @@ const FORBIDDEN_CLAIM_RULES = [
 const SECRET_LEAK_RULES = [
   { label: 'TELEGRAM_BOT_TOKEN', regex: /TELEGRAM_BOT_TOKEN/ },
   { label: 'META_CAPI_TOKEN', regex: /META_CAPI_TOKEN/ },
+  { label: 'UPSTASH_REDIS_REST_TOKEN', regex: /UPSTASH_REDIS_REST_TOKEN/ },
+  { label: 'BLOB_READ_WRITE_TOKEN', regex: /BLOB_READ_WRITE_TOKEN/ },
+  { label: 'RESEND_API_KEY', regex: /RESEND_API_KEY/ },
   { label: 'whsec secret', regex: /\bwhsec[_A-Za-z0-9-]*/ },
   { label: 'Telegram bot token literal', regex: /bot\d+:[A-Za-z0-9_-]{30,}/ },
 ];
 
 const TEXT_SCAN_EXTENSIONS = new Set(['.html', '.js', '.css', '.txt', '.xml', '.mjs', '.json']);
-const MAX_GZIP_JS_BYTES = 20 * 1024; // 20,480 bytes
-const MAX_PHOTO_BYTES = 180 * 1024; // 184,320 bytes
+const MAX_GZIP_JS_BYTES = 20 * 1024;
+const MAX_PHOTO_BYTES = 180 * 1024;
 
 function walkFiles(dir) {
   const results = [];
@@ -74,6 +82,20 @@ function routeToHtmlPath(route) {
   }
   const clean = route.replace(/^\/+/, '').replace(/\/+$/, '');
   return join(distDir, clean, 'index.html');
+}
+
+function routeToCanonicalUrl(route) {
+  if (route === '/') {
+    return 'https://levelupcleaning.ca/';
+  }
+  return `https://levelupcleaning.ca${route}`;
+}
+
+function hasNoindexMeta(html) {
+  return (
+    /<meta\b[^>]*name=(['"])robots\1[^>]*content=(['"])[^'"]*noindex[^'"]*\2/i.test(html) ||
+    /<meta\b[^>]*content=(['"])[^'"]*noindex[^'"]*\1[^>]*name=(['"])robots\2/i.test(html)
+  );
 }
 
 function resolveInternalDistTarget(rawRef) {
@@ -116,12 +138,18 @@ function resolveInternalDistTarget(rawRef) {
 
 const errors = [];
 
+const commentViolations = scanCommentsInProject(websiteRoot);
+if (commentViolations.length > 0) {
+  for (const v of commentViolations) {
+    errors.push(`Comment(s) found in source/config file "${v.file}" (${v.count} occurrence(s))`);
+  }
+}
+
 if (!existsSync(distDir)) {
   console.error(`[verify-build] FAIL: dist directory does not exist at ${distDir}`);
   process.exit(1);
 }
 
-// 1. Verify all 19 HTML pages + sitemap.xml + robots.txt + llms.txt
 for (const route of ALL_EXPECTED_ROUTES) {
   const htmlPath = routeToHtmlPath(route);
   if (!existsSync(htmlPath)) {
@@ -131,8 +159,8 @@ for (const route of ALL_EXPECTED_ROUTES) {
 
 const allDistFiles = walkFiles(distDir);
 const htmlFiles = allDistFiles.filter((f) => extname(f).toLowerCase() === '.html');
-if (htmlFiles.length !== 19) {
-  errors.push(`Expected exactly 19 HTML pages in dist/, found ${htmlFiles.length}`);
+if (htmlFiles.length !== 22) {
+  errors.push(`Expected exactly 22 HTML pages in dist/, found ${htmlFiles.length}`);
 }
 
 for (const metaFile of ['sitemap.xml', 'robots.txt', 'llms.txt']) {
@@ -142,7 +170,6 @@ for (const metaFile of ['sitemap.xml', 'robots.txt', 'llms.txt']) {
   }
 }
 
-// 2 & 3. Scan ALL text outputs for forbidden claims and leaked .env secrets
 for (const filePath of allDistFiles) {
   const ext = extname(filePath).toLowerCase();
   if (!TEXT_SCAN_EXTENSIONS.has(ext)) continue;
@@ -163,7 +190,6 @@ for (const filePath of allDistFiles) {
   }
 }
 
-// 4 & 8. Validate parsable JSON-LD @graph AND zero broken internal src/href/poster/srcset paths on every HTML page
 let verifiedInternalRefs = 0;
 
 for (const htmlPath of htmlFiles) {
@@ -174,22 +200,42 @@ for (const htmlPath of htmlFiles) {
     ...html.matchAll(/<script\b[^>]*type=(['"])application\/ld\+json\1[^>]*>([\s\S]*?)<\/script>/gi),
   ];
 
+  const graphTypes = new Set();
+
   if (ldMatches.length === 0) {
     errors.push(`Missing <script type="application/ld+json"> on dist/${rel}`);
   } else {
     for (const match of ldMatches) {
       try {
         const parsed = JSON.parse(match[2]);
-        if (parsed['@context'] !== 'https://schema.org' || !Array.isArray(parsed['@graph']) || parsed['@graph'].length === 0) {
+        if (
+          parsed['@context'] !== 'https://schema.org' ||
+          !Array.isArray(parsed['@graph']) ||
+          parsed['@graph'].length === 0
+        ) {
           errors.push(`Invalid JSON-LD @graph structure in dist/${rel}`);
+        } else {
+          for (const node of parsed['@graph']) {
+            if (node && typeof node['@type'] === 'string') {
+              graphTypes.add(node['@type']);
+            }
+          }
         }
       } catch (err) {
-        errors.push(`Unparsable JSON-LD in dist/${rel}: ${err instanceof Error ? err.message : String(err)}`);
+        errors.push(
+          `Unparsable JSON-LD in dist/${rel}: ${err instanceof Error ? err.message : String(err)}`,
+        );
       }
     }
   }
 
-  // Check src, href, poster attributes
+  if (rel === 'pricing/index.html' && !graphTypes.has('OfferCatalog')) {
+    errors.push('dist/pricing/index.html JSON-LD @graph must contain OfferCatalog');
+  }
+  if (rel === 'checklist/index.html' && !graphTypes.has('ItemList')) {
+    errors.push('dist/checklist/index.html JSON-LD @graph must contain ItemList');
+  }
+
   const attrMatches = [...html.matchAll(/\b(?:src|href|poster)=(['"])(.*?)\1/gi)];
   for (const [, , rawVal] of attrMatches) {
     const candidates = resolveInternalDistTarget(rawVal);
@@ -200,7 +246,6 @@ for (const htmlPath of htmlFiles) {
     }
   }
 
-  // Check srcset descriptors
   const srcsetMatches = [...html.matchAll(/\bsrcset=(['"])(.*?)\1/gi)];
   for (const [, , srcsetVal] of srcsetMatches) {
     const entries = srcsetVal
@@ -218,27 +263,46 @@ for (const htmlPath of htmlFiles) {
   }
 }
 
-// 5. Verify /lp/* noindex tag, zero sitemap.xml presence, and zero nav exit links
 const sitemapPath = join(distDir, 'sitemap.xml');
 const sitemapContent = existsSync(sitemapPath) ? readFileSync(sitemapPath, 'utf8') : '';
+const sitemapLocs = [...sitemapContent.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1]);
 
-for (const lpRoute of EXPECTED_LP_ROUTES) {
-  if (sitemapContent.includes(lpRoute)) {
-    errors.push(`Funnel route "${lpRoute}" must NOT appear in dist/sitemap.xml`);
+if (sitemapLocs.length !== EXPECTED_INDEXABLE_ROUTES.length) {
+  errors.push(
+    `Expected exactly ${EXPECTED_INDEXABLE_ROUTES.length} URLs in dist/sitemap.xml, found ${sitemapLocs.length}`,
+  );
+}
+
+for (const indexableRoute of EXPECTED_INDEXABLE_ROUTES) {
+  const expectedLoc = routeToCanonicalUrl(indexableRoute);
+  if (!sitemapLocs.includes(expectedLoc)) {
+    errors.push(`Missing indexable canonical URL "${expectedLoc}" in dist/sitemap.xml`);
+  }
+}
+
+if (sitemapContent.includes('/lp/') || sitemapContent.includes('/admin/')) {
+  errors.push('dist/sitemap.xml must contain ZERO /lp/* or /admin/* routes');
+}
+
+for (const noindexRoute of EXPECTED_NOINDEX_ROUTES) {
+  if (sitemapContent.includes(noindexRoute)) {
+    errors.push(`Noindex route "${noindexRoute}" must NOT appear in dist/sitemap.xml`);
   }
 
+  const pagePath = routeToHtmlPath(noindexRoute);
+  if (!existsSync(pagePath)) continue;
+
+  const pageHtml = readFileSync(pagePath, 'utf8');
+  if (!hasNoindexMeta(pageHtml)) {
+    errors.push(`${noindexRoute} is missing <meta name="robots" content="noindex...">`);
+  }
+}
+
+for (const lpRoute of EXPECTED_LP_ROUTES) {
   const lpHtmlPath = routeToHtmlPath(lpRoute);
   if (!existsSync(lpHtmlPath)) continue;
 
   const lpHtml = readFileSync(lpHtmlPath, 'utf8');
-  const hasNoindex =
-    /<meta\b[^>]*name=(['"])robots\1[^>]*content=(['"])[^'"]*noindex[^'"]*\2/i.test(lpHtml) ||
-    /<meta\b[^>]*content=(['"])[^'"]*noindex[^'"]*\1[^>]*name=(['"])robots\2/i.test(lpHtml);
-
-  if (!hasNoindex) {
-    errors.push(`${lpRoute} is missing <meta name="robots" content="noindex...">`);
-  }
-
   if (/<nav\b/i.test(lpHtml)) {
     errors.push(`${lpRoute} contains a <nav> element (must be distraction-free AdFunnelLayout)`);
   }
@@ -256,7 +320,6 @@ for (const lpRoute of EXPECTED_LP_ROUTES) {
   }
 }
 
-// 6. Verify total gzipped client JS across dist/_astro/*.js is < 20 KB (20,480 bytes)
 const astroAssetsDir = join(distDir, '_astro');
 const jsFiles = existsSync(astroAssetsDir)
   ? walkFiles(astroAssetsDir).filter((f) => extname(f).toLowerCase() === '.js')
@@ -277,7 +340,6 @@ if (totalGzipJsBytes >= MAX_GZIP_JS_BYTES) {
   );
 }
 
-// 7. Verify static photo assets in dist/media/photos/* are each <= 180 KB and raw photos/raw/ is absent
 const photosDir = join(distDir, 'media', 'photos');
 const rawPhotosDirs = [
   join(distDir, 'media', 'photos', 'raw'),
@@ -286,7 +348,9 @@ const rawPhotosDirs = [
 
 for (const rawDir of rawPhotosDirs) {
   if (existsSync(rawDir)) {
-    errors.push(`Raw unoptimized directory must not exist in build output: ${relative(distDir, rawDir)}`);
+    errors.push(
+      `Raw unoptimized directory must not exist in build output: ${relative(distDir, rawDir)}`,
+    );
   }
 }
 
@@ -317,9 +381,10 @@ if (errors.length > 0) {
 console.log(
   [
     `[verify-build] PASSED deterministic dist/ verification:`,
-    `  - HTML routes: ${htmlFiles.length}/19 (+ sitemap.xml, robots.txt, llms.txt)`,
+    `  - Zero-comment source audit: 0 files with comments`,
+    `  - HTML routes: ${htmlFiles.length}/22 (18 indexable + 3 /lp/* noindex + 1 /admin/calendar noindex; sitemap.xml=${sitemapLocs.length})`,
     `  - Forbidden claims & secret leaks: 0 across ${allDistFiles.length} built files`,
-    `  - JSON-LD @graph & /lp/* noindex + zero exit-nav isolation: verified`,
+    `  - JSON-LD @graph (incl. OfferCatalog on /pricing & ItemList on /checklist) & /lp/* isolation: verified`,
     `  - Client JS bundle (${jsFiles.length} chunks): ${(totalGzipJsBytes / 1024).toFixed(2)} KB gzipped (${totalGzipJsBytes}/${MAX_GZIP_JS_BYTES} bytes; raw ${(totalRawJsBytes / 1024).toFixed(2)} KB)`,
     `  - Static photos (${photoFiles.length} files): max ${(maxPhotoSeenBytes / 1024).toFixed(1)} KB (<= 180 KB), raw/ absent`,
     `  - Internal asset & route links verified: ${verifiedInternalRefs} (0 broken)`,

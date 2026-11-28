@@ -1,3 +1,4 @@
+import { constantTimeEqual } from '../../src/lib/admin-signing';
 import {
   buildCapiEventPayload,
   type CapiEnv,
@@ -50,22 +51,6 @@ const PAID_CALLBACK_REGEX =
 
 const SLOTS_COMMAND_REGEX = /^\/slots(?:@[A-Za-z0-9_]+)?\s+([0-9])\s*$/i;
 
-function constantTimeStringsEqual(a: string, b: string): boolean {
-  const encoder = new TextEncoder();
-  const aBytes = encoder.encode(a);
-  const bBytes = encoder.encode(b);
-
-  if (aBytes.length !== bBytes.length) {
-    return false;
-  }
-
-  let diff = 0;
-  for (let i = 0; i < aBytes.length; i += 1) {
-    diff |= aBytes[i] ^ bBytes[i];
-  }
-  return diff === 0;
-}
-
 function jsonResponse(payload: Record<string, unknown>, status: number): Response {
   return new Response(JSON.stringify(payload), {
     status,
@@ -98,7 +83,8 @@ export async function onRequestPost(context: TelegramFunctionContext): Promise<R
     );
   }
 
-  if (!constantTimeStringsEqual(providedSecret, configuredSecret)) {
+  const secretMatches = await constantTimeEqual(providedSecret, configuredSecret);
+  if (!secretMatches) {
     return jsonResponse(
       { ok: false, error: 'Forbidden: invalid webhook secret token.' },
       403,
@@ -162,7 +148,7 @@ export async function onRequestPost(context: TelegramFunctionContext): Promise<R
           }),
         });
       } catch {
-        // Non-fatal callback toast failure
+        void 0;
       }
     }
 
@@ -216,7 +202,7 @@ export async function onRequestPost(context: TelegramFunctionContext): Promise<R
           }),
         });
       } catch {
-        // Non-fatal reply failure
+        void 0;
       }
     }
 

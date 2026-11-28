@@ -11,7 +11,6 @@ const firstKitchen = xray.kitchenHotspots[0];
 
 <section id="room-xray" class="py-16 sm:py-22" data-xray-widget>
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <!-- Header & Room Switcher -->
     <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
       <div class="max-w-2xl">
         <span class="inline-flex items-center gap-2 rounded-full border border-brass/45 bg-brass/15 px-3.5 py-1 text-xs font-semibold tracking-wider uppercase text-spruce">
@@ -56,11 +55,8 @@ const firstKitchen = xray.kitchenHotspots[0];
       </div>
     </div>
 
-    <!-- Interactive Canvas + Detail Card -->
     <div class="mt-8 grid gap-6 lg:grid-cols-12 lg:items-start">
-      <!-- Left: Annotated Architectural Photo -->
       <div class="lg:col-span-7">
-        <!-- Kitchen Stage -->
         <div data-xray-stage="kitchen" class="space-y-4">
           <div class="relative aspect-video w-full overflow-hidden rounded-3xl border border-mist/35 bg-spruce shadow-md">
             <picture>
@@ -109,7 +105,6 @@ const firstKitchen = xray.kitchenHotspots[0];
             ))}
           </div>
 
-          <!-- Quick Hotspot Selector Pills -->
           <div class="flex flex-wrap gap-2" aria-label="Kitchen checklist hotspots">
             {xray.kitchenHotspots.map((spot, idx) => (
               <button
@@ -130,7 +125,6 @@ const firstKitchen = xray.kitchenHotspots[0];
           </div>
         </div>
 
-        <!-- Bathroom Stage -->
         <div data-xray-stage="bathroom" hidden class="space-y-4">
           <div class="relative aspect-video w-full overflow-hidden rounded-3xl border border-mist/35 bg-spruce shadow-md">
             <picture>
@@ -199,7 +193,6 @@ const firstKitchen = xray.kitchenHotspots[0];
         </div>
       </div>
 
-      <!-- Right: Inspector Detail Card -->
       <div
         aria-live="polite"
         class="lg:col-span-5 rounded-3xl border border-mist/40 bg-card p-6 sm:p-8 shadow-sm space-y-5"

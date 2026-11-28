@@ -2,6 +2,7 @@
 import type { AddonId, Frequency, ServiceId } from '../types/contracts';
 import strategy from '../data/strategy.json';
 import { buildSmsPrefillHref, calculateQuote } from '../lib/pricing';
+import LiveBookingCalendar from './LiveBookingCalendar.astro';
 
 interface Props {
   defaultService?: ServiceId;
@@ -92,9 +93,7 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
       novalidate
       class="grid gap-6 lg:grid-cols-12 lg:items-start"
     >
-      <!-- Left Column: Steps 1, 2 & 3 Controls -->
       <div class="lg:col-span-7 space-y-6">
-        <!-- STEP 1: Edmonton Postal FSA Check -->
         <div class="rounded-3xl border border-mist/35 bg-card p-5 sm:p-7 shadow-2xs">
           <div class="flex items-center gap-2.5">
             <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-spruce font-mono text-xs font-bold text-linen">
@@ -134,7 +133,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
           </div>
         </div>
 
-        <!-- STEP 2: Dual-Path & Room Customization -->
         <div class="rounded-3xl border border-mist/35 bg-card p-5 sm:p-7 shadow-2xs space-y-6">
           <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div class="flex items-center gap-2.5">
@@ -146,7 +144,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
               </h3>
             </div>
 
-            <!-- Dual-Path Toggle -->
             <div
               role="group"
               aria-label="Pricing mode toggle"
@@ -181,7 +178,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
             </div>
           </div>
 
-          <!-- Flat-Rate Controls -->
           <div data-flat-rate-panel hidden={initialMode !== 'flat_rate'} class="space-y-6">
             <div>
               <p class="text-xs font-bold uppercase tracking-wider text-spruce/75 mb-2.5">
@@ -221,7 +217,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
               </div>
             </div>
 
-            <!-- Bedrooms & Bathrooms -->
             <div class="grid gap-5 sm:grid-cols-2">
               <div>
                 <p class="text-xs font-bold uppercase tracking-wider text-spruce/75 mb-2">
@@ -282,7 +277,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
             </div>
           </div>
 
-          <!-- Hourly Custom Clean Controls -->
           <div data-hourly-panel hidden={initialMode !== 'hourly'} class="space-y-5">
             <div class="rounded-2xl border border-eucalyptus/30 bg-eucalyptus/8 p-4 text-xs sm:text-sm text-spruce">
               <span class="font-semibold">$48/hr per specialist</span> (below the $50/hr Edmonton 30-company median). Hand us your priority room list—we work top-to-bottom with commercial HEPA &amp; botanical kits.
@@ -344,7 +338,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
             </div>
           </div>
 
-          <!-- Frequency Selector -->
           <div>
             <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
               <p class="text-xs font-bold uppercase tracking-wider text-spruce/75">
@@ -385,7 +378,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
             </div>
           </div>
 
-          <!-- Detail Add-Ons (Auto-locks Oven + Fridge + Cabinets FREE on Move-Out) -->
           <div>
             <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
               <p class="text-xs font-bold uppercase tracking-wider text-spruce/75">
@@ -447,7 +439,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
           </div>
         </div>
 
-        <!-- STEP 3: Lock In Date ($0 Upfront) + Snap & Lock + CASL Gate -->
         <div class="rounded-3xl border border-mist/35 bg-card p-5 sm:p-7 shadow-2xs space-y-5">
           <div class="flex items-center gap-2.5">
             <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-spruce font-mono text-xs font-bold text-linen">
@@ -455,7 +446,7 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
             </span>
             <div>
               <h3 class="font-serif text-lg sm:text-xl font-semibold text-spruce">
-                Reserve With $0 Upfront Deposit
+                Pick Open Arrival Window &amp; Reserve ($0 Upfront)
               </h3>
               <p class="text-xs text-spruce/75">
                 Pay only after your 50-point walkthrough sign-off (or SMS photo-verified report).
@@ -463,13 +454,19 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
             </div>
           </div>
 
-          <!-- Hidden Honeypot -->
           <div class="hidden" aria-hidden="true">
             <label>
               Website URL
               <input type="text" name="honeypot" tabindex="-1" autocomplete="off" data-honeypot />
             </label>
           </div>
+
+          <LiveBookingCalendar
+            initialMode={initialMode}
+            initialService={defaultService}
+            initialBedrooms={defaultBedrooms}
+            initialHours={4}
+          />
 
           <div class="grid gap-4 sm:grid-cols-2">
             <div>
@@ -504,9 +501,9 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
               />
             </div>
 
-            <div>
+            <div class="sm:col-span-2">
               <label for="calc-email" class="block text-xs font-semibold text-spruce mb-1.5">
-                Email <span class="font-normal text-spruce/70">(Optional — for itemized receipt)</span>
+                Email <span class="font-normal text-spruce/70">(Optional — for itemized confirmation &amp; receipt)</span>
               </label>
               <input
                 id="calc-email"
@@ -516,19 +513,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
                 placeholder="you@example.ca"
                 data-email-input
                 class="w-full min-h-[46px] rounded-xl border border-mist/45 bg-linen px-3.5 py-2.5 text-sm text-spruce placeholder:text-spruce/45 focus:border-eucalyptus"
-              />
-            </div>
-
-            <div>
-              <label for="calc-date" class="block text-xs font-semibold text-spruce mb-1.5">
-                Preferred Cleaning Date <span class="font-normal text-spruce/70">(Optional)</span>
-              </label>
-              <input
-                id="calc-date"
-                name="preferredDate"
-                type="date"
-                data-date-input
-                class="w-full min-h-[46px] rounded-xl border border-mist/45 bg-linen px-3.5 py-2.5 text-sm text-spruce focus:border-eucalyptus"
               />
             </div>
           </div>
@@ -543,7 +527,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
             <span>Pets at home (our 100% bleach-free botanical eucalyptus kit is standard on every visit)</span>
           </label>
 
-          <!-- Snap & Lock Exact Price (Canvas Browser Compression) -->
           <div class="rounded-2xl border border-dashed border-mist/60 bg-linen/90 p-4 space-y-2.5">
             <div class="flex flex-wrap items-center justify-between gap-2">
               <div>
@@ -582,7 +565,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
             ></textarea>
           </div>
 
-          <!-- Mandatory Unchecked CASL SMS Consent Gate -->
           <label
             data-casl-wrapper
             class="flex min-h-[48px] items-start gap-3 rounded-2xl border border-mist/45 bg-linen p-3.5 text-xs leading-relaxed text-spruce cursor-pointer"
@@ -598,7 +580,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
             </span>
           </label>
 
-          <!-- Validation Alert -->
           <div
             data-form-error
             role="alert"
@@ -606,7 +587,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
             class="rounded-2xl border border-brass bg-brass/20 px-4 py-3 text-xs sm:text-sm font-semibold text-spruce"
           ></div>
 
-          <!-- Confirmation Panel -->
           <div
             data-form-success
             role="status"
@@ -628,7 +608,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
             </div>
           </div>
 
-          <!-- Primary Submit + 1-Tap Pre-Filled SMS Fallback -->
           <div class="grid gap-3 sm:grid-cols-2 pt-1">
             <button
               type="submit"
@@ -650,7 +629,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
         </div>
       </div>
 
-      <!-- Right Column: Live Sticky Quote Summary Card -->
       <aside class="lg:col-span-5 lg:sticky lg:top-24">
         <div class="rounded-3xl border border-spruce/20 bg-spruce p-6 sm:p-8 text-linen shadow-xl space-y-5">
           <div class="flex flex-wrap items-center justify-between gap-2">
@@ -681,7 +659,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
             </p>
           </div>
 
-          <!-- Competitor Median Savings & Move-Out Free Bundle Callouts -->
           <div class="space-y-2">
             <div
               data-quote-savings-pill
@@ -698,9 +675,14 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
             >
               ✓ Includes $135 Appliance Bundle FREE (Inside Oven, Fridge &amp; Cabinets)
             </div>
+
+            <div
+              data-quote-slot-pill
+              hidden
+              class="rounded-2xl border border-brass/50 bg-brass/18 px-4 py-2.5 text-xs font-semibold text-linen"
+            ></div>
           </div>
 
-          <!-- Line-Item Breakdown -->
           <div class="space-y-2.5 border-y border-linen/15 py-4 text-xs sm:text-sm">
             <div class="flex items-center justify-between gap-3">
               <span data-line-service-label class="text-linen/85">{initialQuote.serviceTitle}</span>
@@ -751,7 +733,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
             </div>
           </div>
 
-          <!-- Due Today $0 Assurance -->
           <div class="rounded-2xl bg-linen/10 p-4 space-y-1.5">
             <div class="flex items-center justify-between text-sm font-bold text-linen">
               <span>Due Today to Book</span>
@@ -780,12 +761,15 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
     Frequency,
     LeadSubmissionPayload,
     LeadSubmissionResult,
+    PreferredSlotSelection,
     QuoteInput,
     ServiceId,
+    SlotWindow,
     SnapPhotoAttachment,
   } from '../types/contracts';
   import { lookupPostalCode } from '../lib/postal';
   import { buildSmsPrefillHref, calculateQuote } from '../lib/pricing';
+  import { trackClientLeadConversion } from '../lib/tracking';
 
   const MOVE_OUT_FREE_IDS: readonly AddonId[] = ['inside_oven', 'inside_fridge', 'inside_cabinets'];
 
@@ -834,7 +818,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
       }
       ctx.drawImage(img, 0, 0, width, height);
 
-      // Compress iteratively to stay well under 350 KB (~466,000 base64 chars)
       let quality = 0.78;
       let base64Data = '';
       while (quality >= 0.45) {
@@ -874,6 +857,8 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
     let hours = 4;
     let cleaners = 1;
     let postalCode = '';
+    let selectedSlot: PreferredSlotSelection | null = null;
+    let selectedSlotLabel = '';
     let userAddons = new Set<AddonId>(
       JSON.parse(root.dataset.defaultAddons || '[]') as AddonId[],
     );
@@ -890,7 +875,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
     const nameInput = root.querySelector<HTMLInputElement>('[data-name-input]');
     const phoneInput = root.querySelector<HTMLInputElement>('[data-phone-input]');
     const emailInput = root.querySelector<HTMLInputElement>('[data-email-input]');
-    const dateInput = root.querySelector<HTMLInputElement>('[data-date-input]');
     const petsInput = root.querySelector<HTMLInputElement>('[data-pets-input]');
     const notesInput = root.querySelector<HTMLTextAreaElement>('[data-notes-input]');
     const honeypotInput = root.querySelector<HTMLInputElement>('[data-honeypot]');
@@ -905,12 +889,12 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
     const submitBtn = root.querySelector<HTMLButtonElement>('[data-submit-btn]');
     const smsPrefillLink = root.querySelector<HTMLAnchorElement>('[data-sms-prefill]');
 
-    // Summary DOM refs
     const finalEl = root.querySelector<HTMLElement>('[data-quote-final]');
     const gstEl = root.querySelector<HTMLElement>('[data-quote-gst]');
     const promoBadgeEl = root.querySelector<HTMLElement>('[data-quote-promo-badge]');
     const savingsPillEl = root.querySelector<HTMLElement>('[data-quote-savings-pill]');
     const freeBundleEl = root.querySelector<HTMLElement>('[data-quote-free-bundle]');
+    const slotPillEl = root.querySelector<HTMLElement>('[data-quote-slot-pill]');
     const serviceLabelEl = root.querySelector<HTMLElement>('[data-line-service-label]');
     const basePriceEl = root.querySelector<HTMLElement>('[data-line-base-price]');
     const rowBaths = root.querySelector<HTMLElement>('[data-row-baths]');
@@ -940,6 +924,15 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
         postalCode,
         promoQuery: initialPromo,
       };
+    }
+
+    function emitQuoteScope() {
+      root.dispatchEvent(
+        new CustomEvent('levelup:quote-scope', {
+          bubbles: true,
+          detail: { mode, service: mode === 'hourly' ? 'hourly' : service, bedrooms, hours },
+        }),
+      );
     }
 
     function syncControlStates() {
@@ -1052,6 +1045,8 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
           pill.classList.toggle('text-spruce/85', !lockedFree);
         }
       });
+
+      emitQuoteScope();
     }
 
     function updateSummaryUI() {
@@ -1075,6 +1070,11 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
 
       if (freeBundleEl) {
         freeBundleEl.hidden = quote.includedFreeSavingsCad <= 0;
+      }
+
+      if (slotPillEl) {
+        slotPillEl.hidden = !selectedSlotLabel;
+        slotPillEl.textContent = selectedSlotLabel ? `Slot Held: ${selectedSlotLabel}` : '';
       }
 
       if (serviceLabelEl) {
@@ -1158,7 +1158,28 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
       }
     }
 
-    // Bind Step 1 & Step 2 listeners
+    root.addEventListener('levelup:slot-change', ((
+      ev: CustomEvent<{ date?: string | null; window?: SlotWindow | null; label?: string }>,
+    ) => {
+      const date = ev.detail?.date;
+      const win = ev.detail?.window;
+      selectedSlot = date && win ? { date, window: win } : null;
+      selectedSlotLabel = ev.detail?.label || '';
+      updateSummaryUI();
+    }) as EventListener);
+
+    window.addEventListener('levelup:hero-postal', ((
+      ev: CustomEvent<{ postalCode?: string }>,
+    ) => {
+      const incoming = (ev.detail?.postalCode || '').trim().toUpperCase();
+      if (postalInput && incoming) {
+        postalInput.value = incoming;
+        updatePostalUI();
+        updateSummaryUI();
+      }
+      root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }) as EventListener);
+
     postalInput?.addEventListener('input', () => {
       updatePostalUI();
       updateSummaryUI();
@@ -1241,7 +1262,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
       });
     });
 
-    // Snap & Lock Canvas photo upload
     snapInput?.addEventListener('change', async () => {
       const files = Array.from(snapInput.files || []);
       if (!files.length) {
@@ -1286,7 +1306,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
       errorBox.hidden = false;
     }
 
-    // Form Submission Gate
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (errorBox) errorBox.hidden = true;
@@ -1325,7 +1344,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
         return;
       }
 
-      // Mandatory CASL SMS consent verification
       if (!caslCheckbox?.checked) {
         if (caslWrapper) {
           caslWrapper.classList.add('border-brass', 'bg-brass/15');
@@ -1355,11 +1373,14 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
 
       const quoteInput = buildCurrentQuoteInput();
       const payload: LeadSubmissionPayload = {
+        leadType: 'residential_quote',
         name: nameVal,
         phone: phoneVal,
         ...(emailVal ? { email: emailVal } : {}),
         postalCode: currentPostal.toUpperCase(),
-        ...(dateInput?.value ? { preferredDate: dateInput.value } : {}),
+        ...(selectedSlot
+          ? { preferredSlot: selectedSlot, preferredDate: selectedSlot.date }
+          : {}),
         hasPets: Boolean(petsInput?.checked),
         ...(notesInput?.value.trim() ? { notes: notesInput.value.trim() } : {}),
         caslSmsConsent: true,
@@ -1384,6 +1405,19 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
         const contentType = res.headers.get('content-type') || '';
         if (contentType.includes('application/json')) {
           const result = (await res.json()) as LeadSubmissionResult;
+          if (res.status === 409) {
+            selectedSlot = null;
+            selectedSlotLabel = '';
+            root.dispatchEvent(new CustomEvent('levelup:calendar-refresh', { bubbles: true }));
+            updateSummaryUI();
+            showError(
+              result.error ||
+                'That arrival window was just booked. We refreshed the live calendar above — please pick another open slot.',
+            );
+            errorBox?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            return;
+          }
+
           if (!res.ok || !result.ok) {
             showError(
               result.error || 'Could not submit your request right now. Please tap 1-Tap Pre-Filled SMS below.',
@@ -1391,8 +1425,22 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
             return;
           }
 
+          trackClientLeadConversion({
+            leadId: result.leadId,
+            valueCad: result.finalPreTaxCad,
+            service: quoteInput.service,
+            email: emailVal || undefined,
+            phone: phoneVal,
+            postalCode: currentPostal.toUpperCase(),
+          });
+
+          const slotText = selectedSlotLabel ? ` Requested window: ${selectedSlotLabel}.` : '';
+          if (selectedSlot) {
+            root.dispatchEvent(new CustomEvent('levelup:calendar-refresh', { bubbles: true }));
+          }
+
           if (successDetail) {
-            successDetail.textContent = `Reference #${result.leadId} for ${result.areaName}: $${result.finalPreTaxCad} CAD pre-tax (+ 5% AB GST where applicable). $0 due today — our Edmonton team will text ${phoneVal} shortly to confirm your arrival window.`;
+            successDetail.textContent = `Reference #${result.leadId} for ${result.areaName}: $${result.finalPreTaxCad} CAD pre-tax (+ 5% AB GST where applicable).${slotText} $0 due today — our Edmonton team will text ${phoneVal} shortly to confirm.`;
           }
           if (successSms && result.smsPrefillHref) {
             successSms.href = result.smsPrefillHref;
@@ -1402,7 +1450,6 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
             successBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
           }
         } else {
-          // Local static preview fallback without Cloudflare Functions runtime
           const localQuote = calculateQuote(quoteInput);
           const fallbackHref = buildSmsPrefillHref(localQuote, postalCheck.normalizedFsa, nameVal);
           if (successDetail) {
@@ -1423,7 +1470,12 @@ const moveOutFreeSet = new Set<AddonId>(['inside_oven', 'inside_fridge', 'inside
       }
     });
 
-    // Hydrate initial URL promo override if present
+    const urlPostal = urlParams.get('fsa') || urlParams.get('postal');
+    if (urlPostal && postalInput) {
+      postalInput.value = urlPostal.trim().toUpperCase();
+      updatePostalUI();
+    }
+
     syncControlStates();
     updateSummaryUI();
   });

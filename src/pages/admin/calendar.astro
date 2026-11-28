@@ -1,0 +1,383 @@
+---
+import '../../styles/global.css';
+import SeoHead from '../../components/SeoHead.astro';
+import type { PageSeoConfig } from '../../types/contracts';
+
+const seoConfig: PageSeoConfig = {
+  title: 'Admin Dispatch Calendar | LevelUp Cleaning Edmonton',
+  description: 'Internal real-time 45-day dispatch slot management board for LevelUp Cleaning Edmonton.',
+  canonicalPath: '/admin/calendar',
+  noindex: true,
+};
+---
+
+<!doctype html>
+<html lang="en-CA">
+  <head>
+    <SeoHead config={seoConfig} />
+  </head>
+  <body class="min-h-screen bg-linen text-spruce font-sans antialiased">
+    <header class="sticky top-0 z-30 border-b border-mist/30 bg-spruce text-linen">
+      <div class="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+        <div class="flex items-center gap-3 min-w-0">
+          <img
+            src="/media/logo-badge.webp"
+            alt="LevelUp Cleaning emblem"
+            width="36"
+            height="36"
+            class="h-9 w-9 rounded-full object-cover ring-1 ring-mist/50"
+          />
+          <div class="min-w-0">
+            <h1 class="font-serif text-base sm:text-lg font-semibold leading-tight truncate">
+              LevelUp Dispatch Board
+            </h1>
+            <p class="text-[11px] text-linen/75">45-Day Edmonton Slot Control</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            data-admin-refresh
+            hidden
+            class="inline-flex min-h-[40px] items-center rounded-full border border-mist/45 px-3.5 py-1.5 text-xs font-semibold text-linen hover:bg-linen/10 cursor-pointer"
+          >
+            Refresh
+          </button>
+          <button
+            type="button"
+            data-admin-logout
+            hidden
+            class="inline-flex min-h-[40px] items-center rounded-full bg-brass/25 border border-brass/50 px-3.5 py-1.5 text-xs font-semibold text-linen hover:bg-brass/35 cursor-pointer"
+          >
+            Lock
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-5xl px-4 py-6 sm:px-6 space-y-6">
+      <section
+        data-admin-auth-card
+        class="mx-auto max-w-md rounded-3xl border border-mist/40 bg-card p-6 shadow-sm space-y-4"
+      >
+        <div>
+          <p class="text-xs font-bold uppercase tracking-wider text-eucalyptus">Owner &amp; Yulia Access</p>
+          <h2 class="mt-1 font-serif text-2xl font-semibold text-spruce">
+            Unlock Live Slot Calendar
+          </h2>
+          <p class="mt-1 text-xs leading-relaxed text-spruce/75">
+            Enter your Admin Secret Key. Stored only in this browser tab sessionStorage and sent via X-Admin-Secret header.
+          </p>
+        </div>
+
+        <form data-admin-login-form class="space-y-3">
+          <div>
+            <label for="admin-secret-input" class="block text-xs font-semibold text-spruce mb-1.5">
+              Admin Key
+            </label>
+            <input
+              id="admin-secret-input"
+              type="password"
+              required
+              autocomplete="off"
+              placeholder="Enter admin key"
+              data-admin-key-input
+              class="w-full min-h-[46px] rounded-xl border border-mist/45 bg-linen px-3.5 py-2.5 text-sm text-spruce focus:border-eucalyptus"
+            />
+          </div>
+          <div
+            data-admin-auth-error
+            role="alert"
+            hidden
+            class="rounded-xl border border-brass bg-brass/20 px-3.5 py-2.5 text-xs font-semibold text-spruce"
+          ></div>
+          <button
+            type="submit"
+            data-admin-unlock-btn
+            class="inline-flex min-h-[48px] w-full items-center justify-center rounded-full bg-eucalyptus px-5 py-2.5 text-sm font-semibold text-linen hover:bg-eucalyptus-hover cursor-pointer"
+          >
+            Unlock 45-Day Schedule →
+          </button>
+        </form>
+      </section>
+
+      <section data-admin-board hidden class="space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-mist/35 bg-card p-4">
+          <div class="flex flex-wrap items-center gap-3 text-xs">
+            <span class="rounded-full bg-eucalyptus/15 border border-eucalyptus/35 px-3 py-1 font-semibold text-spruce">
+              Open This Week: <strong data-admin-weekly-open>—</strong>
+            </span>
+            <span class="rounded-full border border-mist/40 bg-linen px-3 py-1 font-medium text-spruce/80">
+              Backend: <strong data-admin-backend>—</strong>
+            </span>
+            <span data-admin-toast aria-live="polite" class="font-semibold text-eucalyptus"></span>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter days">
+            {[
+              { id: '14', label: 'Next 14 Days' },
+              { id: '45', label: 'All 45 Days' },
+              { id: 'busy', label: 'Pending / Booked' },
+            ].map((f, idx) => (
+              <button
+                type="button"
+                data-admin-filter={f.id}
+                class:list={[
+                  'min-h-[40px] rounded-full px-3.5 py-1.5 text-xs font-semibold transition cursor-pointer',
+                  idx === 0
+                    ? 'bg-spruce text-linen'
+                    : 'border border-mist/40 bg-linen text-spruce hover:border-eucalyptus',
+                ]}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div data-admin-days-list class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"></div>
+      </section>
+    </main>
+
+    <script>
+      import type { CalendarDaySchedule, CalendarSchedulePayload, SlotState, SlotWindow } from '../../types/contracts';
+
+      const STORAGE_KEY = 'levelup_admin_key';
+      const NEXT_STATE: Record<SlotState, SlotState> = {
+        available: 'pending',
+        pending: 'booked',
+        booked: 'available',
+      };
+
+      const authCard = document.querySelector<HTMLElement>('[data-admin-auth-card]');
+      const loginForm = document.querySelector<HTMLFormElement>('[data-admin-login-form]');
+      const keyInput = document.querySelector<HTMLInputElement>('[data-admin-key-input]');
+      const authError = document.querySelector<HTMLElement>('[data-admin-auth-error]');
+      const boardSection = document.querySelector<HTMLElement>('[data-admin-board]');
+      const daysWrap = document.querySelector<HTMLElement>('[data-admin-days-list]');
+      const weeklyEl = document.querySelector<HTMLElement>('[data-admin-weekly-open]');
+      const backendEl = document.querySelector<HTMLElement>('[data-admin-backend]');
+      const toastEl = document.querySelector<HTMLElement>('[data-admin-toast]');
+      const refreshBtn = document.querySelector<HTMLButtonElement>('[data-admin-refresh]');
+      const logoutBtn = document.querySelector<HTMLButtonElement>('[data-admin-logout]');
+      const filterBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-admin-filter]'));
+
+      let activeFilter: '14' | '45' | 'busy' = '14';
+      let currentSchedule: CalendarSchedulePayload | null = null;
+
+      function getKey(): string {
+        return window.sessionStorage.getItem(STORAGE_KEY) || '';
+      }
+
+      function stateButtonClasses(state: SlotState): string {
+        if (state === 'available') {
+          return 'border-eucalyptus/45 bg-eucalyptus/12 text-spruce hover:bg-eucalyptus/20';
+        }
+        if (state === 'pending') {
+          return 'border-amber-600/50 bg-amber-100 text-amber-950 hover:bg-amber-200/80';
+        }
+        return 'border-rose-700/50 bg-rose-100 text-rose-950 hover:bg-rose-200/80';
+      }
+
+      function stateBadgeText(state: SlotState): string {
+        if (state === 'available') return '🟢 Open';
+        if (state === 'pending') return '🟠 Pending';
+        return '🔴 Booked';
+      }
+
+      async function mutateSlot(date: string, windowChoice: SlotWindow, targetState: SlotState) {
+        const secret = getKey();
+        if (!secret) return;
+        if (toastEl) toastEl.textContent = `Updating ${date}…`;
+
+        try {
+          const res = await fetch('/api/admin-action', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Admin-Secret': secret,
+            },
+            body: JSON.stringify({
+              action: 'set_slot',
+              date,
+              window: windowChoice,
+              state: targetState,
+            }),
+          });
+          if (res.status === 401 || res.status === 403) {
+            lockBoard('Admin key expired or rejected.');
+            return;
+          }
+          const data = (await res.json()) as { ok?: boolean; schedule?: CalendarSchedulePayload; error?: string };
+          if (!res.ok || !data.ok || !data.schedule) {
+            if (toastEl) toastEl.textContent = data.error || 'Update failed';
+            return;
+          }
+          currentSchedule = data.schedule;
+          renderBoard();
+          if (toastEl) toastEl.textContent = `Saved ${date} (${windowChoice} → ${targetState})`;
+        } catch {
+          if (toastEl) toastEl.textContent = 'Network error saving slot';
+        }
+      }
+
+      function renderBoard() {
+        if (!currentSchedule || !daysWrap) return;
+        if (weeklyEl) weeklyEl.textContent = String(currentSchedule.weeklyOpenSlots);
+        if (backendEl) backendEl.textContent = currentSchedule.storageBackend;
+
+        let list: CalendarDaySchedule[] = currentSchedule.days;
+        if (activeFilter === '14') {
+          list = list.slice(0, 14);
+        } else if (activeFilter === 'busy') {
+          list = list.filter(
+            (d) => d.morning.state !== 'available' || d.afternoon.state !== 'available',
+          );
+        }
+
+        daysWrap.replaceChildren();
+        if (!list.length) {
+          const empty = document.createElement('p');
+          empty.className = 'sm:col-span-2 lg:col-span-3 rounded-2xl border border-mist/35 bg-card p-6 text-center text-sm text-spruce/75';
+          empty.textContent = 'No days match this filter.';
+          daysWrap.append(empty);
+          return;
+        }
+
+        list.forEach((day) => {
+          const card = document.createElement('article');
+          card.className = 'rounded-2xl border border-mist/35 bg-card p-4 space-y-3 shadow-2xs';
+
+          const head = document.createElement('div');
+          head.className = 'flex items-center justify-between gap-2';
+          const title = document.createElement('p');
+          title.className = 'font-serif text-base font-semibold text-spruce';
+          title.textContent = day.dayLabel;
+          const dateTag = document.createElement('span');
+          dateTag.className = 'font-mono text-[11px] text-spruce/70';
+          dateTag.textContent = day.date;
+          head.append(title, dateTag);
+
+          const makeSlotBtn = (label: string, win: 'morning' | 'afternoon', state: SlotState) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = `flex min-h-[44px] w-full items-center justify-between rounded-xl border px-3 py-2 text-xs font-semibold transition cursor-pointer ${stateButtonClasses(state)}`;
+            const left = document.createElement('span');
+            left.textContent = label;
+            const right = document.createElement('span');
+            right.textContent = stateBadgeText(state);
+            btn.append(left, right);
+            btn.addEventListener('click', () => {
+              mutateSlot(day.date, win, NEXT_STATE[state]);
+            });
+            return btn;
+          };
+
+          const morningBtn = makeSlotBtn('Morning (8:30–12:30)', 'morning', day.morning.state);
+          const afternoonBtn = makeSlotBtn('Afternoon (1:30–5:30)', 'afternoon', day.afternoon.state);
+
+          const fullToggle = document.createElement('button');
+          fullToggle.type = 'button';
+          const isFullyBooked = day.morning.state === 'booked' && day.afternoon.state === 'booked';
+          fullToggle.className =
+            'min-h-[40px] w-full rounded-xl border border-spruce/20 bg-linen px-3 py-1.5 text-[11px] font-semibold text-spruce hover:border-eucalyptus cursor-pointer';
+          fullToggle.textContent = isFullyBooked ? 'Reopen Full Day (Available)' : 'Block Full Day (Booked)';
+          fullToggle.addEventListener('click', () => {
+            mutateSlot(day.date, 'full_day', isFullyBooked ? 'available' : 'booked');
+          });
+
+          card.append(head, morningBtn, afternoonBtn, fullToggle);
+          daysWrap.append(card);
+        });
+      }
+
+      function lockBoard(msg?: string) {
+        window.sessionStorage.removeItem(STORAGE_KEY);
+        if (boardSection) boardSection.hidden = true;
+        if (authCard) authCard.hidden = false;
+        if (refreshBtn) refreshBtn.hidden = true;
+        if (logoutBtn) logoutBtn.hidden = true;
+        if (authError && msg) {
+          authError.textContent = msg;
+          authError.hidden = false;
+        }
+      }
+
+      async function verifyAndLoad(secret: string) {
+        if (authError) authError.hidden = true;
+        try {
+          const res = await fetch('/api/admin-action', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Admin-Secret': secret,
+            },
+            body: JSON.stringify({ action: 'list' }),
+          });
+          if (res.status === 401 || res.status === 403) {
+            lockBoard('Invalid admin key. Please check ADMIN_DASHBOARD_SECRET.');
+            return;
+          }
+          const ct = res.headers.get('content-type') || '';
+          if (!ct.includes('application/json')) {
+            const calRes = await fetch('/api/calendar');
+            if (calRes.ok && (calRes.headers.get('content-type') || '').includes('application/json')) {
+              currentSchedule = (await calRes.json()) as CalendarSchedulePayload;
+            }
+          } else {
+            const data = (await res.json()) as { ok?: boolean; schedule?: CalendarSchedulePayload; error?: string };
+            if (!res.ok || !data.ok || !data.schedule) {
+              lockBoard(data.error || 'Could not load admin schedule.');
+              return;
+            }
+            currentSchedule = data.schedule;
+          }
+
+          window.sessionStorage.setItem(STORAGE_KEY, secret);
+          if (authCard) authCard.hidden = true;
+          if (boardSection) boardSection.hidden = false;
+          if (refreshBtn) refreshBtn.hidden = false;
+          if (logoutBtn) logoutBtn.hidden = false;
+          renderBoard();
+        } catch {
+          lockBoard('Could not connect to /api/admin-action.');
+        }
+      }
+
+      loginForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const key = (keyInput?.value || '').trim();
+        if (!key) return;
+        verifyAndLoad(key);
+      });
+
+      refreshBtn?.addEventListener('click', () => {
+        const key = getKey();
+        if (key) verifyAndLoad(key);
+      });
+
+      logoutBtn?.addEventListener('click', () => lockBoard());
+
+      filterBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          activeFilter = (btn.dataset.adminFilter as '14' | '45' | 'busy') || '14';
+          filterBtns.forEach((b) => {
+            const active = b === btn;
+            b.classList.toggle('bg-spruce', active);
+            b.classList.toggle('text-linen', active);
+            b.classList.toggle('border', !active);
+            b.classList.toggle('border-mist/40', !active);
+            b.classList.toggle('bg-linen', !active);
+            b.classList.toggle('text-spruce', !active);
+          });
+          renderBoard();
+        });
+      });
+
+      const savedKey = getKey();
+      if (savedKey) {
+        verifyAndLoad(savedKey);
+      }
+    </script>
+  </body>
+</html>

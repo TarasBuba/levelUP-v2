@@ -9,6 +9,7 @@ import {
 import {
   INDEXABLE_ROUTES,
   NOINDEX_FUNNEL_ROUTES,
+  NOINDEX_ROUTES,
   SITE_ORIGIN,
   buildCanonicalUrl,
   buildJsonLdGraph,
@@ -16,6 +17,7 @@ import {
 } from '../src/lib/seo';
 import { renderLlmsTxt, GET as getLlmsTxt } from '../src/pages/llms.txt';
 import { GET as getSitemapXml } from '../src/pages/sitemap.xml';
+import { scanCommentsInProject } from '../scripts/strip-comments.mjs';
 import strategy from '../src/data/strategy.json';
 import siteCopy from '../src/data/site_copy.json';
 import mediaManifest from '../src/data/media_manifest.json';
@@ -56,28 +58,35 @@ describe('guardrails.ts — Zero-tolerance forbidden claims & surface-safety rul
       ),
     ).toEqual({ valid: true });
 
-    // Unsafe vinegar / citric acid / baking soda / descaling advice missing warnings
     for (const trigger of ['vinegar', 'citric acid', 'baking soda', 'descaling']) {
       const unsafe = validateSurfaceSafetyCompliance(`Use ${trigger} on your bathroom tiles.`);
       expect(unsafe.valid).toBe(false);
       expect(unsafe.reason).toContain('Surface-safety disclaimer incomplete');
     }
 
-    // Compliant full surface-safety disclaimer
     const compliant =
       'DIY vinegar or citric acid descaling is safe ONLY on sealed ceramic or porcelain tile or chrome mesh; NEVER apply vinegar or acids on marble, travertine, natural stone, quartz, hardwood, unsealed grout, or matte-black/brass fixtures; always spot-test an inconspicuous area first.';
     expect(validateSurfaceSafetyCompliance(compliant)).toEqual({ valid: true });
   });
 });
 
-describe('seo.ts, llms.txt, sitemap.xml, and JSON data integrity', () => {
-  it('maintains 16 indexable routes and 3 noindex funnel routes with normalized canonical URLs', () => {
+describe('seo.ts, llms.txt, sitemap.xml, zero-comment policy, and JSON data integrity', () => {
+  it('maintains 18 indexable routes and 4 noindex routes with normalized canonical URLs', () => {
     expect(SITE_ORIGIN).toBe('https://levelupcleaning.ca');
-    expect(INDEXABLE_ROUTES).toHaveLength(16);
+    expect(INDEXABLE_ROUTES).toHaveLength(18);
+    expect(INDEXABLE_ROUTES).toContain('/pricing');
+    expect(INDEXABLE_ROUTES).toContain('/checklist');
     expect(NOINDEX_FUNNEL_ROUTES).toEqual(['/lp/move-out', '/lp/deep-reset', '/lp/pet-safe']);
+    expect(NOINDEX_ROUTES).toHaveLength(4);
+    expect(NOINDEX_ROUTES).toEqual([
+      '/lp/move-out',
+      '/lp/deep-reset',
+      '/lp/pet-safe',
+      '/admin/calendar',
+    ]);
 
-    for (const lp of NOINDEX_FUNNEL_ROUTES) {
-      expect(INDEXABLE_ROUTES).not.toContain(lp);
+    for (const blocked of NOINDEX_ROUTES) {
+      expect(INDEXABLE_ROUTES).not.toContain(blocked);
     }
 
     expect(buildCanonicalUrl('/')).toBe('https://levelupcleaning.ca/');
@@ -104,16 +113,38 @@ describe('seo.ts, llms.txt, sitemap.xml, and JSON data integrity', () => {
     );
   });
 
-  it('builds Schema.org @graph with CleaningService, Service+Offer, FAQPage, and BreadcrumbList', () => {
+  it('builds Schema.org @graph with Service, OfferCatalog, ItemList, FAQPage, and BreadcrumbList', () => {
     const fullGraph = buildJsonLdGraph({
-      title: 'Move-Out Cleaning Edmonton | LevelUp Cleaning',
-      description: 'Alberta RTA Move-Out inspection cleaning from $235 CAD pre-tax.',
-      canonicalPath: '/move-out-cleaning-edmonton',
+      title: 'House Cleaning Prices & Checklist Edmonton | LevelUp Cleaning',
+      description: 'Transparent pre-tax CAD pricing and 50-point checklist in Edmonton.',
+      canonicalPath: '/pricing',
       serviceSchema: {
         name: 'Move-Out / Move-In Inspection Clean',
         description: 'Includes inside oven, fridge, and cabinets FREE.',
         lowPriceCad: 235,
         highPriceCad: 575,
+      },
+      offerCatalogSchema: {
+        name: 'LevelUp Cleaning Edmonton Pre-Tax CAD Pricing Catalog',
+        description: 'Flat-rate packages and $48/hr custom cleaning in Edmonton.',
+        items: [
+          {
+            name: 'Move-Out Clean',
+            description: 'Includes oven, fridge, and cabinets FREE.',
+            priceCad: 235,
+            urlPath: '/move-out-cleaning-edmonton',
+          },
+          {
+            name: 'Hourly Custom Clean',
+            description: '$48/hr per specialist.',
+            priceCad: 48,
+            urlPath: '/pricing',
+          },
+        ],
+      },
+      checklistItemListSchema: {
+        name: '50-Point Move-Out Cleaning Checklist',
+        items: ['Degrease oven cavity and racks', 'Sanitize inside fridge shelves'],
       },
       faqs: [
         {
@@ -123,7 +154,7 @@ describe('seo.ts, llms.txt, sitemap.xml, and JSON data integrity', () => {
       ],
       breadcrumbs: [
         { name: 'Home', path: '/' },
-        { name: 'Move-Out Cleaning Edmonton', path: '/move-out-cleaning-edmonton' },
+        { name: 'Pricing', path: '/pricing' },
       ],
     });
 
@@ -135,9 +166,21 @@ describe('seo.ts, llms.txt, sitemap.xml, and JSON data integrity', () => {
       'WebSite',
       'WebPage',
       'Service',
+      'OfferCatalog',
+      'ItemList',
       'FAQPage',
       'BreadcrumbList',
     ]);
+
+    const catalogNode = nodes.find((n) => n['@type'] === 'OfferCatalog');
+    expect(catalogNode?.['@id']).toBe('https://levelupcleaning.ca/pricing#offer-catalog');
+    expect(Array.isArray(catalogNode?.itemListElement)).toBe(true);
+    expect((catalogNode?.itemListElement as unknown[]).length).toBe(2);
+
+    const itemListNode = nodes.find((n) => n['@type'] === 'ItemList');
+    expect(itemListNode?.['@id']).toBe('https://levelupcleaning.ca/pricing#checklist');
+    expect(itemListNode?.numberOfItems).toBe(2);
+
     expect(scanForbiddenClaims(JSON.stringify(fullGraph))).toEqual([]);
 
     const minimalGraph = buildJsonLdGraph({
@@ -153,6 +196,12 @@ describe('seo.ts, llms.txt, sitemap.xml, and JSON data integrity', () => {
     expect(llmsText).toContain('+1 (780) 710-1503');
     expect(llmsText).toContain('hello@levelupcleaning.ca');
     expect(llmsText).toContain('$120–$575');
+    expect(llmsText).toContain('https://levelupcleaning.ca/pricing');
+    expect(llmsText).toContain('https://levelupcleaning.ca/checklist');
+    expect(llmsText).toContain('https://levelupcleaning.ca/airbnb-cleaning-edmonton#partner-inquiry');
+    expect(llmsText).toContain('https://levelupcleaning.ca/gift-a-clean');
+    expect(llmsText).toContain('America/Edmonton');
+    expect(llmsText).toContain('Canonical Indexable Pages (18 Routes)');
     expect(scanForbiddenClaims(llmsText)).toEqual([]);
     expect(validateSurfaceSafetyCompliance(llmsText)).toEqual({ valid: true });
 
@@ -163,25 +212,24 @@ describe('seo.ts, llms.txt, sitemap.xml, and JSON data integrity', () => {
     const sitemapRes = await getSitemapXml({} as never);
     expect(sitemapRes.status).toBe(200);
     const sitemapXml = await sitemapRes.text();
+    const locMatches = [...sitemapXml.matchAll(/<loc>(.*?)<\/loc>/g)];
+    expect(locMatches).toHaveLength(18);
     for (const route of INDEXABLE_ROUTES) {
       expect(sitemapXml).toContain(`<loc>${buildCanonicalUrl(route)}</loc>`);
     }
-    for (const lp of NOINDEX_FUNNEL_ROUTES) {
-      expect(sitemapXml).not.toContain(lp);
+    for (const blocked of NOINDEX_ROUTES) {
+      expect(sitemapXml).not.toContain(blocked);
     }
 
-    // Zero forbidden claims across all 3 JSON data files
     expect(scanForbiddenClaims(JSON.stringify(strategy))).toEqual([]);
     expect(scanForbiddenClaims(JSON.stringify(siteCopy))).toEqual([]);
     expect(scanForbiddenClaims(JSON.stringify(mediaManifest))).toEqual([]);
 
-    // Every guide's surfaceSafetyWarning satisfies surface-safety compliance
     for (const guide of siteCopy.guides) {
       const check = validateSurfaceSafetyCompliance(guide.surfaceSafetyWarning);
       expect(check).toEqual({ valid: true });
     }
 
-    // Every asset in media_manifest.json exists on disk under website/public
     const publicRoot = resolve(__dirname, '../public');
     for (const brandAsset of Object.values(mediaManifest.brandAssets)) {
       expect(existsSync(resolve(publicRoot, `.${brandAsset.path}`))).toBe(true);
@@ -198,5 +246,10 @@ describe('seo.ts, llms.txt, sitemap.xml, and JSON data integrity', () => {
       expect(existsSync(resolve(publicRoot, `.${vid.poster.avif.path}`))).toBe(true);
       expect(existsSync(resolve(publicRoot, `.${vid.poster.webp.path}`))).toBe(true);
     }
+  });
+
+  it('enforces zero comments across all website source and config files', () => {
+    const violations = scanCommentsInProject(resolve(__dirname, '..'));
+    expect(violations).toEqual([]);
   });
 });

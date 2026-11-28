@@ -10,6 +10,8 @@ export const INDEXABLE_ROUTES = [
   '/deep-cleaning-edmonton',
   '/recurring-cleaning-edmonton',
   '/airbnb-cleaning-edmonton',
+  '/pricing',
+  '/checklist',
   '/areas/central-edmonton-condos',
   '/areas/southwest-edmonton-homes',
   '/areas/west-mature-edmonton',
@@ -29,6 +31,11 @@ export const NOINDEX_FUNNEL_ROUTES = [
   '/lp/pet-safe',
 ] as const;
 
+export const NOINDEX_ROUTES = [
+  ...NOINDEX_FUNNEL_ROUTES,
+  '/admin/calendar',
+] as const;
+
 export const CAPITAL_REGION_CITIES = [
   'Edmonton',
   'St. Albert',
@@ -42,10 +49,6 @@ export const CAPITAL_REGION_CITIES = [
   'Nisku',
 ] as const;
 
-/**
- * Normalizes any route path or URL into a clean canonical URL on SITE_ORIGIN.
- * Root `'/'` stays `'https://levelupcleaning.ca/'`; sub-routes strip trailing slashes.
- */
 export function buildCanonicalUrl(path: string): string {
   const raw = (path || '/').trim();
   let pathname = raw;
@@ -84,9 +87,6 @@ export function resolveOgImageUrl(ogImage?: string): string {
   return `${SITE_ORIGIN}${normalizedPath}`;
 }
 
-/**
- * Builds the Schema.org `@graph` entity payload for LevelUp Cleaning Edmonton.
- */
 export function buildJsonLdGraph(config: PageSeoConfig): Record<string, unknown> {
   const canonicalUrl = buildCanonicalUrl(config.canonicalPath);
   const ogImageUrl = resolveOgImageUrl(config.ogImage);
@@ -180,6 +180,51 @@ export function buildJsonLdGraph(config: PageSeoConfig): Record<string, unknown>
         availability: 'https://schema.org/InStock',
         url: canonicalUrl,
       },
+    });
+  }
+
+  if (config.offerCatalogSchema && config.offerCatalogSchema.items.length > 0) {
+    graph.push({
+      '@type': 'OfferCatalog',
+      '@id': `${canonicalUrl}#offer-catalog`,
+      name: config.offerCatalogSchema.name,
+      description: config.offerCatalogSchema.description,
+      url: canonicalUrl,
+      provider: { '@id': orgId },
+      itemListElement: config.offerCatalogSchema.items.map((item, index) => ({
+        '@type': 'Offer',
+        position: index + 1,
+        priceCurrency: 'CAD',
+        price: item.priceCad,
+        availability: 'https://schema.org/InStock',
+        url: buildCanonicalUrl(item.urlPath),
+        itemOffered: {
+          '@type': 'Service',
+          name: item.name,
+          description: item.description,
+          provider: { '@id': orgId },
+          areaServed: areaServedNodes,
+        },
+      })),
+    });
+  }
+
+  if (
+    config.checklistItemListSchema &&
+    config.checklistItemListSchema.items.length > 0
+  ) {
+    graph.push({
+      '@type': 'ItemList',
+      '@id': `${canonicalUrl}#checklist`,
+      name: config.checklistItemListSchema.name,
+      numberOfItems: config.checklistItemListSchema.items.length,
+      itemListElement: config.checklistItemListSchema.items.map(
+        (item, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: item,
+        }),
+      ),
     });
   }
 

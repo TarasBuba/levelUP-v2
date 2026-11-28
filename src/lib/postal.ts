@@ -13,10 +13,6 @@ const FSA_DIRECTORY: Record<string, FsaDirectoryEntry> = strategyData.fsaDirecto
 const FSA_ONLY_PATTERN = /^[A-Z]\d[A-Z]$/;
 const FULL_POSTAL_PATTERN = /^[A-Z]\d[A-Z]\d[A-Z]\d$/;
 
-/**
- * Checks whether a 3-character Canadian FSA is within LevelUp Cleaning's
- * supported Greater Edmonton service directory.
- */
 export function isSupportedFsa(fsa: string): boolean {
   const normalized = String(fsa ?? '')
     .trim()
@@ -28,10 +24,6 @@ export function isSupportedFsa(fsa: string): boolean {
   return Object.prototype.hasOwnProperty.call(FSA_DIRECTORY, normalized);
 }
 
-/**
- * Normalizes a 3-character FSA or 6-character Canadian postal code and resolves
- * Greater Edmonton zone details and travel fee ($0 core / $15 Capital Region ring).
- */
 export function lookupPostalCode(rawInput: string): PostalLookupResult {
   const cleaned = String(rawInput ?? '')
     .trim()

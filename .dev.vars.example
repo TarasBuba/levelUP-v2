@@ -1,9 +1,15 @@
-# LevelUp Cleaning Edmonton — Local Cloudflare Pages Secrets Example
-# Copy to `.dev.vars` for local `wrangler pages dev` runs.
-# NEVER commit `.dev.vars` or real production tokens to version control.
-
 TELEGRAM_BOT_TOKEN=0000000000:EXAMPLE_PLACEHOLDER_TOKEN_DO_NOT_USE
 TELEGRAM_WEBHOOK_SECRET=replace_with_32_byte_random_webhook_secret
+ADMIN_DASHBOARD_SECRET=replace_with_32_byte_random_dashboard_secret
 META_PIXEL_ID=000000000000000
 META_CAPI_TOKEN=EAAB_PLACEHOLDER_META_CONVERSIONS_API_ACCESS_TOKEN
 META_TEST_EVENT_CODE=
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+BLOB_READ_WRITE_TOKEN=
+GOOGLE_SHEETS_WEBHOOK_URL=
+RESEND_API_KEY=
+RESEND_FROM_EMAIL=LevelUp Cleaning Edmonton <hello@levelupcleaning.ca>
+PUBLIC_META_PIXEL_ID=
+PUBLIC_GOOGLE_ADS_ID=
+PUBLIC_GOOGLE_ADS_LEAD_LABEL=

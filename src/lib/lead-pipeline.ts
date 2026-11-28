@@ -1,20 +1,39 @@
 import type {
   AddonId,
   AttributionData,
+  B2BPartnerDetails,
   Frequency,
+  GiftCertificateDetails,
   LeadSubmissionPayload,
   LeadSubmissionResult,
+  LeadType,
   PostalLookupResult,
+  PreferredSlotSelection,
   QuoteBreakdown,
   QuoteInput,
   ServiceId,
+  SlotWindow,
   SnapPhotoAttachment,
 } from '../types/contracts';
+import { buildSignedAdminUrl } from './admin-signing';
+import {
+  AFTERNOON_TIME_RANGE,
+  type CalendarStoreEnv,
+  MORNING_TIME_RANGE,
+  reserveCalendarSlot,
+} from './calendar-store';
 import {
   buildCapiEventPayload,
   type CapiEnv,
   dispatchMetaCapiEvent,
 } from './capi';
+import {
+  dispatchGoogleSheetsLead,
+  type LeadLedgerEnv,
+  type LeadLedgerRecord,
+  saveLeadRecord,
+  sendCustomerConfirmationEmail,
+} from './lead-ledger';
 import { lookupPostalCode } from './postal';
 import { buildSmsPrefillHref, calculateQuote } from './pricing';
 
@@ -23,6 +42,13 @@ export const AUTHORIZED_TELEGRAM_ADMIN_IDS = ['633982504', '332623386'] as const
 const ALLOWED_PHOTO_MIMES = new Set(['image/jpeg', 'image/png', 'image/webp']);
 const MAX_SNAP_PHOTOS = 2;
 const MAX_SNAP_PHOTO_BASE64_CHARS = 2_500_000;
+const DATE_KEY_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
+const VALID_LEAD_TYPES: readonly LeadType[] = [
+  'residential_quote',
+  'b2b_partner',
+  'gift_certificate',
+];
 
 const VALID_SERVICES: readonly ServiceId[] = [
   'move_out',
@@ -44,8 +70,26 @@ const VALID_ADDONS: readonly AddonId[] = [
   'basement_suite',
 ];
 
-export interface LeadPipelineEnv extends CapiEnv {
+const VALID_SLOT_WINDOWS: readonly SlotWindow[] = ['morning', 'afternoon', 'full_day'];
+
+const VALID_B2B_ROLES: readonly B2BPartnerDetails['companyOrRole'][] = [
+  'realtor',
+  'property_manager',
+  'airbnb_host',
+  'developer',
+];
+
+const VALID_GIFT_DELIVERY: readonly GiftCertificateDetails['deliveryMethod'][] = [
+  'email',
+  'sms',
+  'printable_pdf',
+];
+
+export interface LeadPipelineEnv extends CapiEnv, CalendarStoreEnv, LeadLedgerEnv {
   TELEGRAM_BOT_TOKEN?: string;
+  TELEGRAM_WEBHOOK_SECRET?: string;
+  ADMIN_ACTION_SECRET?: string;
+  ADMIN_DASHBOARD_SECRET?: string;
 }
 
 export interface LeadRequestMeta {
@@ -55,9 +99,12 @@ export interface LeadRequestMeta {
   fetchImpl?: typeof fetch;
 }
 
-/**
- * Escapes untrusted strings for safe inclusion in Telegram Bot API `HTML` messages.
- */
+interface TelegramInlineButton {
+  text: string;
+  url?: string;
+  callback_data?: string;
+}
+
 export function escapeTelegramHtml(text: string): string {
   return String(text ?? '')
     .replace(/&/g, '&amp;')
@@ -82,11 +129,41 @@ function optionalTrimmedString(val: unknown, maxLen: number): string | undefined
   return trimmed.slice(0, maxLen);
 }
 
+function clampBedroomBathroom(value: number | undefined): number {
+  if (typeof value !== 'number' || !Number.isFinite(value)) {
+    return 1;
+  }
+  return Math.min(5, Math.max(1, Math.round(value)));
+}
+
+function formatSlotWindowLabel(windowChoice: SlotWindow): string {
+  if (windowChoice === 'morning') {
+    return `Morning (${MORNING_TIME_RANGE})`;
+  }
+  if (windowChoice === 'afternoon') {
+    return `Afternoon (${AFTERNOON_TIME_RANGE})`;
+  }
+  return 'Full Day (8:30 AM – 4:30 PM)';
+}
+
+function formatB2bRoleLabel(role: B2BPartnerDetails['companyOrRole']): string {
+  if (role === 'realtor') {
+    return 'Realtor / Listing Agent';
+  }
+  if (role === 'property_manager') {
+    return 'Property Manager';
+  }
+  if (role === 'airbnb_host') {
+    return 'Airbnb / Short-Term Rental Host';
+  }
+  return 'Builder / Developer';
+}
+
 function sanitizeAttribution(raw: unknown): AttributionData | undefined {
   if (!isPlainObject(raw)) {
     return undefined;
   }
-  const attribution: AttributionData = {
+  return {
     fbclid: optionalTrimmedString(raw.fbclid, 256),
     fbp: optionalTrimmedString(raw.fbp, 256),
     fbc: optionalTrimmedString(raw.fbc, 512),
@@ -97,70 +174,16 @@ function sanitizeAttribution(raw: unknown): AttributionData | undefined {
     landingPath: optionalTrimmedString(raw.landingPath, 256),
     eventId: optionalTrimmedString(raw.eventId, 128),
   };
-  return attribution;
 }
 
-/**
- * Strictly validates an untrusted JSON request body before lead processing.
- */
-export function validateLeadPayload(
-  body: unknown,
-): { valid: true; data: LeadSubmissionPayload } | { valid: false; error: string } {
-  if (!isPlainObject(body)) {
-    return { valid: false, error: 'Request body must be a JSON object.' };
-  }
-
-  if (body.honeypot !== undefined && body.honeypot !== null && String(body.honeypot).trim() !== '') {
-    return { valid: false, error: 'Automated submission rejected.' };
-  }
-
-  if (typeof body.name !== 'string' || body.name.trim().length === 0) {
-    return { valid: false, error: 'Full name is required.' };
-  }
-  const name = body.name.trim().slice(0, 120);
-
-  if (typeof body.phone !== 'string') {
-    return { valid: false, error: 'Phone number is required.' };
-  }
-  const phoneDigits = body.phone.replace(/\D+/g, '');
-  if (phoneDigits.length < 10 || phoneDigits.length > 15) {
-    return { valid: false, error: 'Phone number must contain 10 to 15 digits.' };
-  }
-  const phone = body.phone.trim().slice(0, 40);
-
-  let email: string | undefined;
-  if (body.email !== undefined && body.email !== null && String(body.email).trim() !== '') {
-    if (typeof body.email !== 'string') {
-      return { valid: false, error: 'Invalid email address.' };
-    }
-    const trimmedEmail = body.email.trim();
-    if (trimmedEmail.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
-      return { valid: false, error: 'Please provide a valid email address.' };
-    }
-    email = trimmedEmail;
-  }
-
-  if (typeof body.postalCode !== 'string' || body.postalCode.trim().length === 0) {
-    return { valid: false, error: 'Edmonton or Capital Region postal code is required.' };
-  }
-  const postalCheck = lookupPostalCode(body.postalCode);
-  if (!postalCheck.valid) {
-    return { valid: false, error: postalCheck.message };
-  }
-  const postalCode = body.postalCode.trim().toUpperCase();
-
-  if (body.caslSmsConsent !== true) {
-    return {
-      valid: false,
-      error: 'Explicit CASL SMS consent is required before submitting your quote request.',
-    };
-  }
-
-  if (!isPlainObject(body.quoteInput)) {
+function parseQuoteInput(
+  rawQuote: unknown,
+  postalCode: string,
+): { valid: true; quoteInput: QuoteInput } | { valid: false; error: string } {
+  if (!isPlainObject(rawQuote)) {
     return { valid: false, error: 'Quote configuration is required.' };
   }
 
-  const rawQuote = body.quoteInput;
   if (rawQuote.mode !== 'flat_rate' && rawQuote.mode !== 'hourly') {
     return { valid: false, error: 'Quote mode must be flat_rate or hourly.' };
   }
@@ -192,21 +215,204 @@ export function validateLeadPayload(
       ? (rawQuote.frequency as Frequency)
       : undefined;
 
-  const quoteInput: QuoteInput = {
-    mode: rawQuote.mode,
-    service: rawQuote.service as ServiceId,
-    bedrooms: typeof rawQuote.bedrooms === 'number' ? rawQuote.bedrooms : undefined,
-    bathrooms: typeof rawQuote.bathrooms === 'number' ? rawQuote.bathrooms : undefined,
-    frequency,
-    addons,
-    hours: typeof rawQuote.hours === 'number' ? rawQuote.hours : undefined,
-    cleaners: typeof rawQuote.cleaners === 'number' ? rawQuote.cleaners : undefined,
-    postalCode,
-    promoQuery:
-      typeof rawQuote.promoQuery === 'string'
-        ? rawQuote.promoQuery.trim().slice(0, 64)
-        : null,
+  return {
+    valid: true,
+    quoteInput: {
+      mode: rawQuote.mode,
+      service: rawQuote.service as ServiceId,
+      bedrooms: typeof rawQuote.bedrooms === 'number' ? rawQuote.bedrooms : undefined,
+      bathrooms: typeof rawQuote.bathrooms === 'number' ? rawQuote.bathrooms : undefined,
+      frequency,
+      addons,
+      hours: typeof rawQuote.hours === 'number' ? rawQuote.hours : undefined,
+      cleaners: typeof rawQuote.cleaners === 'number' ? rawQuote.cleaners : undefined,
+      postalCode,
+      promoQuery:
+        typeof rawQuote.promoQuery === 'string'
+          ? rawQuote.promoQuery.trim().slice(0, 64)
+          : null,
+    },
   };
+}
+
+export function validateLeadPayload(
+  body: unknown,
+): { valid: true; data: LeadSubmissionPayload } | { valid: false; error: string } {
+  if (!isPlainObject(body)) {
+    return { valid: false, error: 'Request body must be a JSON object.' };
+  }
+
+  if (body.honeypot !== undefined && body.honeypot !== null && String(body.honeypot).trim() !== '') {
+    return { valid: false, error: 'Automated submission rejected.' };
+  }
+
+  let leadType: LeadType = 'residential_quote';
+  if (body.leadType !== undefined && body.leadType !== null) {
+    if (
+      typeof body.leadType !== 'string' ||
+      !(VALID_LEAD_TYPES as readonly string[]).includes(body.leadType)
+    ) {
+      return { valid: false, error: 'Unsupported lead type.' };
+    }
+    leadType = body.leadType as LeadType;
+  }
+
+  if (typeof body.name !== 'string' || body.name.trim().length === 0) {
+    return { valid: false, error: 'Full name is required.' };
+  }
+  const name = body.name.trim().slice(0, 120);
+
+  if (typeof body.phone !== 'string') {
+    return { valid: false, error: 'Phone number is required.' };
+  }
+  const phoneDigits = body.phone.replace(/\D+/g, '');
+  if (phoneDigits.length < 10 || phoneDigits.length > 15) {
+    return { valid: false, error: 'Phone number must contain 10 to 15 digits.' };
+  }
+  const phone = body.phone.trim().slice(0, 40);
+
+  let email: string | undefined;
+  if (body.email !== undefined && body.email !== null && String(body.email).trim() !== '') {
+    if (typeof body.email !== 'string') {
+      return { valid: false, error: 'Invalid email address.' };
+    }
+    const trimmedEmail = body.email.trim();
+    if (trimmedEmail.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      return { valid: false, error: 'Please provide a valid email address.' };
+    }
+    email = trimmedEmail;
+  }
+
+  let postalCode = 'T5J';
+  if (leadType === 'residential_quote') {
+    if (typeof body.postalCode !== 'string' || body.postalCode.trim().length === 0) {
+      return { valid: false, error: 'Edmonton or Capital Region postal code is required.' };
+    }
+    const postalCheck = lookupPostalCode(body.postalCode);
+    if (!postalCheck.valid) {
+      return { valid: false, error: postalCheck.message };
+    }
+    postalCode = body.postalCode.trim().toUpperCase();
+  } else if (typeof body.postalCode === 'string' && body.postalCode.trim().length > 0) {
+    const postalCheck = lookupPostalCode(body.postalCode);
+    if (!postalCheck.valid) {
+      return { valid: false, error: postalCheck.message };
+    }
+    postalCode = body.postalCode.trim().toUpperCase();
+  }
+
+  if (body.caslSmsConsent !== true) {
+    return {
+      valid: false,
+      error: 'Explicit CASL SMS consent is required before submitting your quote request.',
+    };
+  }
+
+  let b2bDetails: B2BPartnerDetails | undefined;
+  if (leadType === 'b2b_partner') {
+    if (!isPlainObject(body.b2bDetails)) {
+      return { valid: false, error: 'B2B partner details are required.' };
+    }
+    const role = body.b2bDetails.companyOrRole;
+    if (typeof role !== 'string' || !(VALID_B2B_ROLES as readonly string[]).includes(role)) {
+      return { valid: false, error: 'Please select a valid B2B partner role.' };
+    }
+    const rawCount = Number(body.b2bDetails.propertiesCount);
+    if (!Number.isFinite(rawCount) || rawCount < 1) {
+      return { valid: false, error: 'Please provide at least 1 managed property or unit.' };
+    }
+    b2bDetails = {
+      companyOrRole: role as B2BPartnerDetails['companyOrRole'],
+      propertiesCount: Math.min(500, Math.max(1, Math.round(rawCount))),
+      preferredTurnoverWindow:
+        optionalTrimmedString(body.b2bDetails.preferredTurnoverWindow, 80) ?? '11:00 AM – 3:00 PM',
+      monthlyFrequency:
+        optionalTrimmedString(body.b2bDetails.monthlyFrequency, 80) ?? 'Weekly / As Needed',
+    };
+  }
+
+  let giftDetails: GiftCertificateDetails | undefined;
+  if (leadType === 'gift_certificate') {
+    if (!isPlainObject(body.giftDetails)) {
+      return { valid: false, error: 'Gift certificate details are required.' };
+    }
+    const rawAmount = Number(body.giftDetails.amountCad);
+    if (!Number.isFinite(rawAmount) || rawAmount < 50 || rawAmount > 5000) {
+      return { valid: false, error: 'Gift certificate amount must be between $50 and $5,000 CAD.' };
+    }
+    const recipientName = optionalTrimmedString(body.giftDetails.recipientName, 120);
+    if (!recipientName) {
+      return { valid: false, error: 'Gift recipient name is required.' };
+    }
+    const rawDelivery = body.giftDetails.deliveryMethod;
+    const deliveryMethod: GiftCertificateDetails['deliveryMethod'] =
+      typeof rawDelivery === 'string' &&
+      (VALID_GIFT_DELIVERY as readonly string[]).includes(rawDelivery)
+        ? (rawDelivery as GiftCertificateDetails['deliveryMethod'])
+        : 'email';
+    const personalMessage = optionalTrimmedString(body.giftDetails.personalMessage, 400);
+    giftDetails = {
+      amountCad: Math.round(rawAmount),
+      recipientName,
+      ...(personalMessage ? { personalMessage } : {}),
+      deliveryMethod,
+    };
+  }
+
+  let quoteInput: QuoteInput;
+  if (leadType === 'residential_quote' || body.quoteInput !== undefined) {
+    const parsedQuote = parseQuoteInput(body.quoteInput, postalCode);
+    if (!parsedQuote.valid) {
+      return parsedQuote;
+    }
+    quoteInput = parsedQuote.quoteInput;
+  } else if (leadType === 'b2b_partner') {
+    quoteInput = {
+      mode: 'flat_rate',
+      service: 'airbnb',
+      bedrooms: 2,
+      bathrooms: 1,
+      frequency: 'weekly',
+      addons: [],
+      postalCode,
+      promoQuery: null,
+    };
+  } else {
+    quoteInput = {
+      mode: 'flat_rate',
+      service: 'regular',
+      bedrooms: 2,
+      bathrooms: 1,
+      frequency: 'one_time',
+      addons: [],
+      postalCode,
+      promoQuery: null,
+    };
+  }
+
+  let preferredSlot: PreferredSlotSelection | undefined;
+  if (body.preferredSlot !== undefined && body.preferredSlot !== null) {
+    if (!isPlainObject(body.preferredSlot)) {
+      return { valid: false, error: 'Preferred slot must be a valid date and time window.' };
+    }
+    const slotDate =
+      typeof body.preferredSlot.date === 'string' ? body.preferredSlot.date.trim() : '';
+    const slotWindow = body.preferredSlot.window;
+    if (
+      !DATE_KEY_PATTERN.test(slotDate) ||
+      typeof slotWindow !== 'string' ||
+      !(VALID_SLOT_WINDOWS as readonly string[]).includes(slotWindow)
+    ) {
+      return {
+        valid: false,
+        error: 'Preferred slot must specify a valid YYYY-MM-DD date and time window.',
+      };
+    }
+    preferredSlot = {
+      date: slotDate,
+      window: slotWindow as SlotWindow,
+    };
+  }
 
   let snapPhotos: SnapPhotoAttachment[] | undefined;
   if (body.snapPhotos !== undefined && body.snapPhotos !== null) {
@@ -249,33 +455,32 @@ export function validateLeadPayload(
     }
   }
 
+  const preferredDate = optionalTrimmedString(body.preferredDate, 80) ?? preferredSlot?.date;
+  const notes = optionalTrimmedString(body.notes, 1000);
+  const attribution = sanitizeAttribution(body.attribution);
+
   const payload: LeadSubmissionPayload = {
+    leadType,
     name,
     phone,
     ...(email ? { email } : {}),
     postalCode,
-    ...(optionalTrimmedString(body.preferredDate, 80)
-      ? { preferredDate: optionalTrimmedString(body.preferredDate, 80) }
-      : {}),
+    ...(preferredDate ? { preferredDate } : {}),
+    ...(preferredSlot ? { preferredSlot } : {}),
     ...(typeof body.hasPets === 'boolean' ? { hasPets: body.hasPets } : {}),
-    ...(optionalTrimmedString(body.notes, 1000)
-      ? { notes: optionalTrimmedString(body.notes, 1000) }
-      : {}),
+    ...(notes ? { notes } : {}),
     caslSmsConsent: true,
     honeypot: '',
     quoteInput,
+    ...(b2bDetails ? { b2bDetails } : {}),
+    ...(giftDetails ? { giftDetails } : {}),
     ...(snapPhotos && snapPhotos.length > 0 ? { snapPhotos } : {}),
-    ...(sanitizeAttribution(body.attribution)
-      ? { attribution: sanitizeAttribution(body.attribution) }
-      : {}),
+    ...(attribution ? { attribution } : {}),
   };
 
   return { valid: true, data: payload };
 }
 
-/**
- * Formats an HTML-escaped Telegram dispatch summary for Edmonton operations admins.
- */
 export function formatTelegramLeadMessage(
   leadId: string,
   data: LeadSubmissionPayload,
@@ -287,12 +492,80 @@ export function formatTelegramLeadMessage(
   const safePhone = escapeTelegramHtml(data.phone);
   const safePostal = escapeTelegramHtml(data.postalCode);
   const safeArea = escapeTelegramHtml(`${postal.normalizedFsa} — ${postal.areaName}`);
+
+  if (data.leadType === 'b2b_partner' && data.b2bDetails) {
+    const lines: string[] = [
+      `🏢 <b>VIP B2B PARTNER LEAD</b> <code>#${safeLeadId}</code>`,
+      '',
+      `👤 <b>Contact:</b> ${safeName}`,
+      `📱 <b>Phone (CASL OK):</b> ${safePhone}`,
+    ];
+    if (data.email) {
+      lines.push(`✉️ <b>Email:</b> ${escapeTelegramHtml(data.email)}`);
+    }
+    lines.push(`📍 <b>Primary Zone:</b> ${safeArea} (<code>${safePostal}</code>)`);
+    lines.push('');
+    lines.push(`💼 <b>Partner Role:</b> ${escapeTelegramHtml(formatB2bRoleLabel(data.b2bDetails.companyOrRole))}`);
+    lines.push(`🏘 <b>Properties / Units:</b> ${data.b2bDetails.propertiesCount}`);
+    lines.push(`⏰ <b>Turnover Window:</b> ${escapeTelegramHtml(data.b2bDetails.preferredTurnoverWindow)}`);
+    lines.push(`🔁 <b>Cadence:</b> ${escapeTelegramHtml(data.b2bDetails.monthlyFrequency)}`);
+    if (data.notes) {
+      lines.push(`📝 <b>Notes:</b> ${escapeTelegramHtml(data.notes)}`);
+    }
+    if (data.attribution) {
+      const attrParts = [
+        data.attribution.landingPath ? `path=${data.attribution.landingPath}` : '',
+        data.attribution.utmSource ? `src=${data.attribution.utmSource}` : '',
+        data.attribution.utmCampaign ? `cmp=${data.attribution.utmCampaign}` : '',
+      ].filter(Boolean);
+      if (attrParts.length > 0) {
+        lines.push(`📊 <b>Source:</b> <code>${escapeTelegramHtml(attrParts.join(' | '))}</code>`);
+      }
+    }
+    return lines.join('\n');
+  }
+
+  if (data.leadType === 'gift_certificate' && data.giftDetails) {
+    const lines: string[] = [
+      `🎁 <b>GIFT CERTIFICATE ORDER</b> <code>#${safeLeadId}</code>`,
+      '',
+      `👤 <b>Buyer:</b> ${safeName}`,
+      `📱 <b>Phone (CASL OK):</b> ${safePhone}`,
+    ];
+    if (data.email) {
+      lines.push(`✉️ <b>Email:</b> ${escapeTelegramHtml(data.email)}`);
+    }
+    lines.push('');
+    lines.push(`💵 <b>Gift Value:</b> <b>$${Math.round(data.giftDetails.amountCad)} CAD</b>`);
+    lines.push(`🎀 <b>Recipient:</b> ${escapeTelegramHtml(data.giftDetails.recipientName)}`);
+    lines.push(`📬 <b>Delivery:</b> ${escapeTelegramHtml(data.giftDetails.deliveryMethod)}`);
+    if (data.giftDetails.personalMessage) {
+      lines.push(`💌 <b>Card Message:</b> ${escapeTelegramHtml(data.giftDetails.personalMessage)}`);
+    }
+    if (data.notes) {
+      lines.push(`📝 <b>Notes:</b> ${escapeTelegramHtml(data.notes)}`);
+    }
+    if (data.attribution) {
+      const attrParts = [
+        data.attribution.landingPath ? `path=${data.attribution.landingPath}` : '',
+        data.attribution.utmSource ? `src=${data.attribution.utmSource}` : '',
+        data.attribution.utmCampaign ? `cmp=${data.attribution.utmCampaign}` : '',
+      ].filter(Boolean);
+      if (attrParts.length > 0) {
+        lines.push(`📊 <b>Source:</b> <code>${escapeTelegramHtml(attrParts.join(' | '))}</code>`);
+      }
+    }
+    return lines.join('\n');
+  }
+
   const safeService = escapeTelegramHtml(quote.serviceTitle);
+  const clampedBeds = clampBedroomBathroom(data.quoteInput.bedrooms);
+  const clampedBaths = clampBedroomBathroom(data.quoteInput.bathrooms);
 
   const scopeLine =
     quote.mode === 'hourly'
       ? `${quote.basePriceCad / 48} cleaner-hours @ $48/hr`
-      : `${data.quoteInput.bedrooms ?? 1} Bed / ${data.quoteInput.bathrooms ?? 1} Bath (${escapeTelegramHtml(data.quoteInput.frequency ?? 'one_time')})`;
+      : `${clampedBeds} Bed / ${clampedBaths} Bath (${escapeTelegramHtml(data.quoteInput.frequency ?? 'one_time')})`;
 
   const addonsSummary =
     quote.addonsDetail.length > 0
@@ -318,7 +591,11 @@ export function formatTelegramLeadMessage(
 
   lines.push(`📍 <b>Zone:</b> ${safeArea} (<code>${safePostal}</code>)`);
 
-  if (data.preferredDate) {
+  if (data.preferredSlot) {
+    lines.push(
+      `🗓 <b>Preferred Slot:</b> ${escapeTelegramHtml(data.preferredSlot.date)} — ${escapeTelegramHtml(formatSlotWindowLabel(data.preferredSlot.window))}`,
+    );
+  } else if (data.preferredDate) {
     lines.push(`🗓 <b>Preferred Date:</b> ${escapeTelegramHtml(data.preferredDate)}`);
   }
 
@@ -389,16 +666,125 @@ function generateCompactLeadId(): string {
   return `LU-${uuidHex}`;
 }
 
+function resolveHttpsOrigin(eventSourceUrl?: string): string {
+  if (eventSourceUrl) {
+    try {
+      const parsed = new URL(eventSourceUrl);
+      if (parsed.protocol === 'https:') {
+        return parsed.origin;
+      }
+    } catch {
+      return 'https://levelupcleaning.ca';
+    }
+  }
+  return 'https://levelupcleaning.ca';
+}
+
+async function buildTelegramInlineKeyboard(
+  leadId: string,
+  data: LeadSubmissionPayload,
+  quote: QuoteBreakdown,
+  signingSecret: string,
+  origin: string,
+): Promise<TelegramInlineButton[][]> {
+  if (signingSecret) {
+    const rows: TelegramInlineButton[][] = [];
+
+    if (data.preferredSlot) {
+      const [confirmUrl, releaseUrl] = await Promise.all([
+        buildSignedAdminUrl(
+          origin,
+          {
+            action: 'confirm_slot',
+            leadId,
+            date: data.preferredSlot.date,
+            window: data.preferredSlot.window,
+            name: data.name,
+            phone: data.phone,
+          },
+          signingSecret,
+        ),
+        buildSignedAdminUrl(
+          origin,
+          {
+            action: 'release_slot',
+            leadId,
+            date: data.preferredSlot.date,
+            window: data.preferredSlot.window,
+            name: data.name,
+          },
+          signingSecret,
+        ),
+      ]);
+      rows.push([
+        { text: '✅ Confirm & Lock Slot', url: confirmUrl },
+        { text: '🔓 Release Slot', url: releaseUrl },
+      ]);
+    }
+
+    const [confirmPriceUrl, markPaidUrl] = await Promise.all([
+      buildSignedAdminUrl(
+        origin,
+        {
+          action: 'confirm_price',
+          leadId,
+          amountCad: quote.finalPreTaxCad,
+          service: quote.service,
+          name: data.name,
+          phone: data.phone,
+        },
+        signingSecret,
+      ),
+      buildSignedAdminUrl(
+        origin,
+        {
+          action: 'mark_paid',
+          leadId,
+          amountCad: quote.finalPreTaxCad,
+          service: quote.service,
+          name: data.name,
+        },
+        signingSecret,
+      ),
+    ]);
+
+    rows.push([
+      { text: '📸 Price Confirmed → SMS', url: confirmPriceUrl },
+      { text: `💰 Paid $${quote.finalPreTaxCad} CAD`, url: markPaidUrl },
+    ]);
+
+    return rows;
+  }
+
+  const callbackData = `paid:${leadId}:${quote.finalPreTaxCad}:${quote.service}`;
+  return [
+    [
+      {
+        text: `💰 Paid $${quote.finalPreTaxCad} CAD`,
+        callback_data: callbackData,
+      },
+    ],
+  ];
+}
+
 async function dispatchTelegramAlerts(
   leadId: string,
   data: LeadSubmissionPayload,
   quote: QuoteBreakdown,
   postal: PostalLookupResult,
   botToken: string,
+  signingSecret: string,
+  origin: string,
   fetchImpl: typeof fetch,
 ): Promise<boolean> {
   const htmlMessage = formatTelegramLeadMessage(leadId, data, quote, postal);
-  const callbackData = `paid:${leadId}:${quote.finalPreTaxCad}:${quote.service}`;
+  const inlineKeyboard = await buildTelegramInlineKeyboard(
+    leadId,
+    data,
+    quote,
+    signingSecret,
+    origin,
+  );
   const sendMessageUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
   const sendPhotoUrl = `https://api.telegram.org/bot${botToken}/sendPhoto`;
 
@@ -415,14 +801,7 @@ async function dispatchTelegramAlerts(
           parse_mode: 'HTML',
           disable_web_page_preview: true,
           reply_markup: {
-            inline_keyboard: [
-              [
-                {
-                  text: `💰 Paid $${quote.finalPreTaxCad} CAD`,
-                  callback_data: callbackData,
-                },
-              ],
-            ],
+            inline_keyboard: inlineKeyboard,
           },
         }),
       });
@@ -431,7 +810,7 @@ async function dispatchTelegramAlerts(
         anyMessageSent = true;
       }
     } catch {
-      // Continue attempting remaining admins without failing lead capture
+      continue;
     }
 
     if (data.snapPhotos && data.snapPhotos.length > 0) {
@@ -460,7 +839,7 @@ async function dispatchTelegramAlerts(
             body: formData,
           });
         } catch {
-          // Non-fatal photo attachment failure
+          continue;
         }
       }
     }
@@ -469,12 +848,6 @@ async function dispatchTelegramAlerts(
   return anyMessageSent;
 }
 
-/**
- * Validates lead input, recomputes pricing server-side (never trusting client prices),
- * dispatches Telegram inline-action lead cards + Snap & Lock photos to authorized admins,
- * and sends a deduplicated Meta CAPI `Lead` event. Gracefully operates in `demo` mode
- * when cloud secrets are absent.
- */
 export async function processLeadSubmission(
   body: unknown,
   env?: LeadPipelineEnv,
@@ -501,14 +874,82 @@ export async function processLeadSubmission(
 
   const data = validation.data;
   const postal = lookupPostalCode(data.postalCode);
-  const quote = calculateQuote({
+  const calculatedQuote = calculateQuote({
     ...data.quoteInput,
     postalCode: data.postalCode,
   });
 
+  const quote: QuoteBreakdown =
+    data.leadType === 'gift_certificate' && data.giftDetails
+      ? {
+          ...calculatedQuote,
+          serviceTitle: 'Gift Certificate',
+          finalPreTaxCad: Math.round(data.giftDetails.amountCad),
+          estimatedGstCad: 0,
+        }
+      : calculatedQuote;
+
   const leadId = generateCompactLeadId();
   const smsPrefillHref = buildSmsPrefillHref(quote, postal.normalizedFsa, data.name);
   const fetcher = meta?.fetchImpl ?? globalThis.fetch;
+
+  let slotReserved = false;
+  if (data.preferredSlot) {
+    const reservation = await reserveCalendarSlot(data.preferredSlot, leadId, env, {
+      fetchImpl: fetcher,
+    });
+    if (!reservation.ok) {
+      return {
+        ok: false,
+        leadId: '',
+        finalPreTaxCad: quote.finalPreTaxCad,
+        areaName: postal.areaName,
+        smsPrefillHref,
+        telegramDispatched: false,
+        capiDispatched: false,
+        slotReserved: false,
+        mode,
+        error: 'That time window was just booked. Please pick another open slot.',
+      };
+    }
+    slotReserved = true;
+  }
+
+  const eventSourceUrl =
+    meta?.eventSourceUrl?.trim() ||
+    (data.attribution?.landingPath
+      ? `https://levelupcleaning.ca${data.attribution.landingPath.startsWith('/') ? '' : '/'}${data.attribution.landingPath}`
+      : 'https://levelupcleaning.ca/');
+
+  const signingSecret =
+    env?.TELEGRAM_WEBHOOK_SECRET?.trim() || env?.ADMIN_ACTION_SECRET?.trim() || '';
+  const origin = resolveHttpsOrigin(eventSourceUrl);
+
+  const ledgerRecord: LeadLedgerRecord = {
+    leadId,
+    createdAt: new Date().toISOString(),
+    leadType: data.leadType ?? 'residential_quote',
+    name: data.name,
+    phone: data.phone,
+    ...(data.email ? { email: data.email } : {}),
+    postalCode: data.postalCode,
+    areaName: postal.areaName,
+    service: quote.service,
+    serviceTitle: quote.serviceTitle,
+    finalPreTaxCad: quote.finalPreTaxCad,
+    estimatedGstCad: quote.estimatedGstCad,
+    ...(data.preferredDate ? { preferredDate: data.preferredDate } : {}),
+    ...(data.preferredSlot ? { preferredSlot: data.preferredSlot } : {}),
+    ...(typeof data.hasPets === 'boolean' ? { hasPets: data.hasPets } : {}),
+    ...(data.notes ? { notes: data.notes } : {}),
+    ...(data.b2bDetails ? { b2bDetails: data.b2bDetails } : {}),
+    ...(data.giftDetails ? { giftDetails: data.giftDetails } : {}),
+    ...(data.attribution?.utmSource ? { utmSource: data.attribution.utmSource } : {}),
+    ...(data.attribution?.utmMedium ? { utmMedium: data.attribution.utmMedium } : {}),
+    ...(data.attribution?.utmCampaign ? { utmCampaign: data.attribution.utmCampaign } : {}),
+    ...(data.attribution?.landingPath ? { landingPath: data.attribution.landingPath } : {}),
+    snapPhotosCount: data.snapPhotos?.length ?? 0,
+  };
 
   let telegramDispatched = false;
   if (hasTelegramSecret && env?.TELEGRAM_BOT_TOKEN) {
@@ -518,15 +959,17 @@ export async function processLeadSubmission(
       quote,
       postal,
       env.TELEGRAM_BOT_TOKEN.trim(),
+      signingSecret,
+      origin,
       fetcher,
     );
   }
 
-  const eventSourceUrl =
-    meta?.eventSourceUrl?.trim() ||
-    (data.attribution?.landingPath
-      ? `https://levelupcleaning.ca${data.attribution.landingPath.startsWith('/') ? '' : '/'}${data.attribution.landingPath}`
-      : 'https://levelupcleaning.ca/');
+  const [ledgerSaved, sheetsDispatched, confirmationEmailSent] = await Promise.all([
+    saveLeadRecord(ledgerRecord, env, fetcher),
+    dispatchGoogleSheetsLead(ledgerRecord, env, fetcher),
+    sendCustomerConfirmationEmail(data, leadId, quote, env, fetcher),
+  ]);
 
   const capiPayload = await buildCapiEventPayload({
     eventName: 'Lead',
@@ -558,6 +1001,10 @@ export async function processLeadSubmission(
     smsPrefillHref,
     telegramDispatched,
     capiDispatched: capiResult.dispatched,
+    slotReserved,
+    ledgerSaved,
+    sheetsDispatched,
+    confirmationEmailSent,
     mode,
   };
 }

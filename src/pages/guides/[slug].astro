@@ -48,7 +48,6 @@ const relatedGuides = siteCopy.guides.filter((g) => g.slug !== guide.slug);
 <MainLayout seoConfig={seoConfig} ctaHref="/#quote-calculator">
   <article class="py-10 sm:py-16">
     <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-      <!-- Breadcrumb -->
       <nav aria-label="Breadcrumb" class="mb-6 flex flex-wrap items-center gap-2 text-xs font-semibold text-spruce/75">
         <a href="/" class="inline-flex min-h-[44px] items-center hover:text-eucalyptus">Home</a>
         <span aria-hidden="true">/</span>
@@ -57,7 +56,6 @@ const relatedGuides = siteCopy.guides.filter((g) => g.slug !== guide.slug);
         <span class="text-spruce truncate max-w-[240px] sm:max-w-none">{guide.category}</span>
       </nav>
 
-      <!-- Header -->
       <header class="space-y-4">
         <div class="flex flex-wrap items-center gap-2.5 text-xs font-semibold text-spruce/75">
           <span class="rounded-full border border-brass/50 bg-brass/18 px-3 py-1 text-spruce">
@@ -78,7 +76,6 @@ const relatedGuides = siteCopy.guides.filter((g) => g.slug !== guide.slug);
         </p>
       </header>
 
-      <!-- Hero Photo -->
       <div class="mt-8 overflow-hidden rounded-3xl border border-mist/35 bg-card shadow-md">
         {matchedPhoto ? (
           <picture>
@@ -105,7 +102,6 @@ const relatedGuides = siteCopy.guides.filter((g) => g.slug !== guide.slug);
         )}
       </div>
 
-      <!-- MANDATORY PROMINENT SURFACE SAFETY WARNING ABOVE SECTIONS -->
       <aside
         role="note"
         aria-label="Mandatory Surface Chemistry Safety Warning"
@@ -129,7 +125,6 @@ const relatedGuides = siteCopy.guides.filter((g) => g.slug !== guide.slug);
         </div>
       </aside>
 
-      <!-- Guide Sections -->
       <div class="mt-10 space-y-10">
         {guide.sections.map((sec) => (
           <section class="space-y-4">
@@ -153,7 +148,6 @@ const relatedGuides = siteCopy.guides.filter((g) => g.slug !== guide.slug);
         ))}
       </div>
 
-      <!-- Contextual Conversion Card -->
       <div class="mt-12 rounded-3xl border border-spruce/20 bg-spruce p-6 sm:p-8 text-linen flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div class="space-y-1.5 max-w-xl">
           <p class="text-xs font-semibold uppercase tracking-wider text-brass">
@@ -190,7 +184,6 @@ const relatedGuides = siteCopy.guides.filter((g) => g.slug !== guide.slug);
     faqs={guide.faqs}
   />
 
-  <!-- Related Guides -->
   <section class="py-12 border-t border-mist/25 bg-card/50">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <h2 class="font-serif text-2xl font-semibold text-spruce">More Edmonton Care Guides</h2>

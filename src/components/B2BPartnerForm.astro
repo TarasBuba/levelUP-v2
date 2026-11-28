@@ -1,0 +1,430 @@
+---
+import siteContext from '../data/site_context_lock.json';
+
+const { brand } = siteContext;
+const smsPartnerHref = `sms:${brand.phoneE164}?&body=${encodeURIComponent(
+  "Hi LevelUp Cleaning! I'm inquiring about a VIP Edmonton B2B Partner schedule for turnovers/listings.",
+)}`;
+---
+
+<section id="partner-inquiry" class="py-16 sm:py-20 bg-spruce text-linen">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="grid gap-10 lg:grid-cols-12 lg:items-start">
+      <div class="lg:col-span-5 space-y-5">
+        <span class="inline-flex items-center gap-2 rounded-full border border-brass/55 bg-brass/18 px-3.5 py-1 text-xs font-semibold tracking-wider uppercase text-linen">
+          <span class="h-1.5 w-1.5 rounded-full bg-brass" aria-hidden="true"></span>
+          VIP Edmonton B2B &amp; Host Desk
+        </span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-linen">
+          Priority Turnovers for Superhosts, Realtors &amp; Property Managers
+        </h2>
+        <p class="text-sm sm:text-base leading-relaxed text-linen/85">
+          Lock recurring 11:00 AM – 3:00 PM same-day turnover priority across Ice District, Whyte Ave, Oliver, Windermere, and St. Albert—with timestamped SMS photo proof, restock alerts, and official itemized Canadian invoices.
+        </p>
+
+        <ul class="space-y-2.5 text-sm text-linen/90">
+          <li class="flex items-start gap-2.5">
+            <span class="mt-0.5 text-brass font-bold" aria-hidden="true">✓</span>
+            <span>Dedicated direct dispatch line with lockbox &amp; condo concierge key handling</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <span class="mt-0.5 text-brass font-bold" aria-hidden="true">✓</span>
+            <span>Volume recurring pricing up to 15% OFF pre-tax CAD (+ 5% AB GST where applicable)</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <span class="mt-0.5 text-brass font-bold" aria-hidden="true">✓</span>
+            <span>Immediate SMS damage, lost-item &amp; low-consumable photo alerts</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <span class="mt-0.5 text-brass font-bold" aria-hidden="true">✓</span>
+            <span>$0 upfront deposit — itemized post-completion e-Transfer or card billing</span>
+          </li>
+        </ul>
+
+        <div class="pt-2">
+          <a
+            href={smsPartnerHref}
+            class="inline-flex min-h-[46px] items-center justify-center rounded-full border border-mist/50 px-5 py-2.5 text-xs sm:text-sm font-semibold text-linen transition hover:bg-linen/10"
+          >
+            Direct B2B SMS: {brand.phoneDisplay} →
+          </a>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7">
+        <form
+          data-b2b-form
+          novalidate
+          class="rounded-3xl border border-mist/35 bg-linen p-6 sm:p-8 text-spruce shadow-xl space-y-5"
+        >
+          <div>
+            <h3 class="font-serif text-2xl font-semibold text-spruce">
+              Request VIP Partner Rates &amp; Priority Calendar
+            </h3>
+            <p class="mt-1 text-xs sm:text-sm text-spruce/75">
+              Tell us about your Edmonton portfolio — we respond the same day with tailored volume rates.
+            </p>
+          </div>
+
+          <div class="hidden" aria-hidden="true">
+            <label>
+              Company Website
+              <input type="text" name="honeypot" tabindex="-1" autocomplete="off" data-b2b-honeypot />
+            </label>
+          </div>
+
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider text-spruce/75 mb-2">
+              Your Role <span class="text-eucalyptus">*</span>
+            </p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" role="group" aria-label="Partner role">
+              {[
+                { id: 'airbnb_host', label: 'Airbnb Host' },
+                { id: 'realtor', label: 'Realtor' },
+                { id: 'property_manager', label: 'Property Manager' },
+                { id: 'developer', label: 'Builder' },
+              ].map((role, idx) => (
+                <button
+                  type="button"
+                  data-b2b-role={role.id}
+                  aria-pressed={idx === 0 ? 'true' : 'false'}
+                  class:list={[
+                    'min-h-[44px] rounded-xl border px-3 py-2 text-xs font-semibold transition cursor-pointer',
+                    idx === 0
+                      ? 'border-eucalyptus bg-eucalyptus text-linen'
+                      : 'border-mist/40 bg-card text-spruce hover:border-eucalyptus',
+                  ]}
+                >
+                  {role.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-3">
+            <div>
+              <label for="b2b-props" class="block text-xs font-semibold text-spruce mb-1.5">
+                Properties Count <span class="text-eucalyptus">*</span>
+              </label>
+              <input
+                id="b2b-props"
+                type="number"
+                min="1"
+                max="200"
+                value="2"
+                required
+                data-b2b-props
+                class="w-full min-h-[46px] rounded-xl border border-mist/45 bg-card px-3.5 py-2.5 text-sm font-semibold text-spruce focus:border-eucalyptus"
+              />
+            </div>
+
+            <div>
+              <label for="b2b-window" class="block text-xs font-semibold text-spruce mb-1.5">
+                Turnover Window
+              </label>
+              <select
+                id="b2b-window"
+                data-b2b-window
+                class="w-full min-h-[46px] rounded-xl border border-mist/45 bg-card px-3 py-2.5 text-sm text-spruce focus:border-eucalyptus"
+              >
+                <option value="11am–3pm Same-Day">11am–3pm Same-Day</option>
+                <option value="Morning (8:30 AM – 12:30 PM)">Morning (8:30 AM – 12:30 PM)</option>
+                <option value="Afternoon (1:30 PM – 5:30 PM)">Afternoon (1:30 PM – 5:30 PM)</option>
+                <option value="Flexible / Lockbox">Flexible / Lockbox</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="b2b-freq" class="block text-xs font-semibold text-spruce mb-1.5">
+                Monthly Volume
+              </label>
+              <select
+                id="b2b-freq"
+                data-b2b-freq
+                class="w-full min-h-[46px] rounded-xl border border-mist/45 bg-card px-3 py-2.5 text-sm text-spruce focus:border-eucalyptus"
+              >
+                <option value="Weekly / Back-to-Back">Weekly / Back-to-Back</option>
+                <option value="Bi-Weekly Turnovers">Bi-Weekly Turnovers</option>
+                <option value="Monthly Portfolio">Monthly Portfolio</option>
+                <option value="As-Needed Listing Prep">As-Needed Listing Prep</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="b2b-name" class="block text-xs font-semibold text-spruce mb-1.5">
+                Full Name / Brokerage <span class="text-eucalyptus">*</span>
+              </label>
+              <input
+                id="b2b-name"
+                type="text"
+                required
+                autocomplete="name"
+                placeholder="Alex Chen — YEG Stays"
+                data-b2b-name
+                class="w-full min-h-[46px] rounded-xl border border-mist/45 bg-card px-3.5 py-2.5 text-sm text-spruce placeholder:text-spruce/45 focus:border-eucalyptus"
+              />
+            </div>
+
+            <div>
+              <label for="b2b-phone" class="block text-xs font-semibold text-spruce mb-1.5">
+                Mobile Number <span class="text-eucalyptus">*</span>
+              </label>
+              <input
+                id="b2b-phone"
+                type="tel"
+                required
+                autocomplete="tel"
+                placeholder="(780) 710-1503"
+                data-b2b-phone
+                class="w-full min-h-[46px] rounded-xl border border-mist/45 bg-card px-3.5 py-2.5 text-sm text-spruce placeholder:text-spruce/45 focus:border-eucalyptus"
+              />
+            </div>
+
+            <div>
+              <label for="b2b-email" class="block text-xs font-semibold text-spruce mb-1.5">
+                Work Email <span class="font-normal text-spruce/70">(Optional)</span>
+              </label>
+              <input
+                id="b2b-email"
+                type="email"
+                autocomplete="email"
+                placeholder="host@example.ca"
+                data-b2b-email
+                class="w-full min-h-[46px] rounded-xl border border-mist/45 bg-card px-3.5 py-2.5 text-sm text-spruce placeholder:text-spruce/45 focus:border-eucalyptus"
+              />
+            </div>
+
+            <div>
+              <label for="b2b-postal" class="block text-xs font-semibold text-spruce mb-1.5">
+                Primary Edmonton FSA <span class="font-normal text-spruce/70">(Optional)</span>
+              </label>
+              <input
+                id="b2b-postal"
+                type="text"
+                maxlength="7"
+                placeholder="e.g. T5J, T6E, T6W"
+                data-b2b-postal
+                class="w-full min-h-[46px] rounded-xl border border-mist/45 bg-card px-3.5 py-2.5 text-sm font-semibold uppercase text-spruce placeholder:font-normal placeholder:normal-case placeholder:text-spruce/45 focus:border-eucalyptus"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label for="b2b-notes" class="block text-xs font-semibold text-spruce mb-1.5">
+              Portfolio &amp; Staging Notes <span class="font-normal text-spruce/70">(Optional)</span>
+            </label>
+            <textarea
+              id="b2b-notes"
+              rows="2"
+              placeholder="e.g. 3 condos near Ice District, spare linens in hall closet, smart-lock entry..."
+              data-b2b-notes
+              class="w-full rounded-xl border border-mist/45 bg-card px-3.5 py-2.5 text-sm text-spruce placeholder:text-spruce/45 focus:border-eucalyptus"
+            ></textarea>
+          </div>
+
+          <label
+            data-b2b-casl-wrap
+            class="flex min-h-[48px] items-start gap-3 rounded-2xl border border-mist/45 bg-card p-3.5 text-xs leading-relaxed text-spruce cursor-pointer"
+          >
+            <input
+              type="checkbox"
+              data-b2b-casl
+              class="mt-0.5 h-4 w-4 shrink-0 rounded accent-eucalyptus"
+            />
+            <span>
+              <strong class="font-semibold">CASL SMS Consent (Required):</strong> I consent to receive text messages from LevelUp Cleaning (+1 (780) 710-1503) regarding B2B partner pricing, scheduling, and turnover photo reports. Reply STOP anytime. <a href="/privacy" class="underline font-semibold hover:text-eucalyptus">Privacy &amp; CASL Terms</a>.
+            </span>
+          </label>
+
+          <div
+            data-b2b-error
+            role="alert"
+            hidden
+            class="rounded-2xl border border-brass bg-brass/20 px-4 py-3 text-xs sm:text-sm font-semibold text-spruce"
+          ></div>
+
+          <div
+            data-b2b-success
+            role="status"
+            hidden
+            class="rounded-2xl border border-eucalyptus bg-eucalyptus/12 p-4 space-y-2 text-sm text-spruce"
+          >
+            <p class="font-serif text-lg font-semibold">✓ VIP Partner Inquiry Received!</p>
+            <p data-b2b-success-detail class="text-xs sm:text-sm text-spruce/90"></p>
+          </div>
+
+          <button
+            type="submit"
+            data-b2b-submit
+            class="inline-flex min-h-[50px] w-full items-center justify-center rounded-full bg-eucalyptus px-6 py-3 text-sm font-semibold text-linen shadow-sm transition hover:bg-eucalyptus-hover cursor-pointer"
+          >
+            Request VIP Partner Schedule →
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import type {
+    B2BPartnerDetails,
+    LeadSubmissionPayload,
+    LeadSubmissionResult,
+  } from '../types/contracts';
+  import { trackClientLeadConversion } from '../lib/tracking';
+
+  document.querySelectorAll<HTMLFormElement>('[data-b2b-form]').forEach((form) => {
+    let selectedRole: B2BPartnerDetails['companyOrRole'] = 'airbnb_host';
+
+    const roleBtns = Array.from(form.querySelectorAll<HTMLButtonElement>('[data-b2b-role]'));
+    const propsEl = form.querySelector<HTMLInputElement>('[data-b2b-props]');
+    const windowEl = form.querySelector<HTMLSelectElement>('[data-b2b-window]');
+    const freqEl = form.querySelector<HTMLSelectElement>('[data-b2b-freq]');
+    const nameEl = form.querySelector<HTMLInputElement>('[data-b2b-name]');
+    const phoneEl = form.querySelector<HTMLInputElement>('[data-b2b-phone]');
+    const emailEl = form.querySelector<HTMLInputElement>('[data-b2b-email]');
+    const postalEl = form.querySelector<HTMLInputElement>('[data-b2b-postal]');
+    const notesEl = form.querySelector<HTMLTextAreaElement>('[data-b2b-notes]');
+    const honeypotEl = form.querySelector<HTMLInputElement>('[data-b2b-honeypot]');
+    const caslEl = form.querySelector<HTMLInputElement>('[data-b2b-casl]');
+    const caslWrap = form.querySelector<HTMLElement>('[data-b2b-casl-wrap]');
+    const errorEl = form.querySelector<HTMLElement>('[data-b2b-error]');
+    const successEl = form.querySelector<HTMLElement>('[data-b2b-success]');
+    const successDetail = form.querySelector<HTMLElement>('[data-b2b-success-detail]');
+    const submitBtn = form.querySelector<HTMLButtonElement>('[data-b2b-submit]');
+
+    roleBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        selectedRole = (btn.dataset.b2bRole as B2BPartnerDetails['companyOrRole']) || 'airbnb_host';
+        roleBtns.forEach((b) => {
+          const active = b === btn;
+          b.setAttribute('aria-pressed', String(active));
+          b.classList.toggle('border-eucalyptus', active);
+          b.classList.toggle('bg-eucalyptus', active);
+          b.classList.toggle('text-linen', active);
+          b.classList.toggle('border-mist/40', !active);
+          b.classList.toggle('bg-card', !active);
+          b.classList.toggle('text-spruce', !active);
+        });
+      });
+    });
+
+    caslEl?.addEventListener('change', () => {
+      if (caslEl.checked && caslWrap) {
+        caslWrap.classList.remove('border-brass', 'bg-brass/15');
+      }
+    });
+
+    const showErr = (msg: string) => {
+      if (!errorEl) return;
+      errorEl.textContent = msg;
+      errorEl.hidden = false;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (errorEl) errorEl.hidden = true;
+      if (successEl) successEl.hidden = true;
+
+      const nameVal = (nameEl?.value || '').trim();
+      const phoneVal = (phoneEl?.value || '').trim();
+      const digits = phoneVal.replace(/\D+/g, '');
+      const emailVal = (emailEl?.value || '').trim();
+      const propsCount = Math.max(1, Math.min(200, Math.round(Number(propsEl?.value || '1') || 1)));
+      const postalVal = (postalEl?.value || '').trim().toUpperCase() || 'T5J';
+
+      if (!nameVal) {
+        showErr('Please enter your name or company.');
+        nameEl?.focus();
+        return;
+      }
+      if (digits.length < 10 || digits.length > 15) {
+        showErr('Please enter a valid 10-digit mobile phone number.');
+        phoneEl?.focus();
+        return;
+      }
+      if (!caslEl?.checked) {
+        caslWrap?.classList.add('border-brass', 'bg-brass/15');
+        showErr('Please check the CASL SMS consent box so our Edmonton partner desk can text you.');
+        caslEl?.focus();
+        return;
+      }
+
+      const payload: LeadSubmissionPayload = {
+        leadType: 'b2b_partner',
+        name: nameVal,
+        phone: phoneVal,
+        ...(emailVal ? { email: emailVal } : {}),
+        postalCode: postalVal,
+        ...(notesEl?.value.trim() ? { notes: notesEl.value.trim() } : {}),
+        caslSmsConsent: true,
+        honeypot: honeypotEl?.value || '',
+        quoteInput: {
+          mode: 'flat_rate',
+          service: 'airbnb',
+          bedrooms: 2,
+          bathrooms: 1,
+          frequency: 'weekly',
+          postalCode: postalVal,
+        },
+        b2bDetails: {
+          companyOrRole: selectedRole,
+          propertiesCount: propsCount,
+          preferredTurnoverWindow: windowEl?.value || '11am–3pm Same-Day',
+          monthlyFrequency: freqEl?.value || 'Weekly / Back-to-Back',
+        },
+        attribution: {
+          landingPath: window.location.pathname,
+        },
+      };
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending Partner Request…';
+      }
+
+      try {
+        const res = await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const ct = res.headers.get('content-type') || '';
+        if (ct.includes('application/json')) {
+          const result = (await res.json()) as LeadSubmissionResult;
+          if (!res.ok || !result.ok) {
+            showErr(result.error || 'Could not send request. Please text +1 (780) 710-1503.');
+            return;
+          }
+          trackClientLeadConversion({
+            leadId: result.leadId,
+            valueCad: result.finalPreTaxCad,
+            service: 'b2b_partner',
+            email: emailVal || undefined,
+            phone: phoneVal,
+            postalCode: postalVal,
+          });
+          if (successDetail) {
+            successDetail.textContent = `Reference #${result.leadId} logged for ${propsCount} ${propsCount === 1 ? 'property' : 'properties'}. Our Edmonton dispatch lead will text ${phoneVal} today with your volume turnover schedule.`;
+          }
+          if (successEl) successEl.hidden = false;
+        } else {
+          if (successDetail) {
+            successDetail.textContent = `Partner inquiry prepared for ${propsCount} properties. Text +1 (780) 710-1503 for immediate live scheduling.`;
+          }
+          if (successEl) successEl.hidden = false;
+        }
+      } catch {
+        showErr('Network interrupted. Text our B2B desk directly at +1 (780) 710-1503.');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Request VIP Partner Schedule →';
+        }
+      }
+    });
+  });
+</script>

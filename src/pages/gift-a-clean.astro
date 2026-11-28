@@ -1,5 +1,6 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+import GiftOrderForm from '../components/GiftOrderForm.astro';
 import TrustProtocol from '../components/TrustProtocol.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
 
@@ -21,21 +22,7 @@ const enrichedTiers = gift.tiers.map((tier, idx) => {
     tier.title +
     '" Gift Certificate.';
   const smsHref = 'sms:' + brand.phoneE164 + '?&body=' + encodeURIComponent(smsBody);
-  const mailSubject = 'Gift a Clean Certificate Order ($' + tier.amountCad + ' CAD)';
-  const mailBody =
-    'Hi LevelUp Cleaning,\n\nI would like to order a $' +
-    tier.amountCad +
-    ' CAD "' +
-    tier.title +
-    '" digital gift certificate.\nRecipient Name:\nPersonal Holiday Note:\n';
-  const mailHref =
-    'mailto:' +
-    brand.email +
-    '?subject=' +
-    encodeURIComponent(mailSubject) +
-    '&body=' +
-    encodeURIComponent(mailBody);
-  return { ...tier, featured, smsHref, mailHref };
+  return { ...tier, featured, smsHref };
 });
 
 const seoConfig: PageSeoConfig = {
@@ -58,7 +45,7 @@ const seoConfig: PageSeoConfig = {
 };
 ---
 
-<MainLayout seoConfig={seoConfig} ctaHref="#gift-tiers">
+<MainLayout seoConfig={seoConfig} ctaHref="#gift-order-form">
   <section class="surface-quiet-luxury border-b border-mist/25 py-10 sm:py-16">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="grid gap-10 lg:grid-cols-12 lg:items-center">
@@ -82,10 +69,10 @@ const seoConfig: PageSeoConfig = {
 
           <div class="flex flex-wrap items-center gap-3 pt-1">
             <a
-              href="#gift-tiers"
+              href="#gift-order-form"
               class="inline-flex min-h-[48px] items-center justify-center rounded-full bg-eucalyptus px-6 py-3 text-sm font-semibold text-linen shadow-xs transition hover:bg-eucalyptus-hover"
             >
-              Choose Gift Amount ($150–$350) →
+              Order Gift Certificate Online →
             </a>
             <a
               href={`sms:${brand.phoneE164}?&body=${encodeURIComponent("Hi LevelUp Cleaning! I'd like to order a digital Gift a Clean certificate for Edmonton.")}`}
@@ -116,7 +103,6 @@ const seoConfig: PageSeoConfig = {
     </div>
   </section>
 
-  <!-- Gift Certificate Tiers -->
   <section id="gift-tiers" class="py-16 sm:py-20">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="text-center max-w-2xl mx-auto">
@@ -180,25 +166,26 @@ const seoConfig: PageSeoConfig = {
             </div>
 
             <div class="mt-7 space-y-2.5 pt-2">
-              <a
-                href={tier.smsHref}
+              <button
+                type="button"
+                data-select-gift-tier={String(tier.amountCad)}
                 class={
                   tier.featured
-                    ? 'inline-flex min-h-[48px] w-full items-center justify-center rounded-full bg-eucalyptus px-5 py-3 text-sm font-semibold text-linen transition hover:bg-eucalyptus-hover'
-                    : 'inline-flex min-h-[48px] w-full items-center justify-center rounded-full bg-spruce px-5 py-3 text-sm font-semibold text-linen transition hover:bg-eucalyptus'
+                    ? 'inline-flex min-h-[48px] w-full items-center justify-center rounded-full bg-eucalyptus px-5 py-3 text-sm font-semibold text-linen transition hover:bg-eucalyptus-hover cursor-pointer'
+                    : 'inline-flex min-h-[48px] w-full items-center justify-center rounded-full bg-spruce px-5 py-3 text-sm font-semibold text-linen transition hover:bg-eucalyptus cursor-pointer'
                 }
               >
-                Order ${tier.amountCad} Certificate via SMS →
-              </a>
+                Order ${tier.amountCad} Certificate Online →
+              </button>
               <a
-                href={tier.mailHref}
+                href={tier.smsHref}
                 class={
                   tier.featured
                     ? 'inline-flex min-h-[44px] w-full items-center justify-center rounded-full border border-linen/30 px-4 py-2 text-xs font-semibold text-linen transition hover:bg-linen/10'
                     : 'inline-flex min-h-[44px] w-full items-center justify-center rounded-full border border-spruce/25 px-4 py-2 text-xs font-semibold text-spruce transition hover:border-eucalyptus'
                 }
               >
-                Or Order by Email ({brand.email})
+                Or Order ${tier.amountCad} via 1-Tap SMS
               </a>
             </div>
           </article>
@@ -207,15 +194,16 @@ const seoConfig: PageSeoConfig = {
     </div>
   </section>
 
-  <!-- How It Works -->
-  <section class="py-14 sm:py-18 border-t border-mist/25 bg-card/55">
+  <GiftOrderForm />
+
+  <section class="py-14 sm:py-18 border-t border-mist/25 bg-linen">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <h2 class="font-serif text-2xl sm:text-3xl font-semibold text-spruce">
         How Digital Delivery &amp; Redemption Work
       </h2>
       <div class="mt-6 grid gap-6 md:grid-cols-3">
         {gift.howItWorks.map((step) => (
-          <div class="rounded-3xl border border-mist/35 bg-linen p-6 space-y-2">
+          <div class="rounded-3xl border border-mist/35 bg-card p-6 space-y-2">
             <span class="font-mono text-xs font-bold uppercase tracking-widest text-eucalyptus">
               Step {step.step}
             </span>
@@ -235,3 +223,12 @@ const seoConfig: PageSeoConfig = {
     faqs={gift.faqs}
   />
 </MainLayout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-select-gift-tier]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const amountCad = Number(btn.dataset.selectGiftTier || '250');
+      window.dispatchEvent(new CustomEvent('levelup:gift-tier', { detail: { amountCad } }));
+    });
+  });
+</script>
